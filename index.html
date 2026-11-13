@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Guía de Desayunos IRD - Hotel Arts Barcelona</title>
+  <title>Guía de Operaciones IRD - Hotel Arts Barcelona</title>
   <style>
     :root {
       --bg-color: #0b1120;
@@ -68,674 +68,138 @@
     }
     p.subtitle { color: var(--text-muted); font-size: 1.05rem; max-width: 720px; margin: 0 auto; line-height: 1.5; }
     
-    .header-actions {
-      margin-top: 18px;
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-    .btn-action {
-      background: var(--card-bg);
-      color: var(--text-main);
-      border: 1px solid var(--border-color);
-      padding: 8px 16px;
-      border-radius: 10px;
-      font-size: 0.88rem;
-      cursor: pointer;
+    /* SELECTOR DE TURNO AM/PM */
+    .turn-toggle {
       display: inline-flex;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 30px;
+      padding: 4px;
+      margin-top: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    .turn-btn {
+      background: transparent;
+      color: var(--text-muted);
+      border: none;
+      padding: 10px 24px;
+      border-radius: 26px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
       align-items: center;
       gap: 8px;
-      transition: all 0.2s;
-      text-decoration: none;
     }
-    .btn-action:hover {
-      background: var(--card-hover);
-      border-color: var(--accent-color);
-      color: #fff;
-      transform: translateY(-1px);
+    .turn-btn:hover { color: #fff; }
+    .turn-btn.active-am {
+      background: #eab308;
+      color: #451a03;
+      box-shadow: 0 2px 8px rgba(234, 179, 8, 0.4);
     }
+    .turn-btn.active-pm {
+      background: #38bdf8;
+      color: #082f49;
+      box-shadow: 0 2px 8px rgba(56, 189, 248, 0.4);
+    }
+
+    .header-actions { margin-top: 20px; display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+    .btn-action { background: var(--card-bg); color: var(--text-main); border: 1px solid var(--border-color); padding: 8px 16px; border-radius: 10px; font-size: 0.88rem; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s; text-decoration: none; }
+    .btn-action:hover { background: var(--card-hover); border-color: var(--accent-color); color: #fff; transform: translateY(-1px); }
 
     /* FILTROS Y CONTROLES */
-    .controls-wrapper {
-      max-width: 1300px;
-      margin: 0 auto 28px auto;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-    
-    .search-container {
-      position: relative;
-      width: 100%;
-    }
-    .search-icon {
-      position: absolute;
-      left: 18px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--text-muted);
-      pointer-events: none;
-    }
-    .search-input {
-      width: 100%;
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-md);
-      padding: 14px 20px 14px 50px;
-      color: var(--text-main);
-      font-size: 1.02rem;
-      outline: none;
-      transition: all 0.2s;
-    }
-    .search-input:focus {
-      border-color: var(--accent-color);
-      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
-      background: #172338;
-    }
-    .clear-search {
-      position: absolute;
-      right: 14px;
-      top: 50%;
-      transform: translateY(-50%);
-      background: transparent;
-      border: none;
-      color: var(--text-muted);
-      font-size: 1.2rem;
-      cursor: pointer;
-      display: none;
-      padding: 6px;
-    }
+    .controls-wrapper { max-width: 1300px; margin: 0 auto 28px auto; display: flex; flex-direction: column; gap: 16px; }
+    .search-container { position: relative; width: 100%; }
+    .search-icon { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none; }
+    .search-input { width: 100%; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 14px 20px 14px 50px; color: var(--text-main); font-size: 1.02rem; outline: none; transition: all 0.2s; }
+    .search-input:focus { border-color: var(--accent-color); box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2); background: #172338; }
+    .clear-search { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); background: transparent; border: none; color: var(--text-muted); font-size: 1.2rem; cursor: pointer; display: none; padding: 6px; }
     .clear-search:hover { color: #fff; }
 
-    /* FILTROS RÁPIDOS (CHIPS) */
-    .filters-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 10px;
-    }
-    .filter-btn {
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      color: var(--text-muted);
-      padding: 8px 18px;
-      border-radius: 24px;
-      font-size: 0.88rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.2s;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .filter-btn:hover {
-      background: var(--card-hover);
-      color: var(--text-main);
-      border-color: #475569;
-    }
-    .filter-btn.active {
-      background: #0284c7;
-      color: #fff;
-      border-color: #38bdf8;
-      box-shadow: 0 0 12px rgba(56, 189, 248, 0.35);
-      font-weight: 600;
-    }
-    .filter-count {
-      background: rgba(0, 0, 0, 0.3);
-      padding: 2px 7px;
-      border-radius: 12px;
-      font-size: 0.75rem;
-    }
+    .filters-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+    .filter-btn { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-muted); padding: 8px 18px; border-radius: 24px; font-size: 0.88rem; font-weight: 500; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 6px; }
+    .filter-btn:hover { background: var(--card-hover); color: var(--text-main); border-color: #475569; }
+    .filter-btn.active { background: #0284c7; color: #fff; border-color: #38bdf8; box-shadow: 0 0 12px rgba(56, 189, 248, 0.35); font-weight: 600; }
+    .filter-count { background: rgba(0, 0, 0, 0.3); padding: 2px 7px; border-radius: 12px; font-size: 0.75rem; }
 
-    /* CONTADOR DE RESULTADOS */
-    .results-summary {
-      max-width: 1300px;
-      margin: 0 auto 16px auto;
-      font-size: 0.88rem;
-      color: var(--text-muted);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+    .results-summary { max-width: 1300px; margin: 0 auto 16px auto; font-size: 0.88rem; color: var(--text-muted); display: flex; justify-content: space-between; align-items: center; }
 
     /* GRID DE PLATOS */
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: 24px;
-      max-width: 1300px;
-      margin: 0 auto;
-    }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 24px; max-width: 1300px; margin: 0 auto; }
+    .card { background: var(--card-bg); border-radius: var(--radius-lg); border: 1px solid var(--border-color); overflow: hidden; display: flex; flex-direction: column; transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s; cursor: pointer; box-shadow: var(--shadow-card); position: relative; }
+    .card:hover { transform: translateY(-5px); box-shadow: var(--shadow-hover); border-color: #38bdf8; background: var(--card-hover); }
+    .card-img-container { width: 100%; height: 220px; overflow: hidden; position: relative; background: #090e18; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid var(--border-color); }
+    .card-img { width: 100%; height: 100%; object-fit: cover; object-position: center; transition: transform 0.35s ease; }
+    .card:hover .card-img { transform: scale(1.05); }
 
-    .card {
-      background: var(--card-bg);
-      border-radius: var(--radius-lg);
-      border: 1px solid var(--border-color);
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
-      cursor: pointer;
-      box-shadow: var(--shadow-card);
-      position: relative;
-    }
-    .card:hover {
-      transform: translateY(-5px);
-      box-shadow: var(--shadow-hover);
-      border-color: #38bdf8;
-      background: var(--card-hover);
-    }
+    .card-badge-container { position: absolute; top: 12px; left: 12px; display: flex; flex-direction: column; gap: 6px; z-index: 2; }
+    .card-badge { padding: 4px 10px; border-radius: 8px; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 4px 8px rgba(0,0,0,0.4); }
     
-    .card-img-container {
-      width: 100%;
-      height: 220px;
-      overflow: hidden;
-      position: relative;
-      background: #090e18;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-bottom: 1px solid var(--border-color);
-    }
-    .card-img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center;
-      transition: transform 0.35s ease;
-    }
-    .card:hover .card-img {
-      transform: scale(1.05);
-    }
-
-    .card-badge-container {
-      position: absolute;
-      top: 12px;
-      left: 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      z-index: 2;
-    }
-    .card-badge {
-      padding: 4px 10px;
-      border-radius: 8px;
-      font-size: 0.72rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.4);
-    }
+    /* Colores Badges Dinámicos */
     .badge-menu { background: #0284c7; color: #fff; }
     .badge-eggs { background: #d97706; color: #fff; }
     .badge-carta { background: #475569; color: #f8fafc; }
     .badge-healthy { background: #16a34a; color: #fff; }
     .badge-sweet { background: #db2777; color: #fff; }
+    .badge-local { background: #b91c1c; color: #fff; }
+    .badge-main { background: #7e22ce; color: #fff; }
+    .badge-side { background: #047857; color: #fff; }
 
-    .card-official-badge {
-      background: rgba(16, 185, 129, 0.9);
-      border: 1px solid #34d399;
-      color: #fff;
-      padding: 3px 8px;
-      border-radius: 6px;
-      font-size: 0.7rem;
-      font-weight: 700;
-      letter-spacing: 0.3px;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-    }
-
-    .card-touchpoint-flag {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      background: rgba(133, 77, 14, 0.95);
-      border: 1px solid var(--accent-gold);
-      color: #fef08a;
-      padding: 4px 9px;
-      border-radius: 8px;
-      font-size: 0.72rem;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.4);
-      z-index: 2;
-    }
-
-    .card-body {
-      padding: 20px;
-      flex-grow: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      gap: 14px;
-    }
-
-    .card-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      margin-bottom: 6px;
-    }
-    .card-title {
-      font-size: 1.18rem;
-      font-weight: 600;
-      color: #fff;
-      line-height: 1.3;
-    }
-    .card-price {
-      color: var(--accent-gold);
-      font-size: 1.25rem;
-      font-weight: 700;
-      white-space: nowrap;
-      margin-left: 10px;
-    }
-    .card-desc {
-      color: var(--text-muted);
-      font-size: 0.88rem;
-      line-height: 1.5;
-      margin-bottom: 8px;
-    }
-
-    .tags-container {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-bottom: 6px;
-    }
-    .tag {
-      background: rgba(56, 189, 248, 0.12);
-      color: #bae6fd;
-      border: 1px solid rgba(56, 189, 248, 0.25);
-      padding: 3px 9px;
-      border-radius: 6px;
-      font-size: 0.74rem;
-      font-weight: 500;
-    }
-    .tag-vajilla {
-      background: rgba(148, 163, 184, 0.15);
-      color: #cbd5e1;
-      border-color: rgba(148, 163, 184, 0.25);
-    }
-
-    .allergens-box {
-      font-size: 0.78rem;
-      color: #fca5a5;
-      background: rgba(239, 68, 68, 0.08);
-      padding: 7px 11px;
-      border-radius: 8px;
-      border: 1px solid rgba(239, 68, 68, 0.2);
-      display: flex;
-      align-items: flex-start;
-      gap: 6px;
-      line-height: 1.35;
-    }
-    .allergens-icon { flex-shrink: 0; font-size: 0.9rem; }
-
-    .card-footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding-top: 12px;
-      border-top: 1px solid rgba(255,255,255,0.06);
-      margin-top: auto;
-    }
-    .card-btn-view {
-      color: var(--accent-color);
-      font-size: 0.85rem;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 0;
-    }
+    .card-official-badge { background: rgba(16, 185, 129, 0.9); border: 1px solid #34d399; color: #fff; padding: 3px 8px; border-radius: 6px; font-size: 0.7rem; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; box-shadow: 0 2px 6px rgba(0,0,0,0.3); }
+    .card-touchpoint-flag { position: absolute; top: 12px; right: 12px; background: rgba(133, 77, 14, 0.95); border: 1px solid var(--accent-gold); color: #fef08a; padding: 4px 9px; border-radius: 8px; font-size: 0.72rem; font-weight: 700; display: flex; align-items: center; gap: 4px; box-shadow: 0 4px 8px rgba(0,0,0,0.4); z-index: 2; }
+    
+    .card-body { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; gap: 14px; }
+    .card-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
+    .card-title { font-size: 1.18rem; font-weight: 600; color: #fff; line-height: 1.3; }
+    .card-price { color: var(--accent-gold); font-size: 1.25rem; font-weight: 700; white-space: nowrap; margin-left: 10px; }
+    .card-desc { color: var(--text-muted); font-size: 0.88rem; line-height: 1.5; margin-bottom: 8px; }
+    .tags-container { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 6px; }
+    .tag { background: rgba(56, 189, 248, 0.12); color: #bae6fd; border: 1px solid rgba(56, 189, 248, 0.25); padding: 3px 9px; border-radius: 6px; font-size: 0.74rem; font-weight: 500; }
+    .tag-vajilla { background: rgba(148, 163, 184, 0.15); color: #cbd5e1; border-color: rgba(148, 163, 184, 0.25); }
+    .allergens-box { font-size: 0.78rem; color: #fca5a5; background: rgba(239, 68, 68, 0.08); padding: 7px 11px; border-radius: 8px; border: 1px solid rgba(239, 68, 68, 0.2); display: flex; align-items: flex-start; gap: 6px; line-height: 1.35; }
+    .card-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.06); margin-top: auto; }
+    .card-btn-view { color: var(--accent-color); font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 5px; background: none; border: none; cursor: pointer; padding: 0; }
     .card-btn-view:hover { text-decoration: underline; }
 
-    /* ESTADO VACÍO */
-    .empty-state {
-      grid-column: 1 / -1;
-      text-align: center;
-      padding: 60px 20px;
-      background: var(--card-bg);
-      border-radius: var(--radius-lg);
-      border: 1px dashed var(--border-color);
-    }
-    .empty-state h3 { font-size: 1.3rem; margin-bottom: 8px; color: var(--text-main); }
-    .empty-state p { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 16px; }
-
-    /* MODAL DE FICHA TÉCNICA */
-    .modal-backdrop {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(3, 7, 18, 0.85);
-      backdrop-filter: blur(8px);
-      z-index: 1000;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-    }
+    /* MODAL */
+    .modal-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(3, 7, 18, 0.85); backdrop-filter: blur(8px); z-index: 1000; display: none; align-items: center; justify-content: center; padding: 20px; }
     .modal-backdrop.open { display: flex; }
-
-    .modal-content {
-      background: var(--modal-bg);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-lg);
-      width: 100%;
-      max-width: 860px;
-      max-height: 90vh;
-      overflow-y: auto;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
-      animation: modalFadeIn 0.25s ease-out;
-      position: relative;
-    }
-    @keyframes modalFadeIn {
-      from { opacity: 0; transform: scale(0.96) translateY(10px); }
-      to { opacity: 1; transform: scale(1) translateY(0); }
-    }
-
-    .modal-header {
-      padding: 24px 28px 18px 28px;
-      border-bottom: 1px solid var(--border-color);
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      position: sticky;
-      top: 0;
-      background: var(--modal-bg);
-      z-index: 10;
-    }
-    .modal-header-info { padding-right: 20px; }
+    .modal-content { background: var(--modal-bg); border: 1px solid var(--border-color); border-radius: var(--radius-lg); width: 100%; max-width: 860px; max-height: 90vh; overflow-y: auto; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7); position: relative; }
+    .modal-header { padding: 24px 28px 18px 28px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: flex-start; position: sticky; top: 0; background: var(--modal-bg); z-index: 10; }
     .modal-title { font-size: 1.5rem; font-weight: 700; color: #fff; margin-bottom: 6px; }
     .modal-subtitle { color: var(--text-muted); font-size: 0.92rem; }
-    .modal-close {
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid var(--border-color);
-      color: var(--text-main);
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      font-size: 1.3rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
+    .modal-close { background: rgba(255, 255, 255, 0.08); border: 1px solid var(--border-color); color: var(--text-main); width: 36px; height: 36px; border-radius: 50%; font-size: 1.3rem; display: flex; align-items: center; justify-content: center; cursor: pointer; }
     .modal-close:hover { background: #ef4444; color: #fff; border-color: #ef4444; }
-
     .modal-body { padding: 28px; display: flex; flex-direction: column; gap: 24px; }
-
-    .modal-hero-container {
-      width: 100%;
-      border-radius: var(--radius-md);
-      overflow: hidden;
-      border: 1px solid var(--border-color);
-      background: #090e18;
-      position: relative;
-      max-height: 320px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .modal-hero-photo {
-      width: 100%;
-      max-height: 320px;
-      object-fit: cover;
-      object-position: center;
-    }
-    .modal-hero-svg {
-      width: 100%;
-      height: 240px;
-    }
-
-    /* BANNER DE FICHA OFICIAL */
-    .official-ficha-banner {
-      background: linear-gradient(90deg, rgba(16, 185, 129, 0.15) 0%, rgba(56, 189, 248, 0.15) 100%);
-      border: 1px solid #10b981;
-      border-radius: var(--radius-md);
-      padding: 16px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-    .official-ficha-text strong {
-      display: block;
-      color: #34d399;
-      font-size: 0.98rem;
-      margin-bottom: 3px;
-    }
-    .official-ficha-text span {
-      font-size: 0.85rem;
-      color: #cbd5e1;
-    }
-    .btn-ver-ficha {
-      background: #059669;
-      color: #fff;
-      border: 1px solid #34d399;
-      font-weight: 600;
-      white-space: nowrap;
-    }
-    .btn-ver-ficha:hover {
-      background: #10b981;
-      border-color: #6ee7b7;
-      color: #fff;
-    }
-
-    .modal-grid-specs {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 16px;
-    }
-    .spec-card {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-sm);
-      padding: 14px 16px;
-    }
+    .modal-hero-container { width: 100%; border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--border-color); background: #090e18; max-height: 320px; display: flex; align-items: center; justify-content: center; }
+    .modal-hero-photo { width: 100%; max-height: 320px; object-fit: cover; }
+    .modal-hero-svg { width: 100%; height: 240px; }
+    .official-ficha-banner { background: linear-gradient(90deg, rgba(16, 185, 129, 0.15) 0%, rgba(56, 189, 248, 0.15) 100%); border: 1px solid #10b981; border-radius: var(--radius-md); padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+    .official-ficha-text strong { display: block; color: #34d399; font-size: 0.98rem; }
+    .official-ficha-text span { font-size: 0.85rem; color: #cbd5e1; }
+    .btn-ver-ficha { background: #059669; color: #fff; border: 1px solid #34d399; font-weight: 600; white-space: nowrap; }
+    .btn-ver-ficha:hover { background: #10b981; border-color: #6ee7b7; color: #fff; }
+    .modal-grid-specs { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+    .spec-card { background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 14px 16px; }
     .spec-label { font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-weight: 600; margin-bottom: 4px; }
     .spec-value { font-size: 1.05rem; font-weight: 600; color: #fff; }
+    .section-title { font-size: 1.15rem; font-weight: 600; color: var(--accent-color); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+    .modal-section { background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 18px 20px; }
+    .steps-list { list-style-type: none; display: flex; flex-direction: column; gap: 12px; }
+    .steps-list li { display: flex; gap: 12px; font-size: 0.92rem; line-height: 1.5; color: #e2e8f0; }
+    .step-number { background: #0284c7; color: #fff; font-size: 0.78rem; font-weight: 700; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+    .touchpoint-alert { background: rgba(234, 179, 8, 0.1); border: 1px solid var(--touchpoint-border); border-radius: var(--radius-md); padding: 16px 20px; color: #fef08a; }
+    .touchpoint-title { font-weight: 700; font-size: 0.95rem; display: flex; align-items: center; gap: 8px; margin-bottom: 6px; color: #facc15; }
+    .modal-footer { padding: 18px 28px; border-top: 1px solid var(--border-color); display: flex; justify-content: flex-end; gap: 12px; background: var(--modal-bg); position: sticky; bottom: 0; }
 
-    .section-title {
-      font-size: 1.15rem;
-      font-weight: 600;
-      color: var(--accent-color);
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .modal-section {
-      background: rgba(255, 255, 255, 0.02);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-md);
-      padding: 18px 20px;
-    }
-
-    /* TABLA DE ESCANDALLO Y GRAMAJES */
-    .specs-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.88rem;
-      margin-top: 8px;
-    }
-    .specs-table th {
-      background: rgba(255, 255, 255, 0.05);
-      color: var(--accent-color);
-      padding: 9px 12px;
-      text-align: left;
-      font-weight: 600;
-      border-bottom: 1px solid var(--border-color);
-    }
-    .specs-table td {
-      padding: 9px 12px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-      color: #e2e8f0;
-    }
-    .specs-table tr:last-child td { border-bottom: none; }
-    .specs-table tr:hover td { background: rgba(255, 255, 255, 0.02); }
-    .unit-pill {
-      background: rgba(56, 189, 248, 0.12);
-      color: #7dd3fc;
-      padding: 2px 8px;
-      border-radius: 6px;
-      font-size: 0.8rem;
-      font-weight: 600;
-    }
-
-    .steps-list {
-      list-style-type: none;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-    .steps-list li {
-      display: flex;
-      gap: 12px;
-      font-size: 0.92rem;
-      line-height: 1.5;
-      color: #e2e8f0;
-    }
-    .step-number {
-      background: #0284c7;
-      color: #fff;
-      font-size: 0.78rem;
-      font-weight: 700;
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      margin-top: 2px;
-    }
-
-    .touchpoint-alert {
-      background: rgba(234, 179, 8, 0.1);
-      border: 1px solid var(--touchpoint-border);
-      border-radius: var(--radius-md);
-      padding: 16px 20px;
-      color: #fef08a;
-    }
-    .touchpoint-title {
-      font-weight: 700;
-      font-size: 0.95rem;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 6px;
-      color: #facc15;
-    }
-    .touchpoint-desc { font-size: 0.88rem; line-height: 1.45; color: #fef9c3; }
-
-    .modal-footer {
-      padding: 18px 28px;
-      border-top: 1px solid var(--border-color);
-      display: flex;
-      justify-content: flex-end;
-      gap: 12px;
-      background: var(--modal-bg);
-      position: sticky;
-      bottom: 0;
-    }
-
-    /* LIGHTBOX VISOR DE FICHA ORIGINAL ESCANEADA */
-    .ficha-modal-backdrop {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(3, 7, 18, 0.92);
-      z-index: 2000;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      backdrop-filter: blur(10px);
-    }
+    /* LIGHTBOX VISOR FICHA ORIGINAL */
+    .ficha-modal-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(3, 7, 18, 0.92); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(10px); }
     .ficha-modal-backdrop.open { display: flex; }
-    .ficha-modal-container {
-      max-width: 900px;
-      width: 100%;
-      max-height: 94vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 12px;
-    }
-    .ficha-modal-header {
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px 16px;
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-md);
-    }
-    .ficha-modal-img-wrapper {
-      max-height: 82vh;
-      overflow-y: auto;
-      border-radius: var(--radius-md);
-      box-shadow: 0 20px 50px rgba(0,0,0,0.8);
-      border: 1px solid var(--border-color);
-    }
-    .ficha-modal-img {
-      max-width: 100%;
-      display: block;
-    }
-
-    /* ESTILOS DE IMPRESIÓN */
-    @media print {
-      body { background: #fff !important; color: #000 !important; padding: 0 !important; }
-      header, .controls-wrapper, .header-actions, .card-footer, .filter-btn, .modal-close, .modal-footer, .btn-ver-ficha { display: none !important; }
-      .grid { display: block !important; }
-      .card {
-        page-break-inside: avoid;
-        background: #fff !important;
-        border: 1px solid #ccc !important;
-        color: #000 !important;
-        margin-bottom: 20px !important;
-        box-shadow: none !important;
-      }
-      .card-title, .card-price { color: #000 !important; }
-      .card-desc, .spec-value { color: #333 !important; }
-      .tag, .allergens-box { border: 1px solid #666 !important; background: #eee !important; color: #000 !important; }
-      .modal-backdrop.open {
-        position: static !important;
-        background: none !important;
-        padding: 0 !important;
-      }
-      .modal-content {
-        max-width: 100% !important;
-        box-shadow: none !important;
-        border: none !important;
-        color: #000 !important;
-      }
-    }
-
-    @media (max-width: 640px) {
-      h1 { font-size: 1.7rem; }
-      .grid { grid-template-columns: 1fr; }
-      .modal-grid-specs { grid-template-columns: 1fr; }
-      .modal-body { padding: 18px; }
-      .official-ficha-banner { flex-direction: column; align-items: flex-start; }
-    }
+    .ficha-modal-container { max-width: 900px; width: 100%; max-height: 94vh; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+    .ficha-modal-header { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 10px 16px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: var(--radius-md); }
+    .ficha-modal-img-wrapper { max-height: 82vh; overflow-y: auto; border-radius: var(--radius-md); border: 1px solid var(--border-color); }
+    .ficha-modal-img { max-width: 100%; display: block; }
   </style>
 </head>
 <body>
@@ -743,68 +207,46 @@
   <!-- HEADER -->
   <header>
     <div class="brand-badge">Hotel Arts Barcelona — The Ritz-Carlton</div>
-    <h1>Guía de Desayunos <span>In-Room Dining (IRD)</span></h1>
-    <p class="subtitle">Manual de Operaciones, Fichas Técnicas Oficiales de Cocina (CRO), Alérgenos y Estándares de Servicio LQA / Forbes</p>
+    <h1>Guía de Operaciones <span>In-Room Dining (IRD)</span></h1>
+    <p class="subtitle">Fichas Técnicas Oficiales de Cocina (CRO), Alérgenos y Estándares de Servicio LQA</p>
     
+    <!-- SELECTOR DE TURNO AM / PM -->
+    <div class="turn-toggle">
+      <button id="btnTurnoAM" class="turn-btn active-am" onclick="cambiarTurno('AM')">
+        <span>☀️</span> Desayunos (AM)
+      </button>
+      <button id="btnTurnoPM" class="turn-btn" onclick="cambiarTurno('PM')">
+        <span>🌙</span> Carta de Tarde (PM)
+      </button>
+    </div>
+
     <div class="header-actions">
-      <button class="btn-action" onclick="window.print()">
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2m-12 0v4h12v-4M6 14h.01"></path></svg>
-        Imprimir Guía de Cocina
-      </button>
-      <button class="btn-action" onclick="abrirEstandares()">
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-        Estándares de Servicio LQA / Forbes
-      </button>
+      <button class="btn-action" onclick="window.print()">🖨️ Imprimir Guía</button>
+      <button class="btn-action" onclick="abrirEstandares()">📋 Estándares LQA</button>
     </div>
   </header>
 
-  <!-- CONTROLES (BUSCADOR + FILTROS RÁPIDOS) -->
+  <!-- CONTROLES -->
   <div class="controls-wrapper">
     <div class="search-container">
       <svg class="search-icon" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-      <input type="text" id="searchInput" class="search-input" placeholder="Buscar plato, ingrediente, vajilla o alérgeno (ej. caviar, chía, bulgari, avena, poché, sombrero, trufa)..." oninput="aplicarFiltros()">
-      <button class="clear-search" id="clearSearchBtn" onclick="limpiarBuscador()" title="Limpiar búsqueda">&times;</button>
+      <input type="text" id="searchInput" class="search-input" placeholder="Buscar plato, ingrediente, vajilla o alérgeno..." oninput="aplicarFiltros()">
+      <button class="clear-search" id="clearSearchBtn" onclick="limpiarBuscador()">&times;</button>
     </div>
 
-    <!-- CHIPS DE FILTRO -->
-    <div class="filters-container">
-      <button class="filter-btn active" data-categoria="todos" onclick="seleccionarCategoria('todos', this)">
-        <span>Todos</span>
-        <span class="filter-count" id="count-todos">0</span>
-      </button>
-      <button class="filter-btn" data-categoria="menus" onclick="seleccionarCategoria('menus', this)">
-        <span>Menús Completos</span>
-        <span class="filter-count" id="count-menus">0</span>
-      </button>
-      <button class="filter-btn" data-categoria="huevos" onclick="seleccionarCategoria('huevos', this)">
-        <span>Platos de Huevos</span>
-        <span class="filter-count" id="count-huevos">0</span>
-      </button>
-      <button class="filter-btn" data-categoria="carta" onclick="seleccionarCategoria('carta', this)">
-        <span>A la Carta & Caviar</span>
-        <span class="filter-count" id="count-carta">0</span>
-      </button>
-      <button class="filter-btn" data-categoria="saludable" onclick="seleccionarCategoria('saludable', this)">
-        <span>Saludable & Vegano</span>
-        <span class="filter-count" id="count-saludable">0</span>
-      </button>
-      <button class="filter-btn" data-categoria="dulces" onclick="seleccionarCategoria('dulces', this)">
-        <span>Dulces & Panadería</span>
-        <span class="filter-count" id="count-dulces">0</span>
-      </button>
+    <!-- CONTENEDOR DE FILTROS DINÁMICO (Cambia según AM o PM) -->
+    <div class="filters-container" id="filtersContainer">
+      <!-- Se llena por JS -->
     </div>
   </div>
 
-  <!-- RESUMEN DE RESULTADOS -->
   <div class="results-summary">
-    <span id="resultsCount">Mostrando todos los platos</span>
-    <span style="font-size:0.8rem; color: #64748b;">Hotel Arts Barcelona · IRD Operations · Fichas CRO Verificadas</span>
+    <span id="resultsCount">Cargando platos...</span>
+    <span style="font-size:0.8rem; color: #64748b;">Hotel Arts Barcelona · IRD Operations</span>
   </div>
 
   <!-- GRID DE PLATOS -->
-  <div class="grid" id="platosGrid">
-    <!-- Se generará dinámicamente con JavaScript desde el catálogo maestro -->
-  </div>
+  <div class="grid" id="platosGrid"></div>
 
   <!-- MODAL DE FICHA TÉCNICA -->
   <div class="modal-backdrop" id="modalBackdrop" onclick="cerrarModalFondo(event)">
@@ -812,610 +254,214 @@
       <div class="modal-header">
         <div class="modal-header-info">
           <div class="brand-badge" id="modalBadge">Categoría</div>
-          <h2 class="modal-title" id="modalTitle">Título del Plato</h2>
-          <div class="modal-subtitle" id="modalSubtitle">Subtítulo / Vajilla recomendada</div>
+          <h2 class="modal-title" id="modalTitle">Título</h2>
+          <div class="modal-subtitle" id="modalSubtitle">Subtítulo</div>
         </div>
-        <button class="modal-close" onclick="cerrarModal()" title="Cerrar (Esc)">&times;</button>
+        <button class="modal-close" onclick="cerrarModal()">&times;</button>
       </div>
-
-      <div class="modal-body" id="modalBody">
-        <!-- Renderizado dinámico -->
-      </div>
-
+      <div class="modal-body" id="modalBody"></div>
       <div class="modal-footer">
-        <button class="btn-action" onclick="imprimirFichaActual()">
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2m-12 0v4h12v-4M6 14h.01"></path></svg>
-          Imprimir Ficha A4
-        </button>
-        <button class="btn-action" style="background:#0284c7; color:#fff; border-color:#38bdf8;" onclick="cerrarModal()">
-          Entendido
-        </button>
+        <button class="btn-action" onclick="window.print()">Imprimir Ficha</button>
+        <button class="btn-action" style="background:#0284c7; color:#fff; border-color:#38bdf8;" onclick="cerrarModal()">Cerrar</button>
       </div>
     </div>
   </div>
 
-  <!-- LIGHTBOX PARA VER LA FICHA TÉCNICA ORIGINAL ESCANEADA -->
+  <!-- LIGHTBOX FICHA ESCANEADA -->
   <div class="ficha-modal-backdrop" id="modalFichaViewer" onclick="cerrarVisorFichaFondo(event)">
     <div class="ficha-modal-container">
       <div class="ficha-modal-header">
         <div>
-          <span class="brand-badge" style="background:rgba(16,185,129,0.15); border-color:#10b981; color:#34d399;">Ficha Técnica Oficial (CRO)</span>
-          <h3 id="fichaViewerTitle" style="color:#fff; margin-top:4px; font-size:1.15rem;">Título de la Ficha</h3>
+          <span class="brand-badge" style="background:rgba(16,185,129,0.15); color:#34d399;">Ficha Técnica Oficial</span>
+          <h3 id="fichaViewerTitle" style="color:#fff;">Título</h3>
         </div>
-        <div style="display:flex; align-items:center; gap:10px;">
-          <a id="fichaDownloadBtn" href="#" target="_blank" class="btn-action" style="padding:6px 14px; font-size:0.82rem; background:#1e293b;">
-            Abrir en pestaña nueva ↗
-          </a>
+        <div style="display:flex; gap:10px;">
+          <a id="fichaDownloadBtn" href="#" target="_blank" class="btn-action" style="background:#1e293b;">Abrir en pestaña nueva ↗</a>
           <button class="modal-close" onclick="cerrarVisorFicha()">&times;</button>
         </div>
       </div>
       <div class="ficha-modal-img-wrapper">
-        <img id="fichaViewerImg" src="" alt="Ficha técnica original Hotel Arts" class="ficha-modal-img">
+        <img id="fichaViewerImg" src="" alt="Ficha técnica original" class="ficha-modal-img">
       </div>
     </div>
   </div>
 
-  <!-- SCRIPT CON DATOS MAESTROS Y LÓGICA -->
+  <!-- DATOS MAESTROS Y LÓGICA -->
   <script>
-    // CATÁLOGO MAESTRO DE DESAYUNOS HOTEL ARTS IRD
-    const catalogoPlatos = [
-      // 1. Continental Breakfast (Bandeja Arts)
+    // --- 1. CATÁLOGO DESAYUNOS (AM) ---
+    const catalogoAM = [
       {
-        id: "continental",
-        nombre: "Continental Breakfast",
-        nombreEs: "Desayuno Continental & Bandeja Arts",
-        categoria: "menus",
-        categoriaLabel: "Menú Completo",
-        badgeClass: "badge-menu",
-        precio: "42 €",
-        vajilla: "Bandeja IRD noble, panera de lino, plato de postre 21cm, platillos mantequilla",
-        descripcion: "Surtido de bollería artesana horneada al amanecer (croissant francés, pain au chocolat, caracola), tostadas rústicas, mantequilla d'Isigny AOC, 3 mermeladas selectas, zumo de naranja natural y café de especialidad.",
-        tags: ["Bandeja Arts", "Bollería Francesa", "Mermeladas Artesanas", "Zumo Natural"],
-        touchpoint: "La bollería debe servirse tibia en cesta forrada con servilleta de lino. La mantequilla a 14°C para facilitar el untado sin romperse.",
-        alergenos: "Gluten (GL), Huevos (HUE), Lactosa (LAC)",
-        tiempoPase: "12 - 15 min",
-        tempServicio: "Bollería 25°C · Café >75°C · Zumo <5°C",
-        pasosEmplatado: [
-          "Disponer la panera de lino blanco en el lateral superior izquierdo de la bandeja.",
-          "Colocar el croissant en el centro, flanqueado por el pain au chocolat y la caracola de pasas recién atemperadas.",
-          "Presentar dos mini-tarros de cristal con mermeladas de fresa y naranja amarga junto a la tarrina de mantequilla d'Isigny.",
-          "Acompañar de vaso alto de cristal fino con 220 ml de zumo recién exprimido y jarra térmica de café recién pasado."
-        ],
-        imagen: "img/plato_bandeja_arts.jpg",
-        ficha: null,
-        tieneFichaOficial: false,
-        svg: `<svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg"><rect width="400" height="220" fill="#151f32"/><rect x="40" y="25" width="320" height="170" rx="14" fill="#1e293b" stroke="#334155" stroke-width="2"/><ellipse cx="140" cy="100" rx="65" ry="45" fill="#78350f"/><path d="M90 100 C110 70 170 70 190 100 C170 120 110 120 90 100 Z" fill="#d97706"/><circle cx="270" cy="80" r="32" fill="#ffffff" stroke="#cbd5e1" stroke-width="3"/><rect x="255" y="65" width="30" height="30" rx="4" fill="#fbbf24"/><circle cx="280" cy="145" r="22" fill="#ea580c"/><text x="200" y="208" text-anchor="middle" fill="#94a3b8" font-size="11">Bandeja Continental & Cesta de Bollería</text></svg>`
+        id: "continental", nombre: "Continental Breakfast", nombreEs: "Desayuno Continental & Bandeja Arts",
+        categoria: "menus", categoriaLabel: "Menú Completo", badgeClass: "badge-menu", precio: "42 €",
+        vajilla: "Bandeja IRD noble, panera de lino",
+        descripcion: "Surtido de bollería artesana horneada al amanecer.",
+        tags: ["Bandeja Arts", "Bollería Francesa"], alergenos: "Gluten (GL), Huevos (HUE), Lactosa (LAC)", tiempoPase: "12 - 15 min", tempServicio: "Bollería 25°C",
+        pasosEmplatado: ["Panera lino izquierdo", "Croissant centro"],
+        imagen: null, ficha: null, tieneFichaOficial: false,
+        svg: `<svg viewBox="0 0 400 220"><rect width="400" height="220" fill="#151f32"/><circle cx="200" cy="110" r="50" fill="#d97706"/></svg>`
       },
-
-      // 2. American Breakfast (Ficha Oficial Arts CRO)
       {
-        id: "american",
-        nombre: "American Breakfast",
-        nombreEs: "Desayuno Americano Arts Oficial",
-        categoria: "menus",
-        categoriaLabel: "Menú Completo",
-        badgeClass: "badge-menu",
-        precio: "54 €",
-        vajilla: "Plato llano 28cm caliente, campana térmica inox, bol cuadrado fruta, plato pancakes",
-        descripcion: "Desayuno compuesto por bol de frutas frescas cortadas montado en bol cuadrado, huevos al estilo elegido por el huésped con dos guarniciones, y pancakes servidos con salsa, espuma de mascarpone y frutos rojos.",
-        tags: ["Ficha CRO", "Huevos al Gusto", "Pancakes con Mascarpone", "Bol Frutas Cuadrado"],
-        touchpoint: "Tapar inmediatamente con campana térmica precalentada a 60°C. El bol de fruta fría debe servirse simultáneamente en la bandeja sin absorber calor.",
-        alergenos: "Gluten (GL), Lácteos (L), Huevos (H)",
-        tiempoPase: "15 - 18 min",
-        tempServicio: "Plato caliente >65°C con campana · Fruta fresca <4°C",
-        pasosEmplatado: [
-          "Montar el bol de frutas cortadas en bol cuadrado blanco.",
-          "Cocinar los huevos según la elección del huésped y servir en plato caliente con las guarniciones seleccionadas.",
-          "Terminar con los pancakes espolvoreados con azúcar glas y acompañar con espuma de mascarpone, frutos rojos y salsa.",
-          "Colocar campana térmica sobre los platos calientes y montar en bandeja de servicio IRD."
-        ],
-        ingredientesDetallados: [
-          { ingrediente: "Bol de frutas cortadas frescas", cantidad: "1", unidad: "Bol cuadrado" },
-          { ingrediente: "Huevos al estilo elegido por el huésped", cantidad: "2", unidad: "Ud" },
-          { ingrediente: "Guarniciones a elegir (bacon, salchicha, hash brown, etc.)", cantidad: "2", unidad: "Raciones" },
-          { ingrediente: "Pancakes esponjosos", cantidad: "2", unidad: "Ud" },
-          { ingrediente: "Espuma de mascarpone", cantidad: "30", unidad: "Gr" },
-          { ingrediente: "Salsa artesana & frutos rojos", cantidad: "1", unidad: "Surtido" }
-        ],
-        imagen: "img/plato_american_breakfast.jpg",
-        ficha: "img/ficha_american_breakfast.jpg",
-        tieneFichaOficial: true,
-        svg: `<svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg"><rect width="400" height="220" fill="#151f32"/><circle cx="200" cy="110" r="85" fill="#f8fafc" stroke="#94a3b8" stroke-width="4"/><circle cx="170" cy="120" r="24" fill="#facc15" stroke="#ca8a04" stroke-width="2"/><circle cx="225" cy="120" r="24" fill="#facc15" stroke="#ca8a04" stroke-width="2"/><path d="M140 75 Q 200 65 260 75" stroke="#b91c1c" stroke-width="9" stroke-linecap="round"/><path d="M145 88 Q 200 78 255 88" stroke="#7f1d1d" stroke-width="8" stroke-linecap="round"/><rect x="180" y="45" width="40" height="22" rx="6" fill="#eab308"/><text x="200" y="210" text-anchor="middle" fill="#94a3b8" font-size="11">Plato Caliente 28cm con Campana</text></svg>`
+        id: "american", nombre: "American Breakfast", nombreEs: "Desayuno Americano Arts Oficial",
+        categoria: "menus", categoriaLabel: "Menú Completo", badgeClass: "badge-menu", precio: "54 €",
+        vajilla: "Plato llano 28cm caliente, campana", descripcion: "Huevos al gusto, guarniciones y pancakes.",
+        tags: ["Ficha CRO", "Huevos"], touchpoint: "Tapar inmediatamente con campana térmica.", alergenos: "Gluten, Lácteos, Huevos", tiempoPase: "15 - 18 min", tempServicio: ">65°C con campana",
+        pasosEmplatado: ["Bol cuadrado de frutas", "Huevos al estilo elegido"], imagen: "img/ficha_american_breakfast.jpg", ficha: "img/ficha_american_breakfast.jpg", tieneFichaOficial: true
       },
-
-      // 3. Healthy Breakfast (Ficha Oficial Arts CRO)
       {
-        id: "healthy",
-        nombre: "Healthy Breakfast",
-        nombreEs: "Desayuno Vital & Saludable Arts Oficial",
-        categoria: "menus",
-        categoriaLabel: "Menú Completo",
-        badgeClass: "badge-healthy",
-        precio: "58 €",
-        vajilla: "Bandeja IRD noble, plato sombrero para ensalada, bol cuadrado fruta, bol yogur espirulina, mini cocotte",
-        descripcion: "Desayuno compuesto por fruta fresca cortada, yogur vegano con espirulina y granola, huevo poché con espinaca, aguacate y cherrys confitados, oatmeal horneado y pan de masa madre tostado.",
-        tags: ["Ficha CRO", "Yogur Espirulina", "Huevo Poché Sombrero", "Oatmeal Horneado"],
-        touchpoint: "Estándar de servicio estricto: servir todo el conjunto simultáneamente combinando armónicamente elementos fríos y calientes (Serve all components at once).",
-        alergenos: "Gluten (GL), Lácteos (L), Huevos (H), Frutos Secos (FS)",
-        tiempoPase: "15 min",
-        tempServicio: "Frutas y yogur <4°C · Ensalada poché 55°C · Oatmeal >65°C",
-        pasosEmplatado: [
-          "Disponer el bol de frutas, el yogur de espirulina, el oatmeal horneado y el pan tostado en la bandeja de desayuno.",
-          "Emplatar la ensalada de espinaca con aguacate, cherrys confitados y huevo poché en plato sombrero.",
-          "Servir el conjunto combinando elementos fríos y calientes al mismo tiempo en el pase."
-        ],
-        ingredientesDetallados: [
-          { ingrediente: "Bol de frutas frescas cortadas", cantidad: "1", unidad: "Bol cuadrado" },
-          { ingrediente: "Yogur vegano de espirulina y granola", cantidad: "1", unidad: "Bol individual" },
-          { ingrediente: "Huevo poché ecológico a 64°C", cantidad: "1", unidad: "Ud" },
-          { ingrediente: "Espinacas frescas y aguacate", cantidad: "1", unidad: "Ración" },
-          { ingrediente: "Tomates cherrys confitados al tomillo", cantidad: "4", unidad: "Ud" },
-          { ingrediente: "Oatmeal de avena recién horneado", cantidad: "1", unidad: "Mini cocotte" },
-          { ingrediente: "Pan de masa madre tostado", cantidad: "2", unidad: "Rebanadas" }
-        ],
-        imagen: "img/plato_healthy_breakfast.jpg",
-        ficha: "img/ficha_healthy_breakfast.jpg",
-        tieneFichaOficial: true,
-        svg: `<svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg"><rect width="400" height="220" fill="#151f32"/><rect x="40" y="25" width="320" height="170" rx="12" fill="#1e293b" stroke="#16a34a" stroke-width="2"/><circle cx="100" cy="75" r="28" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/><circle cx="180" cy="75" r="28" fill="#0284c7"/><circle cx="260" cy="75" r="28" fill="#d97706"/><circle cx="140" cy="145" r="32" fill="#ffffff"/><circle cx="140" cy="142" r="16" fill="#facc15"/><rect x="220" y="125" width="55" height="40" rx="8" fill="#15803d"/><text x="200" y="210" text-anchor="middle" fill="#4ade80" font-size="11">Bandeja Vital: Espirulina, Fruta, Poché & Detox</text></svg>`
+        id: "healthy", nombre: "Healthy Breakfast", nombreEs: "Desayuno Vital & Saludable",
+        categoria: "menus", categoriaLabel: "Menú Completo", badgeClass: "badge-healthy", precio: "58 €",
+        vajilla: "Bandeja IRD noble, plato sombrero", descripcion: "Fruta fresca, yogur vegano espirulina, poché.",
+        tags: ["Yogur Espirulina"], touchpoint: "Servir todo simultáneamente.", alergenos: "Gluten, Lácteos, Huevos, Frutos Secos", tiempoPase: "15 min", tempServicio: "Frutas <4°C · Poché 55°C",
+        pasosEmplatado: ["Bol frutas", "Ensalada poché"], imagen: "img/ficha_healthy_breakfast.jpg", ficha: "img/ficha_healthy_breakfast.jpg", tieneFichaOficial: true
       },
-
-      // 4. Champagne y Caviar (Ficha Oficial Arts CRO)
       {
-        id: "champagne_caviar",
-        nombre: "Champagne y Caviar Oscietra",
-        nombreEs: "Servicio de Caviar Oscietra con Blinis Calientes & Gelée de Cava",
-        categoria: "carta",
-        categoriaLabel: "A la Carta",
-        badgeClass: "badge-carta",
-        precio: "185 €",
-        vajilla: "Caviarera con hielo pilé, vajilla de cuatro puntas, lino para blinis, cuchara de nácar",
-        descripcion: "Servicio compuesto por caviar Oscietra acompañado de blinis calientes, gelée de cava, queso crema, yema y clara de huevo, y cebollino. El pase se centra en un montaje en cuatro puntas con contraste de temperatura y guarniciones que aportan cremosidad, salinidad y frescor.",
-        tags: ["Ficha CRO", "Caviar Oscietra 30g", "Blinis Calientes", "Montaje 4 Puntas", "Gelée Cava"],
-        touchpoint: "Servicio de alta gastronomía: utilizar estrictamente cuchara de nácar. Los blinis deben salir calientes envueltos en lino y el caviar a 0-2°C sobre hielo picado.",
-        alergenos: "Gluten (GL), Lácteos (L), Pescado (P), Huevo (H)",
-        tiempoPase: "8 - 10 min",
-        tempServicio: "Servicio frío-caliente: Caviar 0 - 2°C · Blinis calientes >50°C",
-        pasosEmplatado: [
-          "Disponer todos los ingredientes menos los blinis en el plato especial de cuatro puntas.",
-          "Centrar la lata de Caviar Oscietra 30g sobre base noble con hielo picado fino y cuchara de nácar.",
-          "Calentar los blinis al microondas no más de 10 segundos para preservar su ternura.",
-          "Servir los blinis calientes envueltos en servilleta de lino junto al caviar."
-        ],
-        ingredientesDetallados: [
-          { ingrediente: "Oscietra Caviar", cantidad: "30", unidad: "Gr" },
-          { ingrediente: "Blinis artesanos", cantidad: "8", unidad: "Ud" },
-          { ingrediente: "Gelée de Cava", cantidad: "10", unidad: "Gr" },
-          { ingrediente: "Queso Crema", cantidad: "10", unidad: "Gr" },
-          { ingrediente: "Yema de Huevo cocida picada", cantidad: "10", unidad: "Gr" },
-          { ingrediente: "Clara de Huevo cocida picada", cantidad: "10", unidad: "Gr" },
-          { ingrediente: "Cebollino picado fino", cantidad: "3", unidad: "Gr" }
-        ],
-        imagen: "img/plato_champagne_caviar.jpg",
-        ficha: "img/ficha_champagne_caviar.jpg",
-        tieneFichaOficial: true,
-        svg: `<svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg"><rect width="400" height="220" fill="#151f32"/><circle cx="200" cy="110" r="85" fill="#0f172a" stroke="#ca8a04" stroke-width="4"/><circle cx="200" cy="110" r="40" fill="#000"/><circle cx="200" cy="110" r="32" fill="#1e293b"/><text x="200" y="210" text-anchor="middle" fill="#eab308" font-size="11">Caviar Oscietra 30g & Montaje 4 Puntas</text></svg>`
-      },
-
-      // 5. Sliced Fruit / Fruta Cortada (Ficha Oficial Arts CRO)
-      {
-        id: "fruit",
-        nombre: "Sliced Fruit (Fruta Cortada)",
-        nombreEs: "Selección Oficial de Frutas Frescas en Plato Sombrero",
-        categoria: "saludable",
-        categoriaLabel: "Saludable & Vegano",
-        badgeClass: "badge-healthy",
-        precio: "16 €",
-        vajilla: "Plato sombrero hondo refrigerado previamente a 2°C",
-        descripcion: "Plato de fruta fresca cortada compuesto por piña, melón blanco, melón cantaloup, manzana roja, fresa, arándanos, frambuesa, mora, plátano, kiwi y pera. El pase se basa en corte y montaje en plato sombrero, con un perfil fresco y ligero.",
-        tags: ["Ficha CRO", "Plato Sombrero", "11 Variedades Fruta", "100% Vegano"],
-        touchpoint: "El plato sombrero DEBE estar refrigerado a 2°C. El corte se realiza al momento de la orden para evitar la oxidación de la pera y la manzana roja.",
-        alergenos: "Vegano (VE) · Libre de los principales alérgenos",
-        tiempoPase: "8 min",
-        tempServicio: "Servicio muy frío: 2 - 4°C",
-        pasosEmplatado: [
-          "Emplatar en plato sombrero refrigerado, colocando de base la piña y los melones.",
-          "Completar con el resto de la fruta cortada manteniendo armonía cromática y volumetría.",
-          "Terminar el montaje en frío y verificar brillo natural impecable."
-        ],
-        ingredientesDetallados: [
-          { ingrediente: "Piña", cantidad: "4", unidad: "Slices" },
-          { ingrediente: "Melón blanco", cantidad: "4", unidad: "Slices" },
-          { ingrediente: "Melón cantaloup", cantidad: "4", unidad: "Slices" },
-          { ingrediente: "Manzana roja", cantidad: "4", unidad: "Slices" },
-          { ingrediente: "Fresa fresca", cantidad: "1", unidad: "Ud" },
-          { ingrediente: "Arándanos silvestres", cantidad: "5", unidad: "Ud" },
-          { ingrediente: "Frambuesa fresca", cantidad: "1", unidad: "Ud" },
-          { ingrediente: "Mora silvestre", cantidad: "1", unidad: "Ud" },
-          { ingrediente: "Plátano canario", cantidad: "5", unidad: "Slices" },
-          { ingrediente: "Kiwi", cantidad: "1/2", unidad: "Ud" },
-          { ingrediente: "Pera conferencia", cantidad: "6", unidad: "Slices" }
-        ],
-        imagen: "img/plato_sliced_fruit.jpg",
-        ficha: "img/ficha_sliced_fruit.jpg",
-        tieneFichaOficial: true,
-        svg: `<svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg"><rect width="400" height="220" fill="#151f32"/><circle cx="200" cy="110" r="85" fill="#f8fafc" stroke="#94a3b8" stroke-width="5"/><circle cx="200" cy="110" r="50" fill="#e2e8f0"/><text x="200" y="210" text-anchor="middle" fill="#94a3b8" font-size="11">Plato Sombrero Refrigerado 2°C</text></svg>`
-      },
-
-      // 6. Avena con Frutos Rojos (Ficha Oficial Arts CRO)
-      {
-        id: "avena_frutos_rojos",
-        nombre: "Avena con Frutos Rojos",
-        nombreEs: "Warm Oats & Bulgari de Frutos Rojos",
-        categoria: "saludable",
-        categoriaLabel: "Saludable & Vegano",
-        badgeClass: "badge-healthy",
-        precio: "16 €",
-        vajilla: "Plato sombrero caliente + cuenco bulgari para frutos rojos",
-        descripcion: "Avena caliente servida en plato sombrero con frutos rojos presentados aparte en cuenco bulgari para que el huésped los incorpore a su gusto sin marchitarlos.",
-        tags: ["Ficha CRO", "Plato Sombrero", "Cuenco Bulgari", "Avena 60g"],
-        touchpoint: "Los frutos rojos NUNCA se introducen dentro de la avena caliente en cocina para preservar su textura fresca; se sirven rigurosamente aparte en cuenco bulgari.",
-        alergenos: "Gluten (GL); Lácteos según leche a elegir (L)",
-        tiempoPase: "8 - 10 min",
-        tempServicio: "Avena humeante >65°C · Frutos rojos frescos en bulgari",
-        pasosEmplatado: [
-          "Calentar en un cazo la leche elegida con la avena previamente hidratada.",
-          "Emplatar la avena cremosa en el centro de un plato sombrero precalentado.",
-          "Servir aparte un cuenco bulgari con los frutos rojos frescos impecables."
-        ],
-        ingredientesDetallados: [
-          { ingrediente: "Avena previamente hidratada", cantidad: "60", unidad: "Gr" },
-          { ingrediente: "Leche a elegir (avena, soja, entera, almendra)", cantidad: "60", unidad: "Gr" },
-          { ingrediente: "Fresas", cantidad: "0,5", unidad: "Ud" },
-          { ingrediente: "Moras", cantidad: "1", unidad: "Ud" },
-          { ingrediente: "Frambuesa", cantidad: "1", unidad: "Ud" },
-          { ingrediente: "Arándanos", cantidad: "5", unidad: "Ud" }
-        ],
-        imagen: "img/plato_avena_frutos_rojos.jpg",
-        ficha: "img/ficha_avena_frutos_rojos.jpg",
-        tieneFichaOficial: true,
-        svg: `<svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg"><rect width="400" height="220" fill="#151f32"/><circle cx="170" cy="110" r="75" fill="#f8fafc"/><circle cx="280" cy="110" r="40" fill="#e2e8f0"/><text x="200" y="210" text-anchor="middle" fill="#94a3b8" font-size="11">Plato Sombrero & Bulgari Frutos Rojos</text></svg>`
-      },
-
-      // 7. Bowl de Frutos Rojos (Ficha Oficial Arts CRO)
-      {
-        id: "bowl_frutos_rojos",
-        nombre: "Bowl de Frutos Rojos",
-        nombreEs: "Bol Cuadrado de Frutos Silvestres por Capas",
-        categoria: "saludable",
-        categoriaLabel: "Saludable & Vegano",
-        badgeClass: "badge-healthy",
-        precio: "16 €",
-        vajilla: "Bol cuadrado blanco de porcelana refrigerado a 2°C",
-        descripcion: "Bol de frutos rojos compuesto por fresa, arándanos, mora y frambuesa, montado en bol cuadrado. La elaboración se basa en corte y disposición por capas, con un perfil fresco y ligero.",
-        tags: ["Ficha CRO", "Bol Cuadrado", "Montaje por Capas", "Vegano"],
-        touchpoint: "Disposición estricta en capas: fresas en sextos en la base, arándanos en capa intermedia y moras/frambuesas en la superficie. Servicio muy frío.",
-        alergenos: "Vegano (VE) · Libre de alérgenos",
-        tiempoPase: "6 - 8 min",
-        tempServicio: "Servicio muy frío: 2 - 4°C",
-        pasosEmplatado: [
-          "Cortar las fresas en sextos y colocarlas en la base de un bol cuadrado.",
-          "Añadir los arándanos formando una capa intermedia uniforme.",
-          "Terminar con las frambuesas y moras dispuestas en la cúspide con armonía."
-        ],
-        ingredientesDetallados: [
-          { ingrediente: "Fresa fresca", cantidad: "3", unidad: "Ud (cortadas en sextos)" },
-          { ingrediente: "Arándanos", cantidad: "14", unidad: "Ud" },
-          { ingrediente: "Mora silvestre", cantidad: "6", unidad: "Ud" },
-          { ingrediente: "Frambuesa fresca", cantidad: "6", unidad: "Ud" }
-        ],
-        imagen: "img/plato_bowl_frutos_rojos.jpg",
-        ficha: "img/ficha_bowl_frutos_rojos.jpg",
-        tieneFichaOficial: true,
-        svg: `<svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg"><rect width="400" height="220" fill="#151f32"/><rect x="130" y="45" width="140" height="130" rx="14" fill="#f8fafc" stroke="#94a3b8" stroke-width="3"/><text x="200" y="210" text-anchor="middle" fill="#ef4444" font-size="11">Bol Cuadrado de Frutos Silvestres</text></svg>`
-      },
-
-      // 8. Coconut Pudding (Ficha Oficial Arts CRO)
-      {
-        id: "coconut_pudding",
-        nombre: "Coconut Pudding (Chia Pudding)",
-        nombreEs: "Pudding Frío de Chía, Crumble & Piña Osmotizada",
-        categoria: "saludable",
-        categoriaLabel: "Saludable & Vegano",
-        badgeClass: "badge-healthy",
-        precio: "15 €",
-        vajilla: "Bol redondo de cerámica artesanal refrigerado a 2°C",
-        descripcion: "Pudding frío de chía servido en bol redondo con crumble de coco, coco deshidratado y piña osmotizada. El pase se basa en un montaje en frío con contraste entre base cremosa, elemento crujiente y fruta tratada.",
-        tags: ["Ficha CRO", "Chía Cuarto Frío", "Crumble de Coco", "Piña Osmotizada"],
-        touchpoint: "Montaje con contraste de texturas: colocar el crumble de coco de la mitad hacia una esquina y trazar una línea geométrica impecable con las 6 láminas de piña osmotizada.",
-        alergenos: "Frutos de Cáscara (coco) · Vegano (VE)",
-        tiempoPase: "6 - 8 min",
-        tempServicio: "Servicio frío: 2 - 4°C",
-        pasosEmplatado: [
-          "Emplatar en el bol redondo una base lisa de 100g de chia pudding (elaborado en cuarto frío).",
-          "Colocar el crumble de coco cubriendo desde la mitad hacia una esquina.",
-          "Decorar con lascas de coco deshidratado y una línea estética de piña osmotizada."
-        ],
-        ingredientesDetallados: [
-          { ingrediente: "Pudding de Chía (cuarto frío)", cantidad: "100", unidad: "Gr" },
-          { ingrediente: "Crumble de coco artesano", cantidad: "10", unidad: "Gr" },
-          { ingrediente: "Coco deshidratado en lascas", cantidad: "2", unidad: "Gr" },
-          { ingrediente: "Piña osmotizada", cantidad: "6", unidad: "Slices" }
-        ],
-        imagen: "img/plato_coconut_pudding.jpg",
-        ficha: "img/ficha_coconut_pudding.jpg",
-        tieneFichaOficial: true,
-        svg: `<svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg"><rect width="400" height="220" fill="#151f32"/><circle cx="200" cy="110" r="75" fill="#f8fafc" stroke="#94a3b8" stroke-width="4"/><path d="M200 35 A75 75 0 0 1 275 110 L200 110 Z" fill="#d97706"/><text x="200" y="210" text-anchor="middle" fill="#ca8a04" font-size="11">Bol Redondo: Chia, Crumble & Piña Osmotizada</text></svg>`
-      },
-
-      // 9. Desayuno Catalán
-      {
-        id: "catalan",
-        nombre: "Catalan Breakfast",
-        nombreEs: "Desayuno Tradición Catalana con Ibéricos",
-        categoria: "menus",
-        categoriaLabel: "Menú Completo",
-        badgeClass: "badge-menu",
-        precio: "56 €",
-        vajilla: "Tabla de pizarra noble, cesta pan de cristal, aceitera de vidrio",
-        descripcion: "Jamón ibérico de bellota 100% cortado a mano (80g), lomo ibérico de bellota, fuet artesano de Vic, quesos catalanes artesanos (Garrotxa y Formatge d'Urgell), 4 tostas de pan de cristal con tomate de colgar y AOVE Arbequina virgen extra.",
-        tags: ["Jamón Ibérico 100%", "Pan de Cristal", "Queso Garrotxa", "AOVE Arbequina"],
-        touchpoint: "El jamón ibérico DEBE estar atemperado a 22-24°C para que sude la grasa noble. El pan de cristal debe servirse recién tostado y súper crujiente.",
-        alergenos: "Gluten (GL), Lactosa (LAC)",
-        tiempoPase: "10 - 12 min",
-        tempServicio: "Embutidos a temperatura ambiente (22°C) · Pan recién tostado caliente",
-        pasosEmplatado: [
-          "Disponer el Jamón Ibérico de Bellota en abanico aireado sobre la pizarra, evitando apelmazar las lonchas.",
-          "Colocar las cuñas de queso Garrotxa y Urgell en el extremo lateral con unas gotas de aceite de oliva.",
-          "Tostar las 4 piezas de pan de cristal, frotar con tomate maduro de colgar, añadir sal marina en escamas y un hilo generoso de AOVE.",
-          "Servir el pan en cestillo térmico para mantener la textura cristalina hasta la mesa del huésped."
-        ],
-        imagen: null,
-        ficha: null,
-        tieneFichaOficial: false,
-        svg: `<svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg"><rect width="400" height="220" fill="#151f32"/><rect x="50" y="30" width="300" height="155" rx="10" fill="#1e293b" stroke="#64748b" stroke-width="2"/><ellipse cx="140" cy="110" rx="65" ry="40" fill="#991b1b"/><path d="M100 110 Q 140 90 180 110" stroke="#fca5a5" stroke-width="4" fill="none"/><rect x="230" y="60" width="90" height="40" rx="4" fill="#d97706"/><rect x="235" y="65" width="80" height="30" rx="3" fill="#ef4444"/><polygon points="240,150 280,120 280,150" fill="#fef08a"/><text x="200" y="208" text-anchor="middle" fill="#eab308" font-size="11">Pizarra Ibéricos 100% Bellota & Pa amb Tomàquet</text></svg>`
-      },
-
-      // 10. Desayuno Japonés
-      {
-        id: "japanese",
-        nombre: "Traditional Japanese Breakfast",
-        nombreEs: "Desayuno Tradicional Japonés",
-        categoria: "menus",
-        categoriaLabel: "Menú Completo",
-        badgeClass: "badge-menu",
-        precio: "58 €",
-        vajilla: "Bandeja Obon lacada en negro, bol Chawan (arroz), bol Shiruwan (miso con tapa), yakimono-zara",
-        descripcion: "Lomo de salmón salvaje Shioyaki a la plancha con glaseado teriyaki, sopa de miso artesana con tofu sedoso y alga wakame, bol de arroz gohan al vapor con furikake, tortilla japonesa Tamagoyaki, encurtidos tsukemono y té verde Sencha.",
-        tags: ["Salmón Shioyaki", "Sopa Miso", "Arroz Gohan", "Tamagoyaki", "Té Sencha"],
-        touchpoint: "La sopa miso DEBE servirse con su tapa lacada para retener el vapor y aromas del dashi. Los palillos deben disponerse horizontales en la base sobre el hashioki.",
-        alergenos: "Pescado (PES), Soja (SOY), Sésamo (SES), Gluten (GL)",
-        tiempoPase: "15 - 18 min",
-        tempServicio: "Sopa miso y arroz >70°C · Salmón 65°C · Acompañamientos frescos",
-        pasosEmplatado: [
-          "Colocar el bol de arroz blanco Gohan humeante en la parte inferior izquierda de la bandeja Obon.",
-          "Colocar el bol de sopa Miso con su tapa cerrada en la parte inferior derecha.",
-          "Centrar en la parte superior el plato alargado Yakimono con el lomo de salmón asado y piel crujiente hacia arriba.",
-          "Ubicar los platillos pequeños (Kobachi) con el Tamagoyaki en rollitos y los encurtidos Tsukemono entre los platos principales.",
-          "Colocar los palillos japoneses apoyados en el soporte hashioki al frente de la bandeja."
-        ],
-        imagen: null,
-        ficha: null,
-        tieneFichaOficial: false,
-        svg: `<svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg"><rect width="400" height="220" fill="#151f32"/><rect x="40" y="25" width="320" height="170" rx="8" fill="#090d16" stroke="#b91c1c" stroke-width="2"/><ellipse cx="200" cy="75" rx="75" ry="25" fill="#f8fafc"/><path d="M150 75 Q 200 65 250 75" fill="#ea580c"/><circle cx="115" cy="140" r="32" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/><circle cx="115" cy="140" r="26" fill="#f1f5f9"/><circle cx="285" cy="140" r="30" fill="#78350f" stroke="#000000" stroke-width="3"/><rect x="180" y="125" width="40" height="25" rx="4" fill="#facc15"/><text x="200" y="210" text-anchor="middle" fill="#38bdf8" font-size="11">Bandeja Obon: Shioyaki, Gohan, Miso & Tamagoyaki</text></svg>`
-      },
-
-      // 11. Eggs Benedict & Royale
-      {
-        id: "benedict",
-        nombre: "Eggs Benedict & Royale con Yuzu Hollandaise",
-        nombreEs: "Huevos Benedict / Royale con Holandesa de Yuzu",
-        categoria: "huevos",
-        categoriaLabel: "Platos de Huevos",
-        badgeClass: "badge-eggs",
-        precio: "24 €",
-        vajilla: "Plato hondo de ala ancha 28cm precalentado a 50°C, campana con respiradero, salsera",
-        descripcion: "Dos mitades de English Muffin artesano tostados a la mantequilla, láminas de aguacate maduro, dos huevos poché camperos cocinados a 64°C con yema fluida sedosa, salsa holandesa casera infusionada con cítrico yuzu y brotes frescos. Opción de añadir salmón ahumado salvaje (Royale) o bacon crujiente.",
-        tags: ["English Muffin", "Holandesa de Yuzu", "Huevos a 64°C", "Salmón o Bacon"],
-        touchpoint: "La holandesa debe estar a 45-50°C (emulsión tibia sedosa). Si el pedido va a suite lejana, enviar la holandesa en salsera isotérmica aparte para no ablandar el muffin.",
-        alergenos: "Lactosa (LAC), Huevos (HUE), Gluten (GL), Sulfitos (SUL), Pescado (opcional)",
-        tiempoPase: "10 - 12 min",
-        tempServicio: "Servicio a 55°C · Holandesa tibia",
-        pasosEmplatado: [
-          "Tostar las dos mitades de muffin en sartén con mantequilla clarificada hasta obtener un dorado uniforme y crujiente.",
-          "Colocar el aguacate laminado fino y las lonchas de salmón ahumado (o bacon crujiente) sobre cada muffin.",
-          "Escurrir los dos huevos poché en papel secante y asentarlos cuidadosamente sobre cada base.",
-          "Naprotar con 30 ml de holandesa tibia de yuzu por cada huevo, cubrir con cebollino picado ultrafino y micro-brotes de sakura."
-        ],
-        imagen: null,
-        ficha: null,
-        tieneFichaOficial: false,
-        svg: `<svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg"><rect width="400" height="220" fill="#151f32"/><circle cx="200" cy="110" r="80" fill="#f8fafc" stroke="#94a3b8" stroke-width="4"/><circle cx="160" cy="110" r="32" fill="#d97706"/><circle cx="240" cy="110" r="32" fill="#d97706"/><circle cx="160" cy="106" r="28" fill="#fde047" stroke="#eab308" stroke-width="2"/><circle cx="240" cy="106" r="28" fill="#fde047" stroke="#eab308" stroke-width="2"/><circle cx="160" cy="106" r="6" fill="#15803d"/><circle cx="240" cy="106" r="6" fill="#15803d"/><text x="200" y="208" text-anchor="middle" fill="#38bdf8" font-size="11">English Muffin, Poché 64°C & Holandesa de Yuzu</text></svg>`
-      },
-
-      // 12. Toasted Bread with Avocado (Ficha Oficial Arts)
-      {
-        id: "avocado",
-        nombre: "Toasted Bread with Avocado",
-        nombreEs: "Tostada de Aguacate Laminado con Tomates Confitados",
-        categoria: "carta",
-        categoriaLabel: "A la Carta",
-        badgeClass: "badge-carta",
-        precio: "18 €",
-        vajilla: "Plato cerámico artesanal plano (Plate), cubertería noble (cutlery), sin campana hermética",
-        descripcion: "2 unidades de pan rústico con aguacate laminado en abanico continuo, tomates confitados artesanos, AOVE virgen extra y escamas de sal Maldon. Decorado con pensamientos comestibles y pétalos.",
-        tags: ["Ficha Oficial", "Aguacate Laminado", "Tomates Confitados", "AOVE & Sal Maldon"],
-        touchpoint: "NUNCA tapar con campana hermética caliente; el vapor reblandece el pan crujiente. El abanico de aguacate debe mantenerse limpio y brillante con el AOVE.",
-        alergenos: "Gluten (GL), Frutos de cáscara (FC)",
-        tiempoPase: "8 - 10 min",
-        tempServicio: "Pan recién tostado tibio · Aguacate a temperatura fresca",
-        pasosEmplatado: [
-          "Tostar las 2 unidades de pan rústico hasta lograr un dorado uniforme y crujiente.",
-          "Disponer el aguacate laminado fino formando un abanico continuo sobre las tostas.",
-          "Distribuir los tomates confitados por encima y aderezar con un hilo generoso de AOVE.",
-          "Rematar con escamas de sal Maldon y flores comestibles frescas antes del pase."
-        ],
-        ingredientesDetallados: [
-          { ingrediente: "Pan rústico tostado", cantidad: "2", unidad: "Ud" },
-          { ingrediente: "Aguacate laminado en abanico", cantidad: "1", unidad: "Ud" },
-          { ingrediente: "Tomates confitados artesanos", cantidad: "4 - 5", unidad: "Ud" },
-          { ingrediente: "Aceite de Oliva Virgen Extra (AOVE)", cantidad: "10", unidad: "Ml" },
-          { ingrediente: "Sal Maldon en escamas & flores", cantidad: "1", unidad: "Pellizco" }
-        ],
-        imagen: "img/plato_toasted_bread_with_avocado.jpg",
-        ficha: "img/ficha_toasted_bread_with_avocado.jpg",
-        tieneFichaOficial: true,
-        svg: `<svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg"><rect width="400" height="220" fill="#151f32"/><ellipse cx="200" cy="110" rx="140" ry="75" fill="#f8fafc" stroke="#94a3b8" stroke-width="4"/><ellipse cx="200" cy="110" rx="105" ry="46" fill="#78350f"/><ellipse cx="200" cy="106" rx="98" ry="40" fill="#65a30d"/><circle cx="155" cy="100" r="10" fill="#dc2626"/><circle cx="240" cy="115" r="11" fill="#eab308"/><circle cx="200" cy="105" r="9" fill="#a855f7"/><text x="200" y="208" text-anchor="middle" fill="#84cc16" font-size="11">Pan Pochón 200°C & Abanico Milimétrico</text></svg>`
-      },
-
-      // 13. French Toast
-      {
-        id: "frenchtoast",
-        nombre: "Arts French Toast (Brioche Caramelizada)",
-        nombreEs: "Brioche Caramelizado a la Vainilla Bourbon",
-        categoria: "dulces",
-        categoriaLabel: "Dulces & Panadería",
-        badgeClass: "badge-sweet",
-        precio: "20 €",
-        vajilla: "Plato llano hondo de porcelana 26cm atemperado, campana de cristal",
-        descripcion: "Bloque cúbico de pan brioche artesano de mantequilla pura, remojado 12h en crème brûlée con vainilla Bourbon de Madagascar y ralladura de naranja, sellado en mantequilla noisette y caramelizado con costra de azúcar moreno crujiente. Quenelle de mascarpone y coulis de frutos del bosque.",
-        tags: ["Brioche Mantequilla", "Vainilla Bourbon", "Costra Crujiente", "Mascarpone"],
-        touchpoint: "La costra exterior debe estar perfectamente crujiente tipo crème brûlée y el interior tierno y cremoso. Si el trayecto a suite supera 5 min, servir la quenelle de mascarpone en platillo frío anexo.",
-        alergenos: "Gluten (GL), Lactosa (LAC), Huevos (HUE)",
-        tiempoPase: "12 - 14 min",
-        tempServicio: "Brioche caliente 65°C · Mascarpone frío 4°C",
-        pasosEmplatado: [
-          "Marcar el bloque de brioche en sartén con mantequilla avellanada hasta dorar todas sus caras.",
-          "Espolvorear azúcar de caña en la cara superior y caramelizar con soplete o salamandra hasta lograr una costra de caramelo dorado.",
-          "Asentar el brioche en el centro del plato sobre un trazo elegante de coulis de frambuesa.",
-          "Modelar una quenelle perfecta de mascarpone a la vainilla y colocarla encima o a un lado, decorando con menta fresca."
-        ],
-        imagen: null,
-        ficha: null,
-        tieneFichaOficial: false,
-        svg: `<svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg"><rect width="400" height="220" fill="#151f32"/><circle cx="200" cy="110" r="85" fill="#f8fafc" stroke="#94a3b8" stroke-width="4"/><path d="M150 130 Q 200 95 250 130" stroke="#db2777" stroke-width="8" fill="none" stroke-linecap="round"/><rect x="160" y="75" width="80" height="65" rx="6" fill="#b45309" stroke="#78350f" stroke-width="2"/><rect x="165" y="80" width="70" height="22" rx="4" fill="#f59e0b"/><ellipse cx="200" cy="72" rx="20" ry="10" fill="#f8fafc"/><text x="200" y="210" text-anchor="middle" fill="#fbbf24" font-size="11">Brioche Caramelizada & Quenelle Mascarpone</text></svg>`
-      },
-
-      // 14. Pancakes Esponjosos
-      {
-        id: "pancakes",
-        nombre: "Fluffy Buttermilk Pancakes con Arándanos",
-        nombreEs: "Tortitas Americanas con Sirope de Arce Orgánico",
-        categoria: "dulces",
-        categoriaLabel: "Dulces & Panadería",
-        badgeClass: "badge-sweet",
-        precio: "19 €",
-        vajilla: "Plato llano 26cm caliente con campana térmica, jarrita de cobre para sirope",
-        descripcion: "Torre de 3 tortitas americanas de suero de mantequilla esponjosas y aireadas de 1.5 cm de grosor, arándanos frescos integrados en la masa y en superficie, quenelle de mantequilla batida con miel de azahar y jarrita de sirope de arce canadiense grado A tibio.",
-        tags: ["Buttermilk Pancakes", "Arándanos Frescos", "Sirope de Arce Grado A"],
-        touchpoint: "Las tortitas deben conservar su altura y textura suflé; jamás aplastar con la campana. El sirope de arce debe servirse tibio en jarrita individual.",
-        alergenos: "Gluten (GL), Lactosa (LAC), Huevos (HUE)",
-        tiempoPase: "12 min",
-        tempServicio: "Pancakes calientes 65°C · Sirope tibio 45°C",
-        pasosEmplatado: [
-          "Cocinar 3 tortitas en plancha a 170°C hasta que doblen su volumen con burbujas y dorar ambos lados.",
-          "Apilar las 3 tortitas en el centro del plato caliente alineadas con precisión.",
-          "Espolvorear azúcar glas tamizado con colador fino.",
-          "Colocar un puñado de arándanos frescos en la cima, una nuez de mantequilla batida con miel y colocar la campana con la jarrita de sirope aparte."
-        ],
-        imagen: null,
-        ficha: null,
-        tieneFichaOficial: false,
-        svg: `<svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg"><rect width="400" height="220" fill="#151f32"/><circle cx="200" cy="110" r="85" fill="#f8fafc" stroke="#94a3b8" stroke-width="4"/><ellipse cx="200" cy="130" rx="65" ry="20" fill="#d97706"/><ellipse cx="200" cy="115" rx="62" ry="19" fill="#f59e0b"/><ellipse cx="200" cy="100" rx="58" ry="18" fill="#fbbf24"/><rect x="190" y="86" width="20" height="14" rx="3" fill="#fef08a"/><circle cx="170" cy="98" r="6" fill="#1e1b4b"/><circle cx="225" cy="102" r="6" fill="#1e1b4b"/><text x="200" y="210" text-anchor="middle" fill="#94a3b8" font-size="11">Torre Suflé 3 Pisos & Sirope de Arce</text></svg>`
-      },
-
-      // 15. Omelette al Gusto
-      {
-        id: "omelette",
-        nombre: "Omelette Francesa al Gusto (Trufa / Bellota)",
-        nombreEs: "Tortilla Francesa Artesana en Huso",
-        categoria: "huevos",
-        categoriaLabel: "Platos de Huevos",
-        badgeClass: "badge-eggs",
-        precio: "22 €",
-        vajilla: "Plato ovalado 28cm precalentado a 55°C, campana térmica de acero inoxidable",
-        descripcion: "Tortilla francesa de 3 huevos de corral ecológicos batidos a mano, técnica de alta escuela enrollada en huso cilíndrico perfecto sin coloración exterior, superficie lisa barnizada con mantequilla clarificada e interior baveuse. Rellenos selectos: trufa negra melanosporum, setas silvestres, queso de cabra o jamón ibérico.",
-        tags: ["3 Huevos Camperos", "Forma en Huso", "Interior Baveuse", "Sin Dorado Exterior"],
-        touchpoint: "CERO coloración marrón en la superficie (criterio estricto de alta gastronomía). Barnizar con mantequilla clarificada antes de poner la campana.",
-        alergenos: "Huevos (HUE), Lactosa (LAC)",
-        tiempoPase: "8 - 10 min",
-        tempServicio: "Servicio inmediato a 65°C con campana",
-        pasosEmplatado: [
-          "Batir los 3 huevos con un pellizco de sal hasta emulsionar sin exceso de espuma.",
-          "Verter en sartén antiadherente con mantequilla y remover vigorosamente con espátula a fuego medio-alto.",
-          "Cuando el huevo esté casi cuajado pero baveuse en el centro, incorporar el relleno y enrollar dándole golpes suaves a la sartén en forma de huso perfecto.",
-          "Volcar sobre el plato oval caliente con el pliegue hacia abajo, pintar con mantequilla clarificada y decorar con cebollino fresco picado."
-        ],
-        imagen: null,
-        ficha: null,
-        tieneFichaOficial: false,
-        svg: `<svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg"><rect width="400" height="220" fill="#151f32"/><ellipse cx="200" cy="110" rx="130" ry="70" fill="#f8fafc" stroke="#94a3b8" stroke-width="4"/><ellipse cx="200" cy="110" rx="85" ry="32" fill="#facc15" stroke="#eab308" stroke-width="2"/><line x1="140" y1="110" x2="260" y2="110" stroke="#ca8a04" stroke-width="2" stroke-dasharray="4 4"/><circle cx="170" cy="110" r="4" fill="#15803d"/><circle cx="200" cy="110" r="4" fill="#15803d"/><circle cx="230" cy="110" r="4" fill="#15803d"/><text x="200" y="208" text-anchor="middle" fill="#eab308" font-size="11">Huso Francés Liso · Interior Baveuse</text></svg>`
-      },
-
-      // 16. Açaí & Superfood Bowl
-      {
-        id: "acai",
-        nombre: "Açaí & Chia Superfood Bowl",
-        nombreEs: "Bol Antioxidante de Açaí y Frutas",
-        categoria: "saludable",
-        categoriaLabel: "Saludable & Vegano",
-        badgeClass: "badge-healthy",
-        precio: "17 €",
-        vajilla: "Bol artesanal de cerámica gres o cáscara de coco helada a -5°C, cuchara plateada",
-        descripcion: "Base densa de açaí puro orgánico del Amazonas batido con plátano y leche de coco, coronado con líneas geométricas impecables de semillas de chía, granola crujiente casera de avena y nueces, láminas de plátano fresco, arándanos, bayas de goji y escamas de coco tostado.",
-        tags: ["Açaí Orgánico", "Semillas de Chía", "Granola Casera", "Vegano"],
-        touchpoint: "La textura de la base debe ser firme tipo sorbete denso (nunca sopa líquida). Las líneas de toppings deben estar rigurosamente rectas y separadas.",
-        alergenos: "Frutos de Cáscara (FS), Sésamo (trazas)",
-        tiempoPase: "8 min",
-        tempServicio: "Servicio helado a -2°C",
-        pasosEmplatado: [
-          "Verter la emulsión de açaí frío en el bol helado alisando la superficie con espátula.",
-          "Trazar una línea longitudinal de rodajas de plátano superpuestas.",
-          "Disponer en franjas paralelas contiguas: granola crujiente, semillas de chía, bayas de goji rojas y arándanos azules.",
-          "Terminar con escamas de coco tostado en el extremo y servir de inmediato."
-        ],
-        imagen: null,
-        ficha: null,
-        tieneFichaOficial: false,
-        svg: `<svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg"><rect width="400" height="220" fill="#151f32"/><circle cx="200" cy="110" r="85" fill="#3b0764" stroke="#a855f7" stroke-width="4"/><circle cx="200" cy="110" r="75" fill="#581c87"/><rect x="145" y="65" width="15" height="90" rx="7" fill="#fde047"/><rect x="165" y="60" width="15" height="100" rx="7" fill="#d97706"/><rect x="185" y="55" width="15" height="110" rx="7" fill="#1e1b4b"/><rect x="205" y="55" width="15" height="110" rx="7" fill="#ef4444"/><rect x="225" y="60" width="15" height="100" rx="7" fill="#f8fafc"/><text x="200" y="210" text-anchor="middle" fill="#c084fc" font-size="11">Bol Helado -5°C & Líneas Geométricas de Toppings</text></svg>`
+        id: "champagne_caviar", nombre: "Champagne y Caviar Oscietra", nombreEs: "Servicio de Caviar Oscietra 30g",
+        categoria: "carta", categoriaLabel: "A la Carta", badgeClass: "badge-carta", precio: "185 €",
+        vajilla: "Caviarera hielo pilé, 4 puntas", descripcion: "Caviar con blinis calientes y gelée de cava.",
+        tags: ["Caviar Oscietra", "Blinis"], touchpoint: "Cuchara de nácar obligatoria.", alergenos: "Gluten, Lácteos, Pescado, Huevo", tiempoPase: "8 - 10 min", tempServicio: "Caviar 0-2°C",
+        pasosEmplatado: ["Lata sobre hielo", "Blinis en lino"], imagen: "img/ficha_champagne_caviar.jpg", ficha: "img/ficha_champagne_caviar.jpg", tieneFichaOficial: true
       }
     ];
 
+    // --- 2. CATÁLOGO TARDE / NOCHE (PM) - (Las 49 Fichas del PDF) ---
+    const catalogoPM = [
+      // 01 SABOR LOCAL
+      { id: "pm_gilda", nombre: "Gilda", nombreEs: "Gildas Típicas del País Vasco (4 uds)", categoria: "sabor_local", categoriaLabel: "Sabor Local", badgeClass: "badge-local", precio: "12 €", vajilla: "Plato pequeño madera, papel periódico", descripcion: "Gildas elaboradas con Anchoas del Cantábrico, piparras y Oliva Verde.", tags: ["4 Unidades", "Pintxo Vasco"], alergenos: "Pescado, Sulfitos", tiempoPase: "5 min", tempServicio: "Frío", pasosEmplatado: ["Emplatar 4 uds en plato pequeño de madera con papel periódico en la base.", "IMPORTANTE: Escurrir bien las Gildas quitando el exceso de aceite."], imagen: "img/ficha_pm_04.jpg", ficha: "img/ficha_pm_04.jpg", tieneFichaOficial: true },
+      { id: "pm_pan_tomate", nombre: "Pan con Tomate", nombreEs: "Pan de Cristal con Tomate de Colgar", categoria: "sabor_local", categoriaLabel: "Sabor Local", badgeClass: "badge-local", precio: "8 €", vajilla: "Plato rectangular alargado", descripcion: "Pan Cristal tostado pintado con tomate de colgar, AOVE y Sal Maldon.", tags: ["Pan Cristal", "AOVE 0.4°"], alergenos: "Gluten (Trazas: Soja, Mostaza)", tiempoPase: "5 min", tempServicio: "Caliente", pasosEmplatado: ["Llevar 4 trozos de pan cristal al horno a 200°C por 5 minutos.", "Cortar 2 tomates de colgar por la mitad.", "Pintar friccionando el tomate cuidadosamente para que no rompa el pan.", "Finalizar con AOVE y Sal Maldon."], imagen: "img/ficha_pm_06.jpg", ficha: "img/ficha_pm_06.jpg", tieneFichaOficial: true },
+      { id: "pm_jamon", nombre: "Jamón Ibérico 100%", nombreEs: "80g Jamón 100% Bellota a Cuchillo", categoria: "sabor_local", categoriaLabel: "Sabor Local", badgeClass: "badge-local", precio: "38 €", vajilla: "Plato Trinchante Grande", descripcion: "Jamón Ibérico cortado a cuchillo dispuesto en abanico.", tags: ["100% Bellota", "Corte a Cuchillo"], alergenos: "Cerdo", tiempoPase: "15 min", tempServicio: "Atemperado", pasosEmplatado: ["Sacar el blister a atemperar previamente.", "Emplatar centralizado en plato trinchante grande.", "Finalizar pintando con grasa de jamón."], imagen: "img/ficha_pm_08.jpg", ficha: "img/ficha_pm_08.jpg", tieneFichaOficial: true },
+      { id: "pm_bravas", nombre: "Nuestras Bravas", nombreEs: "Vasitos de Patata, Brava y Alioli", categoria: "sabor_local", categoriaLabel: "Sabor Local", badgeClass: "badge-local", precio: "14 €", vajilla: "Plato Alargado Rectangular", descripcion: "Vasitos de patata confitados y fritos rellenos de salsa brava y alioli de ajo asado.", tags: ["Patata Vaso", "Alioli Ajo Asado"], alergenos: "Gluten, Sulfitos, Huevo", tiempoPase: "15 min", tempServicio: "Caliente (Hot Box)", pasosEmplatado: ["Freír 8 vasitos a 180°C por 3 min. Escurrir y sazonar.", "Rellenar con brava dejando espacio.", "Hacer puntos de alioli tapando la brava.", "Finalizar con cebollino y alinear en plato."], imagen: "img/ficha_pm_10.jpg", ficha: "img/ficha_pm_10.jpg", tieneFichaOficial: true },
+      { id: "pm_bomba", nombre: "Bomba de Barceloneta", nombreEs: "Bomba de Ternera y Cerdo (6 uds)", categoria: "sabor_local", categoriaLabel: "Sabor Local", badgeClass: "badge-local", precio: "16 €", vajilla: "Rectangular Alargado", descripcion: "Tradicional bomba mixta servida con salsa brava y alioli.", tags: ["Ternera y Cerdo", "Fritura"], alergenos: "Gluten, Cerdo, Lactosa, Huevo, Sulfitos", tiempoPase: "15 min", tempServicio: "Caliente (Hot Box)", pasosEmplatado: ["Freír 6 bombas a 180°C por 3 min.", "Finalizar al horno 200°C por 2 min (chequear temp interna).", "Disponer 6 puntos de alioli en la base, colocar bomba, punto brava y punto alioli encima, cebollino."], imagen: "img/ficha_pm_12.jpg", ficha: "img/ficha_pm_12.jpg", tieneFichaOficial: true },
+      { id: "pm_croq_jamon", nombre: "Croqueta de Jamón Ibérico", nombreEs: "Croquetas de Bellota (6 uds)", categoria: "sabor_local", categoriaLabel: "Sabor Local", badgeClass: "badge-local", precio: "15 €", vajilla: "Rectangular Alargado", descripcion: "Croquetas de jamón finalizadas con una loncha de ibérico por encima.", tags: ["100% Bellota", "Base Alioli"], alergenos: "Cerdo, Gluten, Lactosa, Huevo", tiempoPase: "12 min", tempServicio: "Caliente", pasosEmplatado: ["Freír 6 uds, escurrir, finalizar al horno 2 min.", "Hacer 6 puntos de alioli en la base para fijar.", "Posicionar croqueta y finalizar con loncha de jamón encima."], imagen: "img/ficha_pm_14.jpg", ficha: "img/ficha_pm_14.jpg", tieneFichaOficial: true },
+      
+      // 02 ENSALADAS Y SOPAS
+      { id: "pm_caesar", nombre: "Ensalada Caesar", nombreEs: "Caesar Salad Tradicional", categoria: "ensaladas", categoriaLabel: "Ensaladas y Sopas", badgeClass: "badge-healthy", precio: "22 €", vajilla: "Plato Sant Jordi", descripcion: "Lechuga romana, salsa caesar, parmesano, tomates cherry, bacon, picatostes.", tags: ["Emulsión Caesar", "Opcional Pollo/Gamba"], alergenos: "Gluten, Pescado, Soja, Lactosa, Mostaza, Cerdo", tiempoPase: "20 min", tempServicio: "Frío", pasosEmplatado: ["Aliñar romana con salsa, croutones, bacon, parmesano y cherrys.", "Preparar toppings extra si los hay.", "Dar volumen en el plato y finalizar con nube de parmesano y puntos de salsa."], imagen: "img/ficha_pm_21.jpg", ficha: "img/ficha_pm_21.jpg", tieneFichaOficial: true },
+      { id: "pm_sopa_pollo", nombre: "Sopa de Pollo", nombreEs: "Chicken Soup en Jarra con Fregola", categoria: "ensaladas", categoriaLabel: "Ensaladas y Sopas", badgeClass: "badge-main", precio: "18 €", vajilla: "Plato Sombrero, Jarra Térmica", descripcion: "Sopa de pollo con fregola, verduras de temporada y pollo a baja temperatura.", tags: ["Jarra Térmica", "Fregola"], alergenos: "Gluten", tiempoPase: "20 min", tempServicio: "Caliente", pasosEmplatado: ["Horno vapor 98°C bolsa de caldo.", "Calentar plato sombrero con fregola, verduras y daditos de pollo filmado en microondas.", "Verter caldo en jarra térmica para transporte."], imagen: "img/ficha_pm_23.jpg", ficha: "img/ficha_pm_23.jpg", tieneFichaOficial: true },
+      { id: "pm_sopa_boga", nombre: "Sopa de Bogavante", nombreEs: "Lobster Soup con Huevo 64°C", categoria: "ensaladas", categoriaLabel: "Ensaladas y Sopas", badgeClass: "badge-main", precio: "32 €", vajilla: "Plato Sant Jordi, Jarra Térmica", descripcion: "Sopa de bogavante con cola a baja temperatura, huevo pochado y tostaditas de romero.", tags: ["Cola Bogavante", "Huevo 64°C", "Caviaroli"], alergenos: "Lactosa, Gluten, Crustáceos, Huevo", tiempoPase: "20 min", tempServicio: "Caliente", pasosEmplatado: ["Laminar cola en 5 anillos junto a huevo pochado.", "Sopa en jarra térmica.", "Decorar con caviarolis, vene cress, sal maldon, cebollino y AOVE."], imagen: "img/ficha_pm_29.jpg", ficha: "img/ficha_pm_29.jpg", tieneFichaOficial: true },
+
+      // 03 PARA COMPARTIR
+      { id: "pm_tartare", nombre: "Steak Tartare", nombreEs: "Steak Tartare Clásico con Tostas", categoria: "compartir", categoriaLabel: "Para Compartir", badgeClass: "badge-menu", precio: "28 €", vajilla: "Plato Sant Jordi", descripcion: "100g solomillo, yema 64°C, tostas de pan.", tags: ["Solomillo Picado", "Yema BT"], alergenos: "Gluten, Pescado, Sulfitos, Soja, Mostaza, Huevo", tiempoPase: "15 min", tempServicio: "Frío", pasosEmplatado: ["Picar 100g solomillo y sazonar.", "Añadir picada pepinillo, chalota, cebollino y salsa.", "Montar con molde circular, puntos de yema BT y micromezclum."], imagen: "img/ficha_pm_32.jpg", ficha: "img/ficha_pm_32.jpg", tieneFichaOficial: true },
+      { id: "pm_langostino", nombre: "Langostino Crujiente", nombreEs: "Crispy Shrimps (6 uds)", categoria: "compartir", categoriaLabel: "Para Compartir", badgeClass: "badge-menu", precio: "24 €", vajilla: "Alargado Rectangular", descripcion: "Langostino en pasta filo servido con mayonesa cítrica de wasabi.", tags: ["Mayo Wasabi", "Pasta Filo"], alergenos: "Gluten, Lactosa, Crustáceos, Sulfitos, Huevo, Soja", tiempoPase: "10 min", tempServicio: "Fritura Caliente", pasosEmplatado: ["Freír 6 uds a 180°C por 2.5 min. Horno 2 min.", "Emplatar en pirámide sobre papel de periódico.", "Servir mayo wasabi en bowl al extremo con ralladura lima."], imagen: "img/ficha_pm_34.jpg", ficha: "img/ficha_pm_34.jpg", tieneFichaOficial: true },
+      { id: "pm_alcachofa", nombre: "Alcachofa Frita", nombreEs: "Alcachofa, Parmentier y Trufa (2 uds)", categoria: "compartir", categoriaLabel: "Para Compartir", badgeClass: "badge-menu", precio: "22 €", vajilla: "Alargado Rectangular", descripcion: "Confitada y frita sobre parmentier trufada y yema BT. Trufa rallada en habitación.", tags: ["Parmentier Trufada", "Finalización Habitación"], alergenos: "Lactosa, Soja, Sulfitos, Huevo", tiempoPase: "18 min", tempServicio: "Caliente", pasosEmplatado: ["Freír alcachofas a 175°C, abrir centro.", "Dos puntos de parmentier en plato.", "Rellenar centro alcachofa con vinagreta cebolla y yema BT.", "Llevar campana y trufa para rallar en suite."], imagen: "img/ficha_pm_38.jpg", ficha: "img/ficha_pm_38.jpg", tieneFichaOficial: true },
+
+      // 04 ARROZ Y PASTAS
+      { id: "pm_arros_gamba", nombre: "Arròs a la llauna de Gambas", nombreEs: "Arroz Llauna con Gamba Roja (4 uds)", categoria: "arroz_pastas", categoriaLabel: "Arroz y Pastas", badgeClass: "badge-main", precio: "36 €", vajilla: "Llauna Rectangular", descripcion: "Arroz con sofrito de sepia, caldo bogavante, gambas rojas y alioli azafrán.", tags: ["Gamba Roja", "Llauna Tradicional"], alergenos: "Sulfitos, Crustáceos, Moluscos, Huevo", tiempoPase: "30 min", tempServicio: "Caliente", pasosEmplatado: ["Mezclar 1 ración arroz + 50g sofrito sepia en llauna.", "Añadir caldo y cocinar 8 min medio/alto.", "Disponer gambas crudas, terminar 3 min al horno.", "Puntos alioli azafrán, cebollino y brotes guisante."], imagen: "img/ficha_pm_43.jpg", ficha: "img/ficha_pm_43.jpg", tieneFichaOficial: true },
+      { id: "pm_fetuccini_gamba", nombre: "Fetuccini con Gambas", nombreEs: "Fetuccini Aglio e Olio", categoria: "arroz_pastas", categoriaLabel: "Arroz y Pastas", badgeClass: "badge-main", precio: "26 €", vajilla: "Plato Sant Jordi", descripcion: "Fetuccini al aglio e olio servido con langostinos (4 uds) y ralladura de lima.", tags: ["Mantequilla Gamba", "Aglio e Olio"], alergenos: "Gluten, Lactosa, Huevo, Crustáceos", tiempoPase: "20 min", tempServicio: "Caliente", pasosEmplatado: ["Cocer pasta 2 min.", "Marcar langostinos pelados con ajo guindilla.", "Mantecar pasta en la sartén. Rulo de pasta en centro de Sant Jordi.", "Alinear gambas encima del rulo, cebollino y ralladura lima."], imagen: "img/ficha_pm_53.jpg", ficha: "img/ficha_pm_53.jpg", tieneFichaOficial: true },
+
+      // 05 CLÁSICOS
+      { id: "pm_bikini", nombre: "Bikini Trufado", nombreEs: "Truffled Bikini", categoria: "clasicos", categoriaLabel: "Clásicos", badgeClass: "badge-carta", precio: "24 €", vajilla: "Plato Mediano", descripcion: "Pan tramezzino, jamón ibérico, mozzarella y tartufata. Trufa fresca encima.", tags: ["Trufa Melanosporum", "Tramezzino"], alergenos: "Cerdo, Gluten, Lactosa", tiempoPase: "15 min", tempServicio: "Caliente", pasosEmplatado: ["Plancha con mantequilla clarificada.", "Certificar fundido de mozzarella.", "Cortar 4 triángulos superpuestos sobre papel.", "Trufa fresca rallada en habitación."], imagen: "img/ficha_pm_60.jpg", ficha: "img/ficha_pm_60.jpg", tieneFichaOficial: true },
+      { id: "pm_club", nombre: "Arts Club Sandwich", nombreEs: "Arts Club Sandwich", categoria: "clasicos", categoriaLabel: "Clásicos", badgeClass: "badge-carta", precio: "26 €", vajilla: "Rectangular Alargado, Bowl Cuadrado (fritas)", descripcion: "Brioche, pollo confitado, yema 64°C, lechuga, tomate y bacon crujiente.", tags: ["Yema 64°C", "Brioche", "Papas Fritas"], alergenos: "Gluten, Lactosa, Huevo, Mostaza", tiempoPase: "15 min", tempServicio: "Caliente", pasosEmplatado: ["Tostar brioche, calentar pollo vapor 3 min.", "Montar capas: mayo, lechuga, tomate, yema, pollo, bacon.", "Quitar corteza, cortar 3 rectángulos, clavar pinchos."], imagen: "img/ficha_pm_62.jpg", ficha: "img/ficha_pm_62.jpg", tieneFichaOficial: true },
+      { id: "pm_burger", nombre: "Arts Cheese Burger", nombreEs: "Doble Wagyu Smash Burger", categoria: "clasicos", categoriaLabel: "Clásicos", badgeClass: "badge-carta", precio: "32 €", vajilla: "Plato Mediano, Cuenco Fritas", descripcion: "2 piezas wagyu (180g), scamorza, cebolla caramelizada, panceta curada y salsa.", tags: ["Wagyu Smash", "Queso Scamorza"], alergenos: "Gluten, Cerdo, Soja, Sulfitos, Huevo, Mostaza", tiempoPase: "15 min", tempServicio: "Caliente", pasosEmplatado: ["Smashear 2 bolas de wagyu, costra caramelizada.", "Fundir scamorza bajo campana.", "Apilar con panceta y cebolla residual, montar en brioche tostado."], imagen: "img/ficha_pm_64.jpg", ficha: "img/ficha_pm_64.jpg", tieneFichaOficial: true },
+      { id: "pm_pizza_margherita", nombre: "Pizza Margherita", nombreEs: "Pizza de Masa Cristalina 8 porciones", categoria: "clasicos", categoriaLabel: "Clásicos", badgeClass: "badge-carta", precio: "22 €", vajilla: "Trinchante Grande", descripcion: "Base cristalina, tomate San Marzano DOP, mozzarella y aceite de albahaca.", tags: ["Masa Cristalina", "San Marzano"], alergenos: "Gluten, Lactosa", tiempoPase: "15 min", tempServicio: "Caliente", pasosEmplatado: ["Pintar base con salsa y mozzarella.", "Horno 200°C por 6 min.", "Cortar en 8 trozos iguales en tabla.", "Transferir a plato y finalizar con hilo de aceite albahaca."], imagen: "img/ficha_pm_66.jpg", ficha: "img/ficha_pm_66.jpg", tieneFichaOficial: true },
+
+      // 06 PRINCIPALES
+      { id: "pm_cuberoll", nombre: "Cube Roll 300g", nombreEs: "Rib-Eye Vaca Madurada", categoria: "principales", categoriaLabel: "Principales", badgeClass: "badge-main", precio: "48 €", vajilla: "Trinchante Grande, Jarrita", descripcion: "Cube roll sellado, cebollas glaseadas, piquillos y demi-glace.", tags: ["300g Vaca Madurada", "Piquillo Confit"], alergenos: "Lactosa, Sulfitos", tiempoPase: "30 min", tempServicio: "Caliente", pasosEmplatado: ["Atemperar y marcar sartén caliente.", "Horno 200°C según punto (MR 3m, M 7m, WD 12m). Reposar.", "Piquillos alineados, cebollitas alrededor, carne al centro, jarrita demi a 1/3."], imagen: "img/ficha_pm_75.jpg", ficha: "img/ficha_pm_75.jpg", tieneFichaOficial: true },
+      { id: "pm_costilla", nombre: "Costilla a Baja Temperatura", nombreEs: "Slow Cooked Beef Ribs", categoria: "principales", categoriaLabel: "Principales", badgeClass: "badge-main", precio: "42 €", vajilla: "Trinchante Grande, Jarrita", descripcion: "Costilla glaseada (3 trozos), patatitas confitadas, puré de piquillo.", tags: ["Baja Temperatura", "Glaseada"], alergenos: "Lactosa, Sulfitos, Mostaza, Soja", tiempoPase: "35 min", tempServicio: "Caliente", pasosEmplatado: ["Regenerar costilla vapor 100°C (5m), horno seco 200°C (12m).", "Napar con demi y dar golpe horno (1.5m).", "Disponer 3 trozos centro plato, dar volumen con patatas y piquillos."], imagen: "img/ficha_pm_77.jpg", ficha: "img/ficha_pm_77.jpg", tieneFichaOficial: true },
+      { id: "pm_salmon", nombre: "Salmón con Puré de Calabaza", nombreEs: "Salmon with Pumpkin & Citric", categoria: "principales", categoriaLabel: "Principales", badgeClass: "badge-main", precio: "32 €", vajilla: "Trinchante Grande", descripcion: "Salmón a la plancha (2 trozos), endivias BT, tirabeques, kumquat, salsa naranja.", tags: ["Plancha", "Kumquat"], alergenos: "Pescado, Sulfitos, Lactosa", tiempoPase: "25 min", tempServicio: "Caliente", pasosEmplatado: ["Base circular de puré con lágrima estirada.", "Posicionar 2 postas salmón superpuestas para volumen.", "Endivias caramelizadas alrededor, salsear naranja, gajos kumquat."], imagen: "img/ficha_pm_81.jpg", ficha: "img/ficha_pm_81.jpg", tieneFichaOficial: true },
+
+      // 07 GUARNICIONES
+      { id: "pm_ensalada_mixta", nombre: "Ensalada Mixta (Side)", nombreEs: "Mixed Green Salad", categoria: "guarniciones", categoriaLabel: "Guarniciones", badgeClass: "badge-side", precio: "8 €", vajilla: "Bowl Cuadrado", descripcion: "Mezclum, rabanito, cebolla roja, tomate cherry, aceitunas negras, aliño miel.", tags: ["Side Dish"], alergenos: "Libre Alérgenos", tiempoPase: "10 min", tempServicio: "Frío", pasosEmplatado: ["Aliñar mezclum y parte toppings.", "Transferir a bowl cuadrado.", "Finalizar decorando con resto toppings en superficie."], imagen: "img/ficha_pm_88.jpg", ficha: "img/ficha_pm_88.jpg", tieneFichaOficial: true },
+
+      // 08 SELECCIÓN INTERNACIONAL
+      { id: "pm_hummus", nombre: "Hummus", nombreEs: "Hummus Clásico con Garbanzos Fritos", categoria: "internacional", categoriaLabel: "Internacional", badgeClass: "badge-local", precio: "18 €", vajilla: "Plato Sombrero", descripcion: "Hummus emplatado en círculo, garbanzos fritos, zumaque, AOVE, tostas.", tags: ["Zumaque", "Garbanzo Frito"], alergenos: "Gluten, Sésamo", tiempoPase: "10 min", tempServicio: "Frío", pasosEmplatado: ["Emplatar hummus dejando un hueco central.", "Colocar garbanzos fritos en el centro.", "Finalizar con AOVE, zumaque y brotes guisante. Tostas aparte."], imagen: "img/ficha_pm_95.jpg", ficha: "img/ficha_pm_95.jpg", tieneFichaOficial: true },
+      { id: "pm_butter_chicken", nombre: "Butter Chicken", nombreEs: "Pollo Mantequilla Hindú", categoria: "internacional", categoriaLabel: "Internacional", badgeClass: "badge-main", precio: "28 €", vajilla: "Bowls Cuadrados (x3)", descripcion: "Pollo salsa cremosa hindú, arroz basmati, pan paratha (4 puntas), jengibre.", tags: ["Comida Hindú", "Pan Paratha"], alergenos: "Lactosa, Frutos Cáscara, Gluten", tiempoPase: "20 min", tempServicio: "Caliente", pasosEmplatado: ["Calentar bolsa curry vapor 100°C (5m).", "Microondas arroz basmati 1.5m.", "Plancha pan paratha (cortar 4 triángulos).", "Emplatar butter chicken, finalizar nueces mantequilla, nata reducida, jengibre juliana. (Cilantro aparte)"], imagen: "img/ficha_pm_101.jpg", ficha: "img/ficha_pm_101.jpg", tieneFichaOficial: true },
+
+      // 09 POSTRES
+      { id: "pm_mousse", nombre: "Mousse de Chocolate y Pistacho", nombreEs: "Chocolate Mousse & Crème Brûlée", categoria: "postres", categoriaLabel: "Postres", badgeClass: "badge-sweet", precio: "14 €", vajilla: "Plato Mediano", descripcion: "Mousse rellena de crème brûlée, crujiente, bizcocho pistacho, frambuesas.", tags: ["Teja Chocolate", "Pistacho"], alergenos: "Gluten, Lactosa, Huevos, Frutos de Cáscara", tiempoPase: "10 min", tempServicio: "Frío", pasosEmplatado: ["Lágrima caramelo en media luna lateral.", "Mousse en centro del plato.", "Decorar lágrima con esponja pistacho, frambuesas, garapiñados y teja chocolate."], imagen: "img/ficha_pm_106.jpg", ficha: "img/ficha_pm_106.jpg", tieneFichaOficial: true },
+      { id: "pm_citricos", nombre: "Texturas Cítricas", nombreEs: "Citric Textures en Bote Vidrio", categoria: "postres", categoriaLabel: "Postres", badgeClass: "badge-sweet", precio: "12 €", vajilla: "Bote de Vidrio", descripcion: "Cremoso mandarina, mousse yuzu, streusel biscoff/chocolate blanco, merengue.", tags: ["Bote Cristal", "Merengue Quemado"], alergenos: "Gluten, Lactosa, Huevos", tiempoPase: "5 min", tempServicio: "Frío", pasosEmplatado: ["Certificar bote limpio sin etiqueta caducidad.", "Verificar tapa aluminio en condiciones.", "Servir al pase frío."], imagen: "img/ficha_pm_108.jpg", ficha: "img/ficha_pm_108.jpg", tieneFichaOficial: true }
+    ];
+
     // ESTADO DE LA APLICACIÓN
+    let turnoActual = 'AM';
     let categoriaSeleccionada = 'todos';
 
-    // INICIALIZACIÓN
-    document.addEventListener('DOMContentLoaded', () => {
-      actualizarContadores();
-      renderizarPlatos(catalogoPlatos);
+    // RENDERIZAR FILTROS SEGÚN TURNO
+    function renderizarFiltros() {
+      const container = document.getElementById('filtersContainer');
+      
+      if(turnoActual === 'AM') {
+        container.innerHTML = `
+          <button class="filter-btn active" data-categoria="todos" onclick="seleccionarCategoria('todos', this)"><span>Todos</span><span class="filter-count" id="count-todos">0</span></button>
+          <button class="filter-btn" data-categoria="menus" onclick="seleccionarCategoria('menus', this)"><span>Menús Completos</span><span class="filter-count" id="count-menus">0</span></button>
+          <button class="filter-btn" data-categoria="huevos" onclick="seleccionarCategoria('huevos', this)"><span>Platos de Huevos</span><span class="filter-count" id="count-huevos">0</span></button>
+          <button class="filter-btn" data-categoria="carta" onclick="seleccionarCategoria('carta', this)"><span>A la Carta & Caviar</span><span class="filter-count" id="count-carta">0</span></button>
+          <button class="filter-btn" data-categoria="saludable" onclick="seleccionarCategoria('saludable', this)"><span>Saludable & Vegano</span><span class="filter-count" id="count-saludable">0</span></button>
+          <button class="filter-btn" data-categoria="dulces" onclick="seleccionarCategoria('dulces', this)"><span>Dulces & Panadería</span><span class="filter-count" id="count-dulces">0</span></button>
+        `;
+      } else {
+        container.innerHTML = `
+          <button class="filter-btn active" data-categoria="todos" onclick="seleccionarCategoria('todos', this)"><span>Toda la Carta PM</span><span class="filter-count" id="count-todos">0</span></button>
+          <button class="filter-btn" data-categoria="sabor_local" onclick="seleccionarCategoria('sabor_local', this)">Sabor Local <span class="filter-count" id="count-sabor_local">0</span></button>
+          <button class="filter-btn" data-categoria="ensaladas" onclick="seleccionarCategoria('ensaladas', this)">Ensaladas & Sopas <span class="filter-count" id="count-ensaladas">0</span></button>
+          <button class="filter-btn" data-categoria="compartir" onclick="seleccionarCategoria('compartir', this)">Para Compartir <span class="filter-count" id="count-compartir">0</span></button>
+          <button class="filter-btn" data-categoria="arroz_pastas" onclick="seleccionarCategoria('arroz_pastas', this)">Arroz y Pastas <span class="filter-count" id="count-arroz_pastas">0</span></button>
+          <button class="filter-btn" data-categoria="clasicos" onclick="seleccionarCategoria('clasicos', this)">Clásicos <span class="filter-count" id="count-clasicos">0</span></button>
+          <button class="filter-btn" data-categoria="principales" onclick="seleccionarCategoria('principales', this)">Principales <span class="filter-count" id="count-principales">0</span></button>
+          <button class="filter-btn" data-categoria="guarniciones" onclick="seleccionarCategoria('guarniciones', this)">Guarniciones <span class="filter-count" id="count-guarniciones">0</span></button>
+          <button class="filter-btn" data-categoria="internacional" onclick="seleccionarCategoria('internacional', this)">Internacional <span class="filter-count" id="count-internacional">0</span></button>
+          <button class="filter-btn" data-categoria="postres" onclick="seleccionarCategoria('postres', this)">Postres <span class="filter-count" id="count-postres">0</span></button>
+        `;
+      }
+    }
 
-      // Cerrar modal con tecla Escape
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-          cerrarVisorFicha();
-          cerrarModal();
-        }
-      });
-    });
+    function cambiarTurno(turno) {
+      turnoActual = turno;
+      categoriaSeleccionada = 'todos';
+      
+      document.getElementById('btnTurnoAM').className = `turn-btn ${turno === 'AM' ? 'active-am' : ''}`;
+      document.getElementById('btnTurnoPM').className = `turn-btn ${turno === 'PM' ? 'active-pm' : ''}`;
+      
+      document.getElementById('searchInput').value = '';
+      document.getElementById('clearSearchBtn').style.display = 'none';
+
+      renderizarFiltros();
+      actualizarContadores();
+      aplicarFiltros();
+    }
 
     // ACTUALIZAR CONTADORES DE LOS BOTONES
     function actualizarContadores() {
-      document.getElementById('count-todos').textContent = catalogoPlatos.length;
-      document.getElementById('count-menus').textContent = catalogoPlatos.filter(p => p.categoria === 'menus').length;
-      document.getElementById('count-huevos').textContent = catalogoPlatos.filter(p => p.categoria === 'huevos').length;
-      document.getElementById('count-carta').textContent = catalogoPlatos.filter(p => p.categoria === 'carta' || p.id === 'champagne_caviar' || p.id === 'avocado').length;
-      document.getElementById('count-saludable').textContent = catalogoPlatos.filter(p => p.categoria === 'saludable' || p.tags.some(t => t.toLowerCase().includes('vegano') || t.toLowerCase().includes('saludable'))).length;
-      document.getElementById('count-dulces').textContent = catalogoPlatos.filter(p => p.categoria === 'dulces').length;
+      const db = turnoActual === 'AM' ? catalogoAM : catalogoPM;
+      
+      document.getElementById('count-todos').textContent = db.length;
+      
+      if(turnoActual === 'AM') {
+        document.getElementById('count-menus').textContent = db.filter(p => p.categoria === 'menus').length;
+        document.getElementById('count-huevos').textContent = db.filter(p => p.categoria === 'huevos').length;
+        document.getElementById('count-carta').textContent = db.filter(p => p.categoria === 'carta').length;
+        document.getElementById('count-saludable').textContent = db.filter(p => p.categoria === 'saludable').length;
+        document.getElementById('count-dulces').textContent = db.filter(p => p.categoria === 'dulces').length;
+      } else {
+        const cats = ['sabor_local', 'ensaladas', 'compartir', 'arroz_pastas', 'clasicos', 'principales', 'guarniciones', 'internacional', 'postres'];
+        cats.forEach(c => {
+          const countEl = document.getElementById(`count-${c}`);
+          if(countEl) countEl.textContent = db.filter(p => p.categoria === c).length;
+        });
+      }
     }
 
-    // RENDERIZAR LAS TARJETAS EN EL GRID
+    // INICIALIZACIÓN
+    document.addEventListener('DOMContentLoaded', () => {
+      renderizarFiltros();
+      actualizarContadores();
+      aplicarFiltros();
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') { cerrarVisorFicha(); cerrarModal(); }
+      });
+    });
+
+    // RENDERIZAR LAS TARJETAS
     function renderizarPlatos(platos) {
       const grid = document.getElementById('platosGrid');
       grid.innerHTML = '';
 
       if (platos.length === 0) {
-        grid.innerHTML = `
-          <div class="empty-state">
-            <svg width="48" height="48" fill="none" stroke="#64748b" stroke-width="1.5" viewBox="0 0 24 24" style="margin-bottom:12px;"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-            <h3>No se encontraron platos</h3>
-            <p>Intenta con otro término de búsqueda o selecciona otra categoría.</p>
-            <button class="btn-action" onclick="limpiarBuscador()">Restablecer Filtros</button>
-          </div>
-        `;
+        grid.innerHTML = `<div class="empty-state"><h3>No se encontraron platos</h3><p>Intenta con otro término.</p></div>`;
         document.getElementById('resultsCount').textContent = '0 platos encontrados';
         return;
       }
 
-      document.getElementById('resultsCount').textContent = `Mostrando ${platos.length} ${platos.length === 1 ? 'plato' : 'platos'}`;
+      document.getElementById('resultsCount').textContent = `Mostrando ${platos.length} platos en el turno ${turnoActual}`;
 
       platos.forEach(plato => {
         const card = document.createElement('div');
@@ -1423,90 +469,57 @@
         card.onclick = () => abrirModal(plato.id);
 
         const visualContent = plato.imagen
-          ? `<img src="${plato.imagen}" alt="${plato.nombre}" class="card-img" loading="lazy">`
-          : plato.svg;
+          ? `<img src="${plato.imagen}" alt="${plato.nombre}" class="card-img" loading="lazy" onerror="this.src='data:image/svg+xml;utf8,<svg viewBox=\\'0 0 400 220\\' xmlns=\\'http://www.w3.org/2000/svg\\'><rect width=\\'400\\' height=\\'220\\' fill=\\'%23151f32\\'/><text x=\\'200\\' y=\\'110\\' text-anchor=\\'middle\\' fill=\\'%2394a3b8\\'>Foto pendiente de subida</text></svg>'">`
+          : (plato.svg || `<div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; background:#151f32; color:#94a3b8;">Sin Imagen</div>`);
 
         card.innerHTML = `
           <div class="card-img-container">
             <div class="card-badge-container">
               <span class="card-badge ${plato.badgeClass}">${plato.categoriaLabel}</span>
-              ${plato.tieneFichaOficial ? `<span class="card-official-badge">✓ Ficha Oficial Arts</span>` : ''}
+              ${plato.tieneFichaOficial ? `<span class="card-official-badge">✓ Ficha Oficial</span>` : ''}
             </div>
-            ${plato.touchpoint ? `<div class="card-touchpoint-flag" title="Tiene estándar crítico Touchpoint LQA">★ Touchpoint LQA</div>` : ''}
+            ${plato.touchpoint ? `<div class="card-touchpoint-flag">★ Touchpoint LQA</div>` : ''}
             ${visualContent}
           </div>
           <div class="card-body">
             <div>
-              <div class="card-top">
-                <div class="card-title">${plato.nombre}</div>
-                <div class="card-price">${plato.precio}</div>
-              </div>
+              <div class="card-top"><div class="card-title">${plato.nombre}</div><div class="card-price">${plato.precio}</div></div>
               <div class="card-desc">${plato.descripcion}</div>
-              
               <div class="tags-container">
                 <span class="tag tag-vajilla">🍽️ ${plato.vajilla.split(',')[0]}</span>
                 ${plato.tags.map(t => `<span class="tag">${t}</span>`).join('')}
               </div>
             </div>
-
             <div>
-              <div class="allergens-box">
-                <span class="allergens-icon">⚠️</span>
-                <span><strong>Alérgenos:</strong> ${plato.alergenos}</span>
-              </div>
-
+              <div class="allergens-box"><span class="allergens-icon">⚠️</span><span><strong>Alérgenos:</strong> ${plato.alergenos}</span></div>
               <div class="card-footer">
                 <span style="font-size:0.75rem; color:#64748b;">⏱️ Pase: ${plato.tiempoPase}</span>
-                <button class="card-btn-view" type="button">
-                  Ver Ficha Técnica
-                  <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                </button>
+                <button class="card-btn-view" type="button">Ver Ficha ➔</button>
               </div>
             </div>
           </div>
         `;
-
         grid.appendChild(card);
       });
     }
 
-    // APLICAR FILTROS COMBINADOS (BUSCADOR + CATEGORÍA)
+    // APLICAR FILTROS
     function aplicarFiltros() {
-      const qInput = document.getElementById('searchInput');
-      const q = qInput.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
-      const clearBtn = document.getElementById('clearSearchBtn');
-      clearBtn.style.display = q.length > 0 ? 'block' : 'none';
+      const q = document.getElementById('searchInput').value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+      document.getElementById('clearSearchBtn').style.display = q.length > 0 ? 'block' : 'none';
 
-      let filtrados = catalogoPlatos.filter(plato => {
-        // Filtro por categoría
-        let coincideCat = true;
-        if (categoriaSeleccionada === 'menus') coincideCat = (plato.categoria === 'menus');
-        else if (categoriaSeleccionada === 'huevos') coincideCat = (plato.categoria === 'huevos');
-        else if (categoriaSeleccionada === 'carta') coincideCat = (plato.categoria === 'carta' || plato.id === 'champagne_caviar' || plato.id === 'avocado');
-        else if (categoriaSeleccionada === 'saludable') coincideCat = (plato.categoria === 'saludable' || plato.tags.some(t => t.toLowerCase().includes('vegano') || t.toLowerCase().includes('saludable')));
-        else if (categoriaSeleccionada === 'dulces') coincideCat = (plato.categoria === 'dulces');
+      const db = turnoActual === 'AM' ? catalogoAM : catalogoPM;
 
-        if (!coincideCat) return false;
-
-        // Filtro por texto de búsqueda
+      let filtrados = db.filter(plato => {
+        if (categoriaSeleccionada !== 'todos' && plato.categoria !== categoriaSeleccionada) return false;
         if (!q) return true;
-
-        const detalleTexto = plato.ingredientesDetallados 
-          ? plato.ingredientesDetallados.map(i => `${i.ingrediente} ${i.cantidad} ${i.unidad}`).join(' ')
-          : '';
-
-        const stringBusqueda = `
-          ${plato.nombre} ${plato.nombreEs} ${plato.descripcion} ${plato.vajilla}
-          ${plato.tags.join(' ')} ${plato.alergenos} ${plato.touchpoint || ''} ${detalleTexto}
-        `.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-
-        return stringBusqueda.includes(q);
+        const texto = `${plato.nombre} ${plato.nombreEs} ${plato.descripcion} ${plato.vajilla} ${plato.tags.join(' ')} ${plato.alergenos}`.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        return texto.includes(q);
       });
 
       renderizarPlatos(filtrados);
     }
 
-    // SELECCIONAR CATEGORÍA DESDE LOS CHIPS
     function seleccionarCategoria(cat, btnElement) {
       categoriaSeleccionada = cat;
       document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
@@ -1514,24 +527,18 @@
       aplicarFiltros();
     }
 
-    // LIMPIAR BUSCADOR
     function limpiarBuscador() {
       document.getElementById('searchInput').value = '';
-      document.getElementById('clearSearchBtn').style.display = 'none';
       categoriaSeleccionada = 'todos';
-      document.querySelectorAll('.filter-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.getAttribute('data-categoria') === 'todos');
-      });
+      renderizarFiltros();
       aplicarFiltros();
     }
 
-    // MODAL INTERACTIVO DE FICHA TÉCNICA
-    let platoActualModal = null;
-
+    // MODAL
     function abrirModal(platoId) {
-      const plato = catalogoPlatos.find(p => p.id === platoId);
+      const db = turnoActual === 'AM' ? catalogoAM : catalogoPM;
+      const plato = db.find(p => p.id === platoId);
       if (!plato) return;
-      platoActualModal = plato;
 
       document.getElementById('modalBadge').textContent = plato.categoriaLabel;
       document.getElementById('modalBadge').className = `brand-badge ${plato.badgeClass}`;
@@ -1539,192 +546,55 @@
       document.getElementById('modalSubtitle').textContent = plato.nombreEs;
 
       const heroContent = plato.imagen
-        ? `<img src="${plato.imagen}" alt="${plato.nombre}" class="modal-hero-photo">`
+        ? `<img src="${plato.imagen}" class="modal-hero-photo" onerror="this.src='data:image/svg+xml;utf8,<svg viewBox=\\'0 0 400 220\\' xmlns=\\'http://www.w3.org/2000/svg\\'><rect width=\\'400\\' height=\\'220\\' fill=\\'%23151f32\\'/><text x=\\'200\\' y=\\'110\\' text-anchor=\\'middle\\' fill=\\'%2394a3b8\\'>Foto pendiente de extracción del PDF</text></svg>'">`
         : `<div class="modal-hero-svg">${plato.svg}</div>`;
 
-      // Tabla de ingredientes si existe
-      let tablaIngredientesHtml = '';
-      if (plato.ingredientesDetallados && plato.ingredientesDetallados.length > 0) {
-        tablaIngredientesHtml = `
-          <div class="modal-section">
-            <div class="section-title">
-              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
-              Dosificación & Escandallo Oficial de Cocina (CRO)
-            </div>
-            <table class="specs-table">
-              <thead>
-                <tr>
-                  <th>Ingrediente / Componente</th>
-                  <th style="width: 120px;">Cantidad</th>
-                  <th style="width: 120px;">Unidad</th>
-                </tr>
-              </thead>
-              <tbody>
-                ${plato.ingredientesDetallados.map(item => `
-                  <tr>
-                    <td><strong>${item.ingrediente}</strong></td>
-                    <td>${item.cantidad}</td>
-                    <td><span class="unit-pill">${item.unidad}</span></td>
-                  </tr>
-                `).join('')}
-              </tbody>
-            </table>
-          </div>
-        `;
-      }
+      let fichaOficialHtml = plato.ficha ? `
+        <div class="official-ficha-banner">
+          <div class="official-ficha-text"><strong>Ficha Técnica Oficial Verificada (CRO)</strong><span>Correspondiente al manual del Hotel Arts.</span></div>
+          <button class="btn-action btn-ver-ficha" type="button" onclick="abrirVisorFicha('${plato.ficha}', '${plato.nombre}')">Ver Ficha Escaneada</button>
+        </div>` : '';
 
-      // Banner de Ficha Oficial Escaneada
-      let fichaOficialBannerHtml = '';
-      if (plato.ficha) {
-        fichaOficialBannerHtml = `
-          <div class="official-ficha-banner">
-            <div class="official-ficha-text">
-              <strong>Ficha Técnica Oficial Verificada (Hotel Arts CRO)</strong>
-              <span>Esta receta, gramajes y emplatado corresponden a la ficha de cocina original.</span>
-            </div>
-            <button class="btn-action btn-ver-ficha" type="button" onclick="abrirVisorFicha('${plato.ficha}', '${plato.nombre}')">
-              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
-              Ver Ficha Técnica Escaneada
-            </button>
-          </div>
-        `;
-      }
-
-      const body = document.getElementById('modalBody');
-      body.innerHTML = `
-        <div class="modal-hero-container">
-          ${heroContent}
-        </div>
-
-        ${fichaOficialBannerHtml}
-
-        <!-- ESPECIFICACIONES CLAVE -->
+      document.getElementById('modalBody').innerHTML = `
+        <div class="modal-hero-container">${heroContent}</div>
+        ${fichaOficialHtml}
         <div class="modal-grid-specs">
-          <div class="spec-card">
-            <div class="spec-label">Vajilla & Montaje</div>
-            <div class="spec-value">${plato.vajilla}</div>
-          </div>
-          <div class="spec-card">
-            <div class="spec-label">Tiempo de Pase Cocina</div>
-            <div class="spec-value">${plato.tiempoPase}</div>
-          </div>
-          <div class="spec-card">
-            <div class="spec-label">Temperatura de Servicio</div>
-            <div class="spec-value">${plato.tempServicio}</div>
-          </div>
+          <div class="spec-card"><div class="spec-label">Vajilla</div><div class="spec-value">${plato.vajilla}</div></div>
+          <div class="spec-card"><div class="spec-label">Tiempo Pase</div><div class="spec-value">${plato.tiempoPase}</div></div>
+          <div class="spec-card"><div class="spec-label">Servicio</div><div class="spec-value">${plato.tempServicio}</div></div>
         </div>
-
-        <!-- TOUCHPOINT LQA / FORBES -->
-        ${plato.touchpoint ? `
-          <div class="touchpoint-alert">
-            <div class="touchpoint-title">
-              <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-              Estándar Crítico de Servicio / Touchpoint LQA & Forbes
-            </div>
-            <div class="touchpoint-desc">${plato.touchpoint}</div>
-          </div>
-        ` : ''}
-
-        ${tablaIngredientesHtml}
-
-        <!-- PASO A PASO DE EMPLATADO -->
+        ${plato.touchpoint ? `<div class="touchpoint-alert"><div class="touchpoint-title">★ Touchpoint LQA</div><div class="touchpoint-desc">${plato.touchpoint}</div></div>` : ''}
         <div class="modal-section">
-          <div class="section-title">
-            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-            Procedimiento de Emplatado y Montaje en Cocina
-          </div>
-          <ol class="steps-list">
-            ${plato.pasosEmplatado.map((paso, idx) => `
-              <li>
-                <span class="step-number">${idx + 1}</span>
-                <span>${paso}</span>
-              </li>
-            `).join('')}
-          </ol>
+          <div class="section-title">Procedimiento de Emplatado</div>
+          <ol class="steps-list">${plato.pasosEmplatado.map((p, i) => `<li><span class="step-number">${i+1}</span><span>${p}</span></li>`).join('')}</ol>
         </div>
-
-        <!-- ALÉRGENOS E INTOLERANCIAS -->
         <div class="modal-section">
-          <div class="section-title" style="color:#f87171;">
-            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
-            Control de Alérgenos (Reglamento UE 1169/2011)
-          </div>
-          <div style="font-size:0.95rem; line-height:1.5; color:#fca5a5;">
-            <strong>Contiene:</strong> ${plato.alergenos}
-          </div>
-          <p style="font-size:0.8rem; color:#94a3b8; margin-top:8px;">
-            * En caso de comanda con alergia alimentaria severa comunicada por el huésped, utilizar tabla y cuchillos desinfectados en zona de alérgenos de partida fría.
-          </p>
+          <div class="section-title" style="color:#f87171;">⚠️ Alérgenos</div>
+          <div style="font-size:0.95rem; color:#fca5a5;"><strong>Contiene:</strong> ${plato.alergenos}</div>
         </div>
       `;
-
       document.getElementById('modalBackdrop').classList.add('open');
       document.body.style.overflow = 'hidden';
     }
 
-    function cerrarModal() {
-      document.getElementById('modalBackdrop').classList.remove('open');
-      document.body.style.overflow = 'auto';
-      platoActualModal = null;
-    }
+    function cerrarModal() { document.getElementById('modalBackdrop').classList.remove('open'); document.body.style.overflow = 'auto'; }
+    function cerrarModalFondo(e) { if (e.target.id === 'modalBackdrop') cerrarModal(); }
 
-    function cerrarModalFondo(e) {
-      if (e.target.id === 'modalBackdrop') {
-        cerrarModal();
-      }
-    }
-
-    function imprimirFichaActual() {
-      window.print();
-    }
-
-    // VISOR LIGHTBOX DE FICHA ESCANEADA
     function abrirVisorFicha(rutaFicha, nombrePlato) {
-      document.getElementById('fichaViewerTitle').textContent = `Ficha Técnica Oficial: ${nombrePlato}`;
+      document.getElementById('fichaViewerTitle').textContent = `Ficha Original: ${nombrePlato}`;
       document.getElementById('fichaViewerImg').src = rutaFicha;
       document.getElementById('fichaDownloadBtn').href = rutaFicha;
       document.getElementById('modalFichaViewer').classList.add('open');
     }
+    function cerrarVisorFicha() { document.getElementById('modalFichaViewer').classList.remove('open'); }
+    function cerrarVisorFichaFondo(e) { if (e.target.id === 'modalFichaViewer') cerrarVisorFicha(); }
 
-    function cerrarVisorFicha() {
-      document.getElementById('modalFichaViewer').classList.remove('open');
-    }
-
-    function cerrarVisorFichaFondo(e) {
-      if (e.target.id === 'modalFichaViewer') {
-        cerrarVisorFicha();
-      }
-    }
-
-    // MODAL DE ESTÁNDARES LQA / FORBES
     function abrirEstandares() {
-      const body = document.getElementById('modalBody');
-      document.getElementById('modalBadge').textContent = "Calidad & Auditoría";
-      document.getElementById('modalBadge').className = "brand-badge badge-menu";
-      document.getElementById('modalTitle').textContent = "Estándares LQA / Forbes — In-Room Dining";
-      document.getElementById('modalSubtitle').textContent = "Pautas obligatorias de presentación y servicio para Hotel Arts Barcelona";
-
-      body.innerHTML = `
-        <div class="touchpoint-alert">
-          <div class="touchpoint-title">Objetivo del Servicio de Desayuno IRD</div>
-          <div class="touchpoint-desc">
-            Ofrecer una experiencia gastronómica de lujo en habitación con una temperatura impecable, vajilla inmaculada y presentación idéntica a la ficha técnica oficial de cocina.
-          </div>
-        </div>
-
-        <div class="modal-section">
-          <div class="section-title">Checklist de Salida de Cocina & Pase</div>
-          <ol class="steps-list">
-            <li><span class="step-number">1</span><span><strong>Temperatura de Platos Calientes:</strong> Todo plato caliente debe salir cubierto con campana térmica precalentada inmediatamente tras ser montado en cocina.</span></li>
-            <li><span class="step-number">2</span><span><strong>Protección de Texturas Crujientes:</strong> Las tostadas rústicas y el pan pochón jamás se tapan con campanas calientes para evitar la condensación de vapor y pérdida de crujiente.</span></li>
-            <li><span class="step-number">3</span><span><strong>Vajilla Fría Especializada:</strong> La fruta cortada, el açaí bowl, la avena con frutos y el chia pudding deben montarse en vajilla refrigerada previamente a 2°C / -5°C (platos sombrero, bulgaris y boles cuadrados).</span></li>
-            <li><span class="step-number">4</span><span><strong>Separación de Elementos en Caliente:</strong> En la avena con frutos rojos, la fruta fresca se presenta en cuenco bulgari aparte para que el calor de la avena no la cocine antes del consumo.</span></li>
-            <li><span class="step-number">5</span><span><strong>Servicio de Caviar de Lujo:</strong> El caviar Oscietra 30g se acompaña con cuchara de nácar sobre hielo picado, guarniciones en cuatro puntas y blinis calientes envueltos en servilleta de lino.</span></li>
-            <li><span class="step-number">6</span><span><strong>Presentación en Bandeja IRD:</strong> Comprobar servilletas de lino planchadas sin pliegues irregulares, cubertería de plata pulida sin marcas de agua y condimentos en tarros individuales sellados.</span></li>
-          </ol>
-        </div>
-      `;
-
+      // Estándares simplificados
+      document.getElementById('modalBadge').textContent = "Calidad";
+      document.getElementById('modalTitle').textContent = "Estándares LQA / Forbes";
+      document.getElementById('modalSubtitle').textContent = "Pautas obligatorias In-Room Dining";
+      document.getElementById('modalBody').innerHTML = `<div class="touchpoint-alert"><div class="touchpoint-desc">Asegurar servicio a temperatura correcta, vajilla inmaculada y presentación idéntica a la ficha técnica oficial de la cocina del Hotel Arts.</div></div>`;
       document.getElementById('modalBackdrop').classList.add('open');
       document.body.style.overflow = 'hidden';
     }
