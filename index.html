@@ -1,0 +1,2636 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guía de Operaciones IRD - Hotel Arts Barcelona</title>
+  <style>
+    :root {
+      --bg-color: #0b1120;
+      --card-bg: #151f32;
+      --card-hover: #1c2a44;
+      --modal-bg: #111a2d;
+      --accent-color: #38bdf8;
+      --accent-gold: #eab308;
+      --accent-gold-dark: #854d0e;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --border-color: #243552;
+      --tag-bg: #0369a1;
+      --touchpoint-bg: rgba(234, 179, 8, 0.15);
+      --touchpoint-text: #fef08a;
+      --touchpoint-border: #eab308;
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --shadow-card: 0 8px 24px rgba(0, 0, 0, 0.35);
+      --shadow-hover: 0 16px 32px rgba(0, 0, 0, 0.5);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
+    body { background-color: var(--bg-color); color: var(--text-main); padding: 24px 20px; min-height: 100vh; }
+    
+    /* HEADER */
+    header {
+      max-width: 1300px;
+      margin: 0 auto 30px auto;
+      text-align: center;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border-color);
+      position: relative;
+    }
+    .brand-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(56, 189, 248, 0.12);
+      color: var(--accent-color);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 5px 14px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    h1 {
+      color: #fff;
+      font-size: 2.2rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+    }
+    h1 span {
+      background: linear-gradient(135deg, #38bdf8 0%, #ca8a04 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    p.subtitle { color: var(--text-muted); font-size: 1.05rem; max-width: 720px; margin: 0 auto; line-height: 1.5; }
+    
+    /* SELECTOR DE TURNO AM/PM */
+    .turn-toggle {
+      display: inline-flex;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 30px;
+      padding: 4px;
+      margin-top: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    .turn-btn {
+      background: transparent;
+      color: var(--text-muted);
+      border: none;
+      padding: 10px 24px;
+      border-radius: 26px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .turn-btn:hover { color: #fff; }
+    .turn-btn.active-am {
+      background: #eab308;
+      color: #451a03;
+      box-shadow: 0 2px 8px rgba(234, 179, 8, 0.4);
+    }
+    .turn-btn.active-pm {
+      background: #38bdf8;
+      color: #082f49;
+      box-shadow: 0 2px 8px rgba(56, 189, 248, 0.4);
+    }
+
+    .header-actions { margin-top: 20px; display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+    .btn-action { background: var(--card-bg); color: var(--text-main); border: 1px solid var(--border-color); padding: 8px 16px; border-radius: 10px; font-size: 0.88rem; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s; text-decoration: none; }
+    .btn-action:hover { background: var(--card-hover); border-color: var(--accent-color); color: #fff; transform: translateY(-1px); }
+
+    /* FILTROS Y CONTROLES */
+    .controls-wrapper { max-width: 1300px; margin: 0 auto 28px auto; display: flex; flex-direction: column; gap: 16px; }
+    .search-container { position: relative; width: 100%; }
+    .search-icon { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none; }
+    .search-input { width: 100%; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 14px 20px 14px 50px; color: var(--text-main); font-size: 1.02rem; outline: none; transition: all 0.2s; }
+    .search-input:focus { border-color: var(--accent-color); box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2); background: #172338; }
+    .clear-search { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); background: transparent; border: none; color: var(--text-muted); font-size: 1.2rem; cursor: pointer; display: none; padding: 6px; }
+    .clear-search:hover { color: #fff; }
+
+    .filters-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+    .filter-btn { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-muted); padding: 8px 18px; border-radius: 24px; font-size: 0.88rem; font-weight: 500; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 6px; }
+    .filter-btn:hover { background: var(--card-hover); color: var(--text-main); border-color: #475569; }
+    .filter-btn.active { background: #0284c7; color: #fff; border-color: #38bdf8; box-shadow: 0 0 12px rgba(56, 189, 248, 0.35); font-weight: 600; }
+    .filter-count { background: rgba(0, 0, 0, 0.3); padding: 2px 7px; border-radius: 12px; font-size: 0.75rem; }
+
+    .results-summary { max-width: 1300px; margin: 0 auto 16px auto; font-size: 0.88rem; color: var(--text-muted); display: flex; justify-content: space-between; align-items: center; }
+
+    /* GRID DE PLATOS */
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 24px; max-width: 1300px; margin: 0 auto; }
+    .card { background: var(--card-bg); border-radius: var(--radius-lg); border: 1px solid var(--border-color); overflow: hidden; display: flex; flex-direction: column; transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s; cursor: pointer; box-shadow: var(--shadow-card); position: relative; }
+    .card:hover { transform: translateY(-5px); box-shadow: var(--shadow-hover); border-color: #38bdf8; background: var(--card-hover); }
+    .card-img-container { width: 100%; height: 220px; overflow: hidden; position: relative; background: #090e18; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid var(--border-color); }
+    .card-img { width: 100%; height: 100%; object-fit: cover; object-position: center; transition: transform 0.35s ease; }
+    .card:hover .card-img { transform: scale(1.05); }
+
+    .card-badge-container { position: absolute; top: 12px; left: 12px; display: flex; flex-direction: column; gap: 6px; z-index: 2; }
+    .card-badge { padding: 4px 10px; border-radius: 8px; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 4px 8px rgba(0,0,0,0.4); }
+    
+    /* Colores Badges Dinámicos */
+    .badge-menu { background: #0284c7; color: #fff; }
+    .badge-eggs { background: #d97706; color: #fff; }
+    .badge-carta { background: #475569; color: #f8fafc; }
+    .badge-healthy { background: #16a34a; color: #fff; }
+    .badge-sweet { background: #db2777; color: #fff; }
+    .badge-local { background: #b91c1c; color: #fff; }
+    .badge-main { background: #7e22ce; color: #fff; }
+    .badge-side { background: #047857; color: #fff; }
+
+    .card-official-badge { background: rgba(16, 185, 129, 0.9); border: 1px solid #34d399; color: #fff; padding: 3px 8px; border-radius: 6px; font-size: 0.7rem; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; box-shadow: 0 2px 6px rgba(0,0,0,0.3); }
+    .card-touchpoint-flag { position: absolute; top: 12px; right: 12px; background: rgba(133, 77, 14, 0.95); border: 1px solid var(--accent-gold); color: #fef08a; padding: 4px 9px; border-radius: 8px; font-size: 0.72rem; font-weight: 700; display: flex; align-items: center; gap: 4px; box-shadow: 0 4px 8px rgba(0,0,0,0.4); z-index: 2; }
+    
+    .card-body { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; gap: 14px; }
+    .card-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
+    .card-title { font-size: 1.18rem; font-weight: 600; color: #fff; line-height: 1.3; }
+    .card-price { color: var(--accent-gold); font-size: 1.25rem; font-weight: 700; white-space: nowrap; margin-left: 10px; }
+    .card-desc { color: var(--text-muted); font-size: 0.88rem; line-height: 1.5; margin-bottom: 8px; }
+    .tags-container { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 6px; }
+    .tag { background: rgba(56, 189, 248, 0.12); color: #bae6fd; border: 1px solid rgba(56, 189, 248, 0.25); padding: 3px 9px; border-radius: 6px; font-size: 0.74rem; font-weight: 500; }
+    .tag-vajilla { background: rgba(148, 163, 184, 0.15); color: #cbd5e1; border-color: rgba(148, 163, 184, 0.25); }
+    .allergens-box { font-size: 0.78rem; color: #fca5a5; background: rgba(239, 68, 68, 0.08); padding: 7px 11px; border-radius: 8px; border: 1px solid rgba(239, 68, 68, 0.2); display: flex; align-items: flex-start; gap: 6px; line-height: 1.35; }
+    .card-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.06); margin-top: auto; }
+    .card-btn-view { color: var(--accent-color); font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 5px; background: none; border: none; cursor: pointer; padding: 0; }
+    .card-btn-view:hover { text-decoration: underline; }
+
+    /* MODAL */
+    .modal-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(3, 7, 18, 0.85); backdrop-filter: blur(8px); z-index: 1000; display: none; align-items: center; justify-content: center; padding: 20px; }
+    .modal-backdrop.open { display: flex; }
+    .modal-content { background: var(--modal-bg); border: 1px solid var(--border-color); border-radius: var(--radius-lg); width: 100%; max-width: 860px; max-height: 90vh; overflow-y: auto; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7); position: relative; }
+    .modal-header { padding: 24px 28px 18px 28px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: flex-start; position: sticky; top: 0; background: var(--modal-bg); z-index: 10; }
+    .modal-title { font-size: 1.5rem; font-weight: 700; color: #fff; margin-bottom: 6px; }
+    .modal-subtitle { color: var(--text-muted); font-size: 0.92rem; }
+    .modal-close { background: rgba(255, 255, 255, 0.08); border: 1px solid var(--border-color); color: var(--text-main); width: 36px; height: 36px; border-radius: 50%; font-size: 1.3rem; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+    .modal-close:hover { background: #ef4444; color: #fff; border-color: #ef4444; }
+    .modal-body { padding: 28px; display: flex; flex-direction: column; gap: 24px; }
+    .modal-hero-container { width: 100%; border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--border-color); background: #090e18; max-height: 320px; display: flex; align-items: center; justify-content: center; }
+    .modal-hero-photo { width: 100%; max-height: 320px; object-fit: cover; }
+    .modal-hero-svg { width: 100%; height: 240px; }
+    .official-ficha-banner { background: linear-gradient(90deg, rgba(16, 185, 129, 0.15) 0%, rgba(56, 189, 248, 0.15) 100%); border: 1px solid #10b981; border-radius: var(--radius-md); padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+    .official-ficha-text strong { display: block; color: #34d399; font-size: 0.98rem; }
+    .official-ficha-text span { font-size: 0.85rem; color: #cbd5e1; }
+    .btn-ver-ficha { background: #059669; color: #fff; border: 1px solid #34d399; font-weight: 600; white-space: nowrap; }
+    .btn-ver-ficha:hover { background: #10b981; border-color: #6ee7b7; color: #fff; }
+    .modal-grid-specs { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+    .spec-card { background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 14px 16px; }
+    .spec-label { font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-weight: 600; margin-bottom: 4px; }
+    .spec-value { font-size: 1.05rem; font-weight: 600; color: #fff; }
+    .section-title { font-size: 1.15rem; font-weight: 600; color: var(--accent-color); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+    .modal-section { background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 18px 20px; }
+    .steps-list { list-style-type: none; display: flex; flex-direction: column; gap: 12px; }
+    .steps-list li { display: flex; gap: 12px; font-size: 0.92rem; line-height: 1.5; color: #e2e8f0; }
+    .step-number { background: #0284c7; color: #fff; font-size: 0.78rem; font-weight: 700; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+    .touchpoint-alert { background: rgba(234, 179, 8, 0.1); border: 1px solid var(--touchpoint-border); border-radius: var(--radius-md); padding: 16px 20px; color: #fef08a; }
+    .touchpoint-title { font-weight: 700; font-size: 0.95rem; display: flex; align-items: center; gap: 8px; margin-bottom: 6px; color: #facc15; }
+    .modal-footer { padding: 18px 28px; border-top: 1px solid var(--border-color); display: flex; justify-content: flex-end; gap: 12px; background: var(--modal-bg); position: sticky; bottom: 0; }
+
+    /* LIGHTBOX VISOR FICHA ORIGINAL */
+    .ficha-modal-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(3, 7, 18, 0.92); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(10px); }
+    .ficha-modal-backdrop.open { display: flex; }
+    .ficha-modal-container { max-width: 900px; width: 100%; max-height: 94vh; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+    .ficha-modal-header { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 10px 16px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: var(--radius-md); }
+    .ficha-modal-img-wrapper { max-height: 82vh; overflow-y: auto; border-radius: var(--radius-md); border: 1px solid var(--border-color); }
+    .ficha-modal-img { max-width: 100%; display: block; }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="brand-badge">Hotel Arts Barcelona — The Ritz-Carlton</div>
+    <h1>Guía de Operaciones <span>In-Room Dining (IRD)</span></h1>
+    <p class="subtitle">Fichas Técnicas Oficiales de Cocina (CRO), Alérgenos y Estándares de Servicio LQA</p>
+    
+    <!-- SELECTOR DE TURNO AM / PM -->
+    <div class="turn-toggle">
+      <button id="btnTurnoAM" class="turn-btn active-am" onclick="cambiarTurno('AM')">
+        <span>☀️</span> Desayunos (AM)
+      </button>
+      <button id="btnTurnoPM" class="turn-btn" onclick="cambiarTurno('PM')">
+        <span>🌙</span> Carta de Tarde (PM)
+      </button>
+    </div>
+
+    <div class="header-actions">
+      <button class="btn-action" onclick="window.print()">🖨️ Imprimir Guía</button>
+      <button class="btn-action" onclick="abrirEstandares()">📋 Estándares LQA</button>
+    </div>
+  </header>
+
+  <!-- CONTROLES -->
+  <div class="controls-wrapper">
+    <div class="search-container">
+      <svg class="search-icon" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      <input type="text" id="searchInput" class="search-input" placeholder="Buscar plato, ingrediente, vajilla o alérgeno..." oninput="aplicarFiltros()">
+      <button class="clear-search" id="clearSearchBtn" onclick="limpiarBuscador()">&times;</button>
+    </div>
+
+    <!-- CONTENEDOR DE FILTROS DINÁMICO (Cambia según AM o PM) -->
+    <div class="filters-container" id="filtersContainer">
+      <!-- Se llena por JS -->
+    </div>
+  </div>
+
+  <div class="results-summary">
+    <span id="resultsCount">Cargando platos...</span>
+    <span style="font-size:0.8rem; color: #64748b;">Hotel Arts Barcelona · IRD Operations</span>
+  </div>
+
+  <!-- GRID DE PLATOS -->
+  <div class="grid" id="platosGrid"></div>
+
+  <!-- MODAL DE FICHA TÉCNICA -->
+  <div class="modal-backdrop" id="modalBackdrop" onclick="cerrarModalFondo(event)">
+    <div class="modal-content" id="modalContent">
+      <div class="modal-header">
+        <div class="modal-header-info">
+          <div class="brand-badge" id="modalBadge">Categoría</div>
+          <h2 class="modal-title" id="modalTitle">Título</h2>
+          <div class="modal-subtitle" id="modalSubtitle">Subtítulo</div>
+        </div>
+        <button class="modal-close" onclick="cerrarModal()">&times;</button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+      <div class="modal-footer">
+        <button class="btn-action" onclick="window.print()">Imprimir Ficha</button>
+        <button class="btn-action" style="background:#0284c7; color:#fff; border-color:#38bdf8;" onclick="cerrarModal()">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- LIGHTBOX FICHA ESCANEADA -->
+  <div class="ficha-modal-backdrop" id="modalFichaViewer" onclick="cerrarVisorFichaFondo(event)">
+    <div class="ficha-modal-container">
+      <div class="ficha-modal-header">
+        <div>
+          <span class="brand-badge" style="background:rgba(16,185,129,0.15); color:#34d399;">Ficha Técnica Oficial</span>
+          <h3 id="fichaViewerTitle" style="color:#fff;">Título</h3>
+        </div>
+        <div style="display:flex; gap:10px;">
+          <a id="fichaDownloadBtn" href="#" target="_blank" class="btn-action" style="background:#1e293b;">Abrir en pestaña nueva ↗</a>
+          <button class="modal-close" onclick="cerrarVisorFicha()">&times;</button>
+        </div>
+      </div>
+      <div class="ficha-modal-img-wrapper">
+        <img id="fichaViewerImg" src="" alt="Ficha técnica original" class="ficha-modal-img">
+      </div>
+    </div>
+  </div>
+
+  <!-- DATOS MAESTROS Y LÓGICA -->
+  <script>
+    // --- 1. CATÁLOGO DESAYUNOS (AM) ---
+    const catalogoAM = [
+  {
+    "id": "continental",
+    "nombre": "Continental Breakfast",
+    "nombreEs": "Desayuno Continental & Bandeja Arts",
+    "categoria": "menus",
+    "categoriaLabel": "Menú Completo",
+    "badgeClass": "badge-menu",
+    "precio": "42 €",
+    "vajilla": "Bandeja IRD noble, panera de lino, plato de postre 21cm, platillos mantequilla",
+    "descripcion": "Surtido de bollería artesana horneada al amanecer (croissant francés, pain au chocolat, caracola), tostadas rústicas, mantequilla d'Isigny AOC, 3 mermeladas selectas, zumo de naranja natural y café de especialidad.",
+    "tags": [
+      "Bandeja Arts",
+      "Bollería Francesa",
+      "Mermeladas Artesanas",
+      "Zumo Natural"
+    ],
+    "touchpoint": "La bollería debe servirse tibia en cesta forrada con servilleta de lino. La mantequilla a 14°C para facilitar el untado sin romperse.",
+    "alergenos": "Gluten (GL), Huevos (HUE), Lactosa (LAC)",
+    "tiempoPase": "12 - 15 min",
+    "tempServicio": "Bollería 25°C · Café >75°C · Zumo <5°C",
+    "pasosEmplatado": [
+      "Disponer la panera de lino blanco en el lateral superior izquierdo de la bandeja.",
+      "Colocar el croissant en el centro, flanqueado por el pain au chocolat y la caracola de pasas recién atemperadas.",
+      "Presentar dos mini-tarros de cristal con mermeladas de fresa y naranja amarga junto a la tarrina de mantequilla d'Isigny.",
+      "Acompañar de vaso alto de cristal fino con 220 ml de zumo recién exprimido y jarra térmica de café recién pasado."
+    ],
+    "imagen": "img/plato_bandeja_arts.jpg",
+    "ficha": null,
+    "tieneFichaOficial": false,
+    "svg": "<svg viewBox=\"0 0 400 220\" xmlns=\"http://www.w3.org/2000/svg\"><rect width=\"400\" height=\"220\" fill=\"#151f32\"/><rect x=\"40\" y=\"25\" width=\"320\" height=\"170\" rx=\"14\" fill=\"#1e293b\" stroke=\"#334155\" stroke-width=\"2\"/><ellipse cx=\"140\" cy=\"100\" rx=\"65\" ry=\"45\" fill=\"#78350f\"/><path d=\"M90 100 C110 70 170 70 190 100 C170 120 110 120 90 100 Z\" fill=\"#d97706\"/><circle cx=\"270\" cy=\"80\" r=\"32\" fill=\"#ffffff\" stroke=\"#cbd5e1\" stroke-width=\"3\"/><rect x=\"255\" y=\"65\" width=\"30\" height=\"30\" rx=\"4\" fill=\"#fbbf24\"/><circle cx=\"280\" cy=\"145\" r=\"22\" fill=\"#ea580c\"/><text x=\"200\" y=\"208\" text-anchor=\"middle\" fill=\"#94a3b8\" font-size=\"11\">Bandeja Continental & Cesta de Bollería</text></svg>"
+  },
+  {
+    "id": "american",
+    "nombre": "American Breakfast",
+    "nombreEs": "Desayuno Americano Arts Oficial",
+    "categoria": "menus",
+    "categoriaLabel": "Menú Completo",
+    "badgeClass": "badge-menu",
+    "precio": "54 €",
+    "vajilla": "Plato llano 28cm caliente, campana térmica inox, bol cuadrado fruta, plato pancakes",
+    "descripcion": "Desayuno compuesto por bol de frutas frescas cortadas montado en bol cuadrado, huevos al estilo elegido por el huésped con dos guarniciones, y pancakes servidos con salsa, espuma de mascarpone y frutos rojos.",
+    "tags": [
+      "Ficha CRO",
+      "Huevos al Gusto",
+      "Pancakes con Mascarpone",
+      "Bol Frutas Cuadrado"
+    ],
+    "touchpoint": "Tapar inmediatamente con campana térmica precalentada a 60°C. El bol de fruta fría debe servirse simultáneamente en la bandeja sin absorber calor.",
+    "alergenos": "Gluten (GL), Lácteos (L), Huevos (H)",
+    "tiempoPase": "15 - 18 min",
+    "tempServicio": "Plato caliente >65°C con campana · Fruta fresca <4°C",
+    "pasosEmplatado": [
+      "Montar el bol de frutas cortadas en bol cuadrado blanco.",
+      "Cocinar los huevos según la elección del huésped y servir en plato caliente con las guarniciones seleccionadas.",
+      "Terminar con los pancakes espolvoreados con azúcar glas y acompañar con espuma de mascarpone, frutos rojos y salsa.",
+      "Colocar campana térmica sobre los platos calientes y montar en bandeja de servicio IRD."
+    ],
+    "ingredientesDetallados": [
+      {
+        "ingrediente": "Bol de frutas cortadas frescas",
+        "cantidad": "1",
+        "unidad": "Bol cuadrado"
+      },
+      {
+        "ingrediente": "Huevos al estilo elegido por el huésped",
+        "cantidad": "2",
+        "unidad": "Ud"
+      },
+      {
+        "ingrediente": "Guarniciones a elegir (bacon, salchicha, hash brown, etc.)",
+        "cantidad": "2",
+        "unidad": "Raciones"
+      },
+      {
+        "ingrediente": "Pancakes esponjosos",
+        "cantidad": "2",
+        "unidad": "Ud"
+      },
+      {
+        "ingrediente": "Espuma de mascarpone",
+        "cantidad": "30",
+        "unidad": "Gr"
+      },
+      {
+        "ingrediente": "Salsa artesana & frutos rojos",
+        "cantidad": "1",
+        "unidad": "Surtido"
+      }
+    ],
+    "imagen": "img/plato_american_breakfast.jpg",
+    "ficha": "img/ficha_american_breakfast.jpg",
+    "tieneFichaOficial": true,
+    "svg": "<svg viewBox=\"0 0 400 220\" xmlns=\"http://www.w3.org/2000/svg\"><rect width=\"400\" height=\"220\" fill=\"#151f32\"/><circle cx=\"200\" cy=\"110\" r=\"85\" fill=\"#f8fafc\" stroke=\"#94a3b8\" stroke-width=\"4\"/><circle cx=\"170\" cy=\"120\" r=\"24\" fill=\"#facc15\" stroke=\"#ca8a04\" stroke-width=\"2\"/><circle cx=\"225\" cy=\"120\" r=\"24\" fill=\"#facc15\" stroke=\"#ca8a04\" stroke-width=\"2\"/><path d=\"M140 75 Q 200 65 260 75\" stroke=\"#b91c1c\" stroke-width=\"9\" stroke-linecap=\"round\"/><path d=\"M145 88 Q 200 78 255 88\" stroke=\"#7f1d1d\" stroke-width=\"8\" stroke-linecap=\"round\"/><rect x=\"180\" y=\"45\" width=\"40\" height=\"22\" rx=\"6\" fill=\"#eab308\"/><text x=\"200\" y=\"210\" text-anchor=\"middle\" fill=\"#94a3b8\" font-size=\"11\">Plato Caliente 28cm con Campana</text></svg>"
+  },
+  {
+    "id": "healthy",
+    "nombre": "Healthy Breakfast",
+    "nombreEs": "Desayuno Vital & Saludable Arts Oficial",
+    "categoria": "menus",
+    "categoriaLabel": "Menú Completo",
+    "badgeClass": "badge-healthy",
+    "precio": "58 €",
+    "vajilla": "Bandeja IRD noble, plato sombrero para ensalada, bol cuadrado fruta, bol yogur espirulina, mini cocotte",
+    "descripcion": "Desayuno compuesto por fruta fresca cortada, yogur vegano con espirulina y granola, huevo poché con espinaca, aguacate y cherrys confitados, oatmeal horneado y pan de masa madre tostado.",
+    "tags": [
+      "Ficha CRO",
+      "Yogur Espirulina",
+      "Huevo Poché Sombrero",
+      "Oatmeal Horneado"
+    ],
+    "touchpoint": "Estándar de servicio estricto: servir todo el conjunto simultáneamente combinando armónicamente elementos fríos y calientes (Serve all components at once).",
+    "alergenos": "Gluten (GL), Lácteos (L), Huevos (H), Frutos Secos (FS)",
+    "tiempoPase": "15 min",
+    "tempServicio": "Frutas y yogur <4°C · Ensalada poché 55°C · Oatmeal >65°C",
+    "pasosEmplatado": [
+      "Disponer el bol de frutas, el yogur de espirulina, el oatmeal horneado y el pan tostado en la bandeja de desayuno.",
+      "Emplatar la ensalada de espinaca con aguacate, cherrys confitados y huevo poché en plato sombrero.",
+      "Servir el conjunto combinando elementos fríos y calientes al mismo tiempo en el pase."
+    ],
+    "ingredientesDetallados": [
+      {
+        "ingrediente": "Bol de frutas frescas cortadas",
+        "cantidad": "1",
+        "unidad": "Bol cuadrado"
+      },
+      {
+        "ingrediente": "Yogur vegano de espirulina y granola",
+        "cantidad": "1",
+        "unidad": "Bol individual"
+      },
+      {
+        "ingrediente": "Huevo poché ecológico a 64°C",
+        "cantidad": "1",
+        "unidad": "Ud"
+      },
+      {
+        "ingrediente": "Espinacas frescas y aguacate",
+        "cantidad": "1",
+        "unidad": "Ración"
+      },
+      {
+        "ingrediente": "Tomates cherrys confitados al tomillo",
+        "cantidad": "4",
+        "unidad": "Ud"
+      },
+      {
+        "ingrediente": "Oatmeal de avena recién horneado",
+        "cantidad": "1",
+        "unidad": "Mini cocotte"
+      },
+      {
+        "ingrediente": "Pan de masa madre tostado",
+        "cantidad": "2",
+        "unidad": "Rebanadas"
+      }
+    ],
+    "imagen": "img/plato_healthy_breakfast.jpg",
+    "ficha": "img/ficha_healthy_breakfast.jpg",
+    "tieneFichaOficial": true,
+    "svg": "<svg viewBox=\"0 0 400 220\" xmlns=\"http://www.w3.org/2000/svg\"><rect width=\"400\" height=\"220\" fill=\"#151f32\"/><rect x=\"40\" y=\"25\" width=\"320\" height=\"170\" rx=\"12\" fill=\"#1e293b\" stroke=\"#16a34a\" stroke-width=\"2\"/><circle cx=\"100\" cy=\"75\" r=\"28\" fill=\"#ffffff\" stroke=\"#cbd5e1\" stroke-width=\"2\"/><circle cx=\"180\" cy=\"75\" r=\"28\" fill=\"#0284c7\"/><circle cx=\"260\" cy=\"75\" r=\"28\" fill=\"#d97706\"/><circle cx=\"140\" cy=\"145\" r=\"32\" fill=\"#ffffff\"/><circle cx=\"140\" cy=\"142\" r=\"16\" fill=\"#facc15\"/><rect x=\"220\" y=\"125\" width=\"55\" height=\"40\" rx=\"8\" fill=\"#15803d\"/><text x=\"200\" y=\"210\" text-anchor=\"middle\" fill=\"#4ade80\" font-size=\"11\">Bandeja Vital: Espirulina, Fruta, Poché & Detox</text></svg>"
+  },
+  {
+    "id": "champagne_caviar",
+    "nombre": "Champagne y Caviar Oscietra",
+    "nombreEs": "Servicio de Caviar Oscietra con Blinis Calientes & Gelée de Cava",
+    "categoria": "carta",
+    "categoriaLabel": "A la Carta",
+    "badgeClass": "badge-carta",
+    "precio": "185 €",
+    "vajilla": "Caviarera con hielo pilé, vajilla de cuatro puntas, lino para blinis, cuchara de nácar",
+    "descripcion": "Servicio compuesto por caviar Oscietra acompañado de blinis calientes, gelée de cava, queso crema, yema y clara de huevo, y cebollino. El pase se centra en un montaje en cuatro puntas con contraste de temperatura y guarniciones que aportan cremosidad, salinidad y frescor.",
+    "tags": [
+      "Ficha CRO",
+      "Caviar Oscietra 30g",
+      "Blinis Calientes",
+      "Montaje 4 Puntas",
+      "Gelée Cava"
+    ],
+    "touchpoint": "Servicio de alta gastronomía: utilizar estrictamente cuchara de nácar. Los blinis deben salir calientes envueltos en lino y el caviar a 0-2°C sobre hielo picado.",
+    "alergenos": "Gluten (GL), Lácteos (L), Pescado (P), Huevo (H)",
+    "tiempoPase": "8 - 10 min",
+    "tempServicio": "Servicio frío-caliente: Caviar 0 - 2°C · Blinis calientes >50°C",
+    "pasosEmplatado": [
+      "Disponer todos los ingredientes menos los blinis en el plato especial de cuatro puntas.",
+      "Centrar la lata de Caviar Oscietra 30g sobre base noble con hielo picado fino y cuchara de nácar.",
+      "Calentar los blinis al microondas no más de 10 segundos para preservar su ternura.",
+      "Servir los blinis calientes envueltos en servilleta de lino junto al caviar."
+    ],
+    "ingredientesDetallados": [
+      {
+        "ingrediente": "Oscietra Caviar",
+        "cantidad": "30",
+        "unidad": "Gr"
+      },
+      {
+        "ingrediente": "Blinis artesanos",
+        "cantidad": "8",
+        "unidad": "Ud"
+      },
+      {
+        "ingrediente": "Gelée de Cava",
+        "cantidad": "10",
+        "unidad": "Gr"
+      },
+      {
+        "ingrediente": "Queso Crema",
+        "cantidad": "10",
+        "unidad": "Gr"
+      },
+      {
+        "ingrediente": "Yema de Huevo cocida picada",
+        "cantidad": "10",
+        "unidad": "Gr"
+      },
+      {
+        "ingrediente": "Clara de Huevo cocida picada",
+        "cantidad": "10",
+        "unidad": "Gr"
+      },
+      {
+        "ingrediente": "Cebollino picado fino",
+        "cantidad": "3",
+        "unidad": "Gr"
+      }
+    ],
+    "imagen": "img/plato_champagne_caviar.jpg",
+    "ficha": "img/ficha_champagne_caviar.jpg",
+    "tieneFichaOficial": true,
+    "svg": "<svg viewBox=\"0 0 400 220\" xmlns=\"http://www.w3.org/2000/svg\"><rect width=\"400\" height=\"220\" fill=\"#151f32\"/><circle cx=\"200\" cy=\"110\" r=\"85\" fill=\"#0f172a\" stroke=\"#ca8a04\" stroke-width=\"4\"/><circle cx=\"200\" cy=\"110\" r=\"40\" fill=\"#000\"/><circle cx=\"200\" cy=\"110\" r=\"32\" fill=\"#1e293b\"/><text x=\"200\" y=\"210\" text-anchor=\"middle\" fill=\"#eab308\" font-size=\"11\">Caviar Oscietra 30g & Montaje 4 Puntas</text></svg>"
+  },
+  {
+    "id": "fruit",
+    "nombre": "Sliced Fruit (Fruta Cortada)",
+    "nombreEs": "Selección Oficial de Frutas Frescas en Plato Sombrero",
+    "categoria": "saludable",
+    "categoriaLabel": "Saludable & Vegano",
+    "badgeClass": "badge-healthy",
+    "precio": "16 €",
+    "vajilla": "Plato sombrero hondo refrigerado previamente a 2°C",
+    "descripcion": "Plato de fruta fresca cortada compuesto por piña, melón blanco, melón cantaloup, manzana roja, fresa, arándanos, frambuesa, mora, plátano, kiwi y pera. El pase se basa en corte y montaje en plato sombrero, con un perfil fresco y ligero.",
+    "tags": [
+      "Ficha CRO",
+      "Plato Sombrero",
+      "11 Variedades Fruta",
+      "100% Vegano"
+    ],
+    "touchpoint": "El plato sombrero DEBE estar refrigerado a 2°C. El corte se realiza al momento de la orden para evitar la oxidación de la pera y la manzana roja.",
+    "alergenos": "Vegano (VE) · Libre de los principales alérgenos",
+    "tiempoPase": "8 min",
+    "tempServicio": "Servicio muy frío: 2 - 4°C",
+    "pasosEmplatado": [
+      "Emplatar en plato sombrero refrigerado, colocando de base la piña y los melones.",
+      "Completar con el resto de la fruta cortada manteniendo armonía cromática y volumetría.",
+      "Terminar el montaje en frío y verificar brillo natural impecable."
+    ],
+    "ingredientesDetallados": [
+      {
+        "ingrediente": "Piña",
+        "cantidad": "4",
+        "unidad": "Slices"
+      },
+      {
+        "ingrediente": "Melón blanco",
+        "cantidad": "4",
+        "unidad": "Slices"
+      },
+      {
+        "ingrediente": "Melón cantaloup",
+        "cantidad": "4",
+        "unidad": "Slices"
+      },
+      {
+        "ingrediente": "Manzana roja",
+        "cantidad": "4",
+        "unidad": "Slices"
+      },
+      {
+        "ingrediente": "Fresa fresca",
+        "cantidad": "1",
+        "unidad": "Ud"
+      },
+      {
+        "ingrediente": "Arándanos silvestres",
+        "cantidad": "5",
+        "unidad": "Ud"
+      },
+      {
+        "ingrediente": "Frambuesa fresca",
+        "cantidad": "1",
+        "unidad": "Ud"
+      },
+      {
+        "ingrediente": "Mora silvestre",
+        "cantidad": "1",
+        "unidad": "Ud"
+      },
+      {
+        "ingrediente": "Plátano canario",
+        "cantidad": "5",
+        "unidad": "Slices"
+      },
+      {
+        "ingrediente": "Kiwi",
+        "cantidad": "1/2",
+        "unidad": "Ud"
+      },
+      {
+        "ingrediente": "Pera conferencia",
+        "cantidad": "6",
+        "unidad": "Slices"
+      }
+    ],
+    "imagen": "img/plato_sliced_fruit.jpg",
+    "ficha": "img/ficha_sliced_fruit.jpg",
+    "tieneFichaOficial": true,
+    "svg": "<svg viewBox=\"0 0 400 220\" xmlns=\"http://www.w3.org/2000/svg\"><rect width=\"400\" height=\"220\" fill=\"#151f32\"/><circle cx=\"200\" cy=\"110\" r=\"85\" fill=\"#f8fafc\" stroke=\"#94a3b8\" stroke-width=\"5\"/><circle cx=\"200\" cy=\"110\" r=\"50\" fill=\"#e2e8f0\"/><text x=\"200\" y=\"210\" text-anchor=\"middle\" fill=\"#94a3b8\" font-size=\"11\">Plato Sombrero Refrigerado 2°C</text></svg>"
+  },
+  {
+    "id": "avena_frutos_rojos",
+    "nombre": "Avena con Frutos Rojos",
+    "nombreEs": "Warm Oats & Bulgari de Frutos Rojos",
+    "categoria": "saludable",
+    "categoriaLabel": "Saludable & Vegano",
+    "badgeClass": "badge-healthy",
+    "precio": "16 €",
+    "vajilla": "Plato sombrero caliente + cuenco bulgari para frutos rojos",
+    "descripcion": "Avena caliente servida en plato sombrero con frutos rojos presentados aparte en cuenco bulgari para que el huésped los incorpore a su gusto sin marchitarlos.",
+    "tags": [
+      "Ficha CRO",
+      "Plato Sombrero",
+      "Cuenco Bulgari",
+      "Avena 60g"
+    ],
+    "touchpoint": "Los frutos rojos NUNCA se introducen dentro de la avena caliente en cocina para preservar su textura fresca; se sirven rigurosamente aparte en cuenco bulgari.",
+    "alergenos": "Gluten (GL); Lácteos según leche a elegir (L)",
+    "tiempoPase": "8 - 10 min",
+    "tempServicio": "Avena humeante >65°C · Frutos rojos frescos en bulgari",
+    "pasosEmplatado": [
+      "Calentar en un cazo la leche elegida con la avena previamente hidratada.",
+      "Emplatar la avena cremosa en el centro de un plato sombrero precalentado.",
+      "Servir aparte un cuenco bulgari con los frutos rojos frescos impecables."
+    ],
+    "ingredientesDetallados": [
+      {
+        "ingrediente": "Avena previamente hidratada",
+        "cantidad": "60",
+        "unidad": "Gr"
+      },
+      {
+        "ingrediente": "Leche a elegir (avena, soja, entera, almendra)",
+        "cantidad": "60",
+        "unidad": "Gr"
+      },
+      {
+        "ingrediente": "Fresas",
+        "cantidad": "0,5",
+        "unidad": "Ud"
+      },
+      {
+        "ingrediente": "Moras",
+        "cantidad": "1",
+        "unidad": "Ud"
+      },
+      {
+        "ingrediente": "Frambuesa",
+        "cantidad": "1",
+        "unidad": "Ud"
+      },
+      {
+        "ingrediente": "Arándanos",
+        "cantidad": "5",
+        "unidad": "Ud"
+      }
+    ],
+    "imagen": "img/plato_avena_frutos_rojos.jpg",
+    "ficha": "img/ficha_avena_frutos_rojos.jpg",
+    "tieneFichaOficial": true,
+    "svg": "<svg viewBox=\"0 0 400 220\" xmlns=\"http://www.w3.org/2000/svg\"><rect width=\"400\" height=\"220\" fill=\"#151f32\"/><circle cx=\"170\" cy=\"110\" r=\"75\" fill=\"#f8fafc\"/><circle cx=\"280\" cy=\"110\" r=\"40\" fill=\"#e2e8f0\"/><text x=\"200\" y=\"210\" text-anchor=\"middle\" fill=\"#94a3b8\" font-size=\"11\">Plato Sombrero & Bulgari Frutos Rojos</text></svg>"
+  },
+  {
+    "id": "bowl_frutos_rojos",
+    "nombre": "Bowl de Frutos Rojos",
+    "nombreEs": "Bol Cuadrado de Frutos Silvestres por Capas",
+    "categoria": "saludable",
+    "categoriaLabel": "Saludable & Vegano",
+    "badgeClass": "badge-healthy",
+    "precio": "16 €",
+    "vajilla": "Bol cuadrado blanco de porcelana refrigerado a 2°C",
+    "descripcion": "Bol de frutos rojos compuesto por fresa, arándanos, mora y frambuesa, montado en bol cuadrado. La elaboración se basa en corte y disposición por capas, con un perfil fresco y ligero.",
+    "tags": [
+      "Ficha CRO",
+      "Bol Cuadrado",
+      "Montaje por Capas",
+      "Vegano"
+    ],
+    "touchpoint": "Disposición estricta en capas: fresas en sextos en la base, arándanos en capa intermedia y moras/frambuesas en la superficie. Servicio muy frío.",
+    "alergenos": "Vegano (VE) · Libre de alérgenos",
+    "tiempoPase": "6 - 8 min",
+    "tempServicio": "Servicio muy frío: 2 - 4°C",
+    "pasosEmplatado": [
+      "Cortar las fresas en sextos y colocarlas en la base de un bol cuadrado.",
+      "Añadir los arándanos formando una capa intermedia uniforme.",
+      "Terminar con las frambuesas y moras dispuestas en la cúspide con armonía."
+    ],
+    "ingredientesDetallados": [
+      {
+        "ingrediente": "Fresa fresca",
+        "cantidad": "3",
+        "unidad": "Ud (cortadas en sextos)"
+      },
+      {
+        "ingrediente": "Arándanos",
+        "cantidad": "14",
+        "unidad": "Ud"
+      },
+      {
+        "ingrediente": "Mora silvestre",
+        "cantidad": "6",
+        "unidad": "Ud"
+      },
+      {
+        "ingrediente": "Frambuesa fresca",
+        "cantidad": "6",
+        "unidad": "Ud"
+      }
+    ],
+    "imagen": "img/plato_bowl_frutos_rojos.jpg",
+    "ficha": "img/ficha_bowl_frutos_rojos.jpg",
+    "tieneFichaOficial": true,
+    "svg": "<svg viewBox=\"0 0 400 220\" xmlns=\"http://www.w3.org/2000/svg\"><rect width=\"400\" height=\"220\" fill=\"#151f32\"/><rect x=\"130\" y=\"45\" width=\"140\" height=\"130\" rx=\"14\" fill=\"#f8fafc\" stroke=\"#94a3b8\" stroke-width=\"3\"/><text x=\"200\" y=\"210\" text-anchor=\"middle\" fill=\"#ef4444\" font-size=\"11\">Bol Cuadrado de Frutos Silvestres</text></svg>"
+  },
+  {
+    "id": "coconut_pudding",
+    "nombre": "Coconut Pudding (Chia Pudding)",
+    "nombreEs": "Pudding Frío de Chía, Crumble & Piña Osmotizada",
+    "categoria": "saludable",
+    "categoriaLabel": "Saludable & Vegano",
+    "badgeClass": "badge-healthy",
+    "precio": "15 €",
+    "vajilla": "Bol redondo de cerámica artesanal refrigerado a 2°C",
+    "descripcion": "Pudding frío de chía servido en bol redondo con crumble de coco, coco deshidratado y piña osmotizada. El pase se basa en un montaje en frío con contraste entre base cremosa, elemento crujiente y fruta tratada.",
+    "tags": [
+      "Ficha CRO",
+      "Chía Cuarto Frío",
+      "Crumble de Coco",
+      "Piña Osmotizada"
+    ],
+    "touchpoint": "Montaje con contraste de texturas: colocar el crumble de coco de la mitad hacia una esquina y trazar una línea geométrica impecable con las 6 láminas de piña osmotizada.",
+    "alergenos": "Frutos de Cáscara (coco) · Vegano (VE)",
+    "tiempoPase": "6 - 8 min",
+    "tempServicio": "Servicio frío: 2 - 4°C",
+    "pasosEmplatado": [
+      "Emplatar en el bol redondo una base lisa de 100g de chia pudding (elaborado en cuarto frío).",
+      "Colocar el crumble de coco cubriendo desde la mitad hacia una esquina.",
+      "Decorar con lascas de coco deshidratado y una línea estética de piña osmotizada."
+    ],
+    "ingredientesDetallados": [
+      {
+        "ingrediente": "Pudding de Chía (cuarto frío)",
+        "cantidad": "100",
+        "unidad": "Gr"
+      },
+      {
+        "ingrediente": "Crumble de coco artesano",
+        "cantidad": "10",
+        "unidad": "Gr"
+      },
+      {
+        "ingrediente": "Coco deshidratado en lascas",
+        "cantidad": "2",
+        "unidad": "Gr"
+      },
+      {
+        "ingrediente": "Piña osmotizada",
+        "cantidad": "6",
+        "unidad": "Slices"
+      }
+    ],
+    "imagen": "img/plato_coconut_pudding.jpg",
+    "ficha": "img/ficha_coconut_pudding.jpg",
+    "tieneFichaOficial": true,
+    "svg": "<svg viewBox=\"0 0 400 220\" xmlns=\"http://www.w3.org/2000/svg\"><rect width=\"400\" height=\"220\" fill=\"#151f32\"/><circle cx=\"200\" cy=\"110\" r=\"75\" fill=\"#f8fafc\" stroke=\"#94a3b8\" stroke-width=\"4\"/><path d=\"M200 35 A75 75 0 0 1 275 110 L200 110 Z\" fill=\"#d97706\"/><text x=\"200\" y=\"210\" text-anchor=\"middle\" fill=\"#ca8a04\" font-size=\"11\">Bol Redondo: Chia, Crumble & Piña Osmotizada</text></svg>"
+  },
+  {
+    "id": "catalan",
+    "nombre": "Catalan Breakfast",
+    "nombreEs": "Desayuno Tradición Catalana con Ibéricos",
+    "categoria": "menus",
+    "categoriaLabel": "Menú Completo",
+    "badgeClass": "badge-menu",
+    "precio": "56 €",
+    "vajilla": "Tabla de pizarra noble, cesta pan de cristal, aceitera de vidrio",
+    "descripcion": "Jamón ibérico de bellota 100% cortado a mano (80g), lomo ibérico de bellota, fuet artesano de Vic, quesos catalanes artesanos (Garrotxa y Formatge d'Urgell), 4 tostas de pan de cristal con tomate de colgar y AOVE Arbequina virgen extra.",
+    "tags": [
+      "Jamón Ibérico 100%",
+      "Pan de Cristal",
+      "Queso Garrotxa",
+      "AOVE Arbequina"
+    ],
+    "touchpoint": "El jamón ibérico DEBE estar atemperado a 22-24°C para que sude la grasa noble. El pan de cristal debe servirse recién tostado y súper crujiente.",
+    "alergenos": "Gluten (GL), Lactosa (LAC)",
+    "tiempoPase": "10 - 12 min",
+    "tempServicio": "Embutidos a temperatura ambiente (22°C) · Pan recién tostado caliente",
+    "pasosEmplatado": [
+      "Disponer el Jamón Ibérico de Bellota en abanico aireado sobre la pizarra, evitando apelmazar las lonchas.",
+      "Colocar las cuñas de queso Garrotxa y Urgell en el extremo lateral con unas gotas de aceite de oliva.",
+      "Tostar las 4 piezas de pan de cristal, frotar con tomate maduro de colgar, añadir sal marina en escamas y un hilo generoso de AOVE.",
+      "Servir el pan en cestillo térmico para mantener la textura cristalina hasta la mesa del huésped."
+    ],
+    "imagen": null,
+    "ficha": null,
+    "tieneFichaOficial": false,
+    "svg": "<svg viewBox=\"0 0 400 220\" xmlns=\"http://www.w3.org/2000/svg\"><rect width=\"400\" height=\"220\" fill=\"#151f32\"/><rect x=\"50\" y=\"30\" width=\"300\" height=\"155\" rx=\"10\" fill=\"#1e293b\" stroke=\"#64748b\" stroke-width=\"2\"/><ellipse cx=\"140\" cy=\"110\" rx=\"65\" ry=\"40\" fill=\"#991b1b\"/><path d=\"M100 110 Q 140 90 180 110\" stroke=\"#fca5a5\" stroke-width=\"4\" fill=\"none\"/><rect x=\"230\" y=\"60\" width=\"90\" height=\"40\" rx=\"4\" fill=\"#d97706\"/><rect x=\"235\" y=\"65\" width=\"80\" height=\"30\" rx=\"3\" fill=\"#ef4444\"/><polygon points=\"240,150 280,120 280,150\" fill=\"#fef08a\"/><text x=\"200\" y=\"208\" text-anchor=\"middle\" fill=\"#eab308\" font-size=\"11\">Pizarra Ibéricos 100% Bellota & Pa amb Tomàquet</text></svg>"
+  },
+  {
+    "id": "japanese",
+    "nombre": "Traditional Japanese Breakfast",
+    "nombreEs": "Desayuno Tradicional Japonés",
+    "categoria": "menus",
+    "categoriaLabel": "Menú Completo",
+    "badgeClass": "badge-menu",
+    "precio": "58 €",
+    "vajilla": "Bandeja Obon lacada en negro, bol Chawan (arroz), bol Shiruwan (miso con tapa), yakimono-zara",
+    "descripcion": "Lomo de salmón salvaje Shioyaki a la plancha con glaseado teriyaki, sopa de miso artesana con tofu sedoso y alga wakame, bol de arroz gohan al vapor con furikake, tortilla japonesa Tamagoyaki, encurtidos tsukemono y té verde Sencha.",
+    "tags": [
+      "Salmón Shioyaki",
+      "Sopa Miso",
+      "Arroz Gohan",
+      "Tamagoyaki",
+      "Té Sencha"
+    ],
+    "touchpoint": "La sopa miso DEBE servirse con su tapa lacada para retener el vapor y aromas del dashi. Los palillos deben disponerse horizontales en la base sobre el hashioki.",
+    "alergenos": "Pescado (PES), Soja (SOY), Sésamo (SES), Gluten (GL)",
+    "tiempoPase": "15 - 18 min",
+    "tempServicio": "Sopa miso y arroz >70°C · Salmón 65°C · Acompañamientos frescos",
+    "pasosEmplatado": [
+      "Colocar el bol de arroz blanco Gohan humeante en la parte inferior izquierda de la bandeja Obon.",
+      "Colocar el bol de sopa Miso con su tapa cerrada en la parte inferior derecha.",
+      "Centrar en la parte superior el plato alargado Yakimono con el lomo de salmón asado y piel crujiente hacia arriba.",
+      "Ubicar los platillos pequeños (Kobachi) con el Tamagoyaki en rollitos y los encurtidos Tsukemono entre los platos principales.",
+      "Colocar los palillos japoneses apoyados en el soporte hashioki al frente de la bandeja."
+    ],
+    "imagen": null,
+    "ficha": null,
+    "tieneFichaOficial": false,
+    "svg": "<svg viewBox=\"0 0 400 220\" xmlns=\"http://www.w3.org/2000/svg\"><rect width=\"400\" height=\"220\" fill=\"#151f32\"/><rect x=\"40\" y=\"25\" width=\"320\" height=\"170\" rx=\"8\" fill=\"#090d16\" stroke=\"#b91c1c\" stroke-width=\"2\"/><ellipse cx=\"200\" cy=\"75\" rx=\"75\" ry=\"25\" fill=\"#f8fafc\"/><path d=\"M150 75 Q 200 65 250 75\" fill=\"#ea580c\"/><circle cx=\"115\" cy=\"140\" r=\"32\" fill=\"#ffffff\" stroke=\"#94a3b8\" stroke-width=\"2\"/><circle cx=\"115\" cy=\"140\" r=\"26\" fill=\"#f1f5f9\"/><circle cx=\"285\" cy=\"140\" r=\"30\" fill=\"#78350f\" stroke=\"#000000\" stroke-width=\"3\"/><rect x=\"180\" y=\"125\" width=\"40\" height=\"25\" rx=\"4\" fill=\"#facc15\"/><text x=\"200\" y=\"210\" text-anchor=\"middle\" fill=\"#38bdf8\" font-size=\"11\">Bandeja Obon: Shioyaki, Gohan, Miso & Tamagoyaki</text></svg>"
+  },
+  {
+    "id": "benedict",
+    "nombre": "Eggs Benedict & Royale con Yuzu Hollandaise",
+    "nombreEs": "Huevos Benedict / Royale con Holandesa de Yuzu",
+    "categoria": "huevos",
+    "categoriaLabel": "Platos de Huevos",
+    "badgeClass": "badge-eggs",
+    "precio": "24 €",
+    "vajilla": "Plato hondo de ala ancha 28cm precalentado a 50°C, campana con respiradero, salsera",
+    "descripcion": "Dos mitades de English Muffin artesano tostados a la mantequilla, láminas de aguacate maduro, dos huevos poché camperos cocinados a 64°C con yema fluida sedosa, salsa holandesa casera infusionada con cítrico yuzu y brotes frescos. Opción de añadir salmón ahumado salvaje (Royale) o bacon crujiente.",
+    "tags": [
+      "English Muffin",
+      "Holandesa de Yuzu",
+      "Huevos a 64°C",
+      "Salmón o Bacon"
+    ],
+    "touchpoint": "La holandesa debe estar a 45-50°C (emulsión tibia sedosa). Si el pedido va a suite lejana, enviar la holandesa en salsera isotérmica aparte para no ablandar el muffin.",
+    "alergenos": "Lactosa (LAC), Huevos (HUE), Gluten (GL), Sulfitos (SUL), Pescado (opcional)",
+    "tiempoPase": "10 - 12 min",
+    "tempServicio": "Servicio a 55°C · Holandesa tibia",
+    "pasosEmplatado": [
+      "Tostar las dos mitades de muffin en sartén con mantequilla clarificada hasta obtener un dorado uniforme y crujiente.",
+      "Colocar el aguacate laminado fino y las lonchas de salmón ahumado (o bacon crujiente) sobre cada muffin.",
+      "Escurrir los dos huevos poché en papel secante y asentarlos cuidadosamente sobre cada base.",
+      "Naprotar con 30 ml de holandesa tibia de yuzu por cada huevo, cubrir con cebollino picado ultrafino y micro-brotes de sakura."
+    ],
+    "imagen": null,
+    "ficha": null,
+    "tieneFichaOficial": false,
+    "svg": "<svg viewBox=\"0 0 400 220\" xmlns=\"http://www.w3.org/2000/svg\"><rect width=\"400\" height=\"220\" fill=\"#151f32\"/><circle cx=\"200\" cy=\"110\" r=\"80\" fill=\"#f8fafc\" stroke=\"#94a3b8\" stroke-width=\"4\"/><circle cx=\"160\" cy=\"110\" r=\"32\" fill=\"#d97706\"/><circle cx=\"240\" cy=\"110\" r=\"32\" fill=\"#d97706\"/><circle cx=\"160\" cy=\"106\" r=\"28\" fill=\"#fde047\" stroke=\"#eab308\" stroke-width=\"2\"/><circle cx=\"240\" cy=\"106\" r=\"28\" fill=\"#fde047\" stroke=\"#eab308\" stroke-width=\"2\"/><circle cx=\"160\" cy=\"106\" r=\"6\" fill=\"#15803d\"/><circle cx=\"240\" cy=\"106\" r=\"6\" fill=\"#15803d\"/><text x=\"200\" y=\"208\" text-anchor=\"middle\" fill=\"#38bdf8\" font-size=\"11\">English Muffin, Poché 64°C & Holandesa de Yuzu</text></svg>"
+  },
+  {
+    "id": "avocado",
+    "nombre": "Toasted Bread with Avocado",
+    "nombreEs": "Tostada de Aguacate Laminado con Tomates Confitados",
+    "categoria": "carta",
+    "categoriaLabel": "A la Carta",
+    "badgeClass": "badge-carta",
+    "precio": "18 €",
+    "vajilla": "Plato cerámico artesanal plano (Plate), cubertería noble (cutlery), sin campana hermética",
+    "descripcion": "2 unidades de pan rústico con aguacate laminado en abanico continuo, tomates confitados artesanos, AOVE virgen extra y escamas de sal Maldon. Decorado con pensamientos comestibles y pétalos.",
+    "tags": [
+      "Ficha Oficial",
+      "Aguacate Laminado",
+      "Tomates Confitados",
+      "AOVE & Sal Maldon"
+    ],
+    "touchpoint": "NUNCA tapar con campana hermética caliente; el vapor reblandece el pan crujiente. El abanico de aguacate debe mantenerse limpio y brillante con el AOVE.",
+    "alergenos": "Gluten (GL), Frutos de cáscara (FC)",
+    "tiempoPase": "8 - 10 min",
+    "tempServicio": "Pan recién tostado tibio · Aguacate a temperatura fresca",
+    "pasosEmplatado": [
+      "Tostar las 2 unidades de pan rústico hasta lograr un dorado uniforme y crujiente.",
+      "Disponer el aguacate laminado fino formando un abanico continuo sobre las tostas.",
+      "Distribuir los tomates confitados por encima y aderezar con un hilo generoso de AOVE.",
+      "Rematar con escamas de sal Maldon y flores comestibles frescas antes del pase."
+    ],
+    "ingredientesDetallados": [
+      {
+        "ingrediente": "Pan rústico tostado",
+        "cantidad": "2",
+        "unidad": "Ud"
+      },
+      {
+        "ingrediente": "Aguacate laminado en abanico",
+        "cantidad": "1",
+        "unidad": "Ud"
+      },
+      {
+        "ingrediente": "Tomates confitados artesanos",
+        "cantidad": "4 - 5",
+        "unidad": "Ud"
+      },
+      {
+        "ingrediente": "Aceite de Oliva Virgen Extra (AOVE)",
+        "cantidad": "10",
+        "unidad": "Ml"
+      },
+      {
+        "ingrediente": "Sal Maldon en escamas & flores",
+        "cantidad": "1",
+        "unidad": "Pellizco"
+      }
+    ],
+    "imagen": "img/plato_toasted_bread_with_avocado.jpg",
+    "ficha": "img/ficha_toasted_bread_with_avocado.jpg",
+    "tieneFichaOficial": true,
+    "svg": "<svg viewBox=\"0 0 400 220\" xmlns=\"http://www.w3.org/2000/svg\"><rect width=\"400\" height=\"220\" fill=\"#151f32\"/><ellipse cx=\"200\" cy=\"110\" rx=\"140\" ry=\"75\" fill=\"#f8fafc\" stroke=\"#94a3b8\" stroke-width=\"4\"/><ellipse cx=\"200\" cy=\"110\" rx=\"105\" ry=\"46\" fill=\"#78350f\"/><ellipse cx=\"200\" cy=\"106\" rx=\"98\" ry=\"40\" fill=\"#65a30d\"/><circle cx=\"155\" cy=\"100\" r=\"10\" fill=\"#dc2626\"/><circle cx=\"240\" cy=\"115\" r=\"11\" fill=\"#eab308\"/><circle cx=\"200\" cy=\"105\" r=\"9\" fill=\"#a855f7\"/><text x=\"200\" y=\"208\" text-anchor=\"middle\" fill=\"#84cc16\" font-size=\"11\">Pan Pochón 200°C & Abanico Milimétrico</text></svg>"
+  },
+  {
+    "id": "frenchtoast",
+    "nombre": "Arts French Toast (Brioche Caramelizada)",
+    "nombreEs": "Brioche Caramelizado a la Vainilla Bourbon",
+    "categoria": "dulces",
+    "categoriaLabel": "Dulces & Panadería",
+    "badgeClass": "badge-sweet",
+    "precio": "20 €",
+    "vajilla": "Plato llano hondo de porcelana 26cm atemperado, campana de cristal",
+    "descripcion": "Bloque cúbico de pan brioche artesano de mantequilla pura, remojado 12h en crème brûlée con vainilla Bourbon de Madagascar y ralladura de naranja, sellado en mantequilla noisette y caramelizado con costra de azúcar moreno crujiente. Quenelle de mascarpone y coulis de frutos del bosque.",
+    "tags": [
+      "Brioche Mantequilla",
+      "Vainilla Bourbon",
+      "Costra Crujiente",
+      "Mascarpone"
+    ],
+    "touchpoint": "La costra exterior debe estar perfectamente crujiente tipo crème brûlée y el interior tierno y cremoso. Si el trayecto a suite supera 5 min, servir la quenelle de mascarpone en platillo frío anexo.",
+    "alergenos": "Gluten (GL), Lactosa (LAC), Huevos (HUE)",
+    "tiempoPase": "12 - 14 min",
+    "tempServicio": "Brioche caliente 65°C · Mascarpone frío 4°C",
+    "pasosEmplatado": [
+      "Marcar el bloque de brioche en sartén con mantequilla avellanada hasta dorar todas sus caras.",
+      "Espolvorear azúcar de caña en la cara superior y caramelizar con soplete o salamandra hasta lograr una costra de caramelo dorado.",
+      "Asentar el brioche en el centro del plato sobre un trazo elegante de coulis de frambuesa.",
+      "Modelar una quenelle perfecta de mascarpone a la vainilla y colocarla encima o a un lado, decorando con menta fresca."
+    ],
+    "imagen": null,
+    "ficha": null,
+    "tieneFichaOficial": false,
+    "svg": "<svg viewBox=\"0 0 400 220\" xmlns=\"http://www.w3.org/2000/svg\"><rect width=\"400\" height=\"220\" fill=\"#151f32\"/><circle cx=\"200\" cy=\"110\" r=\"85\" fill=\"#f8fafc\" stroke=\"#94a3b8\" stroke-width=\"4\"/><path d=\"M150 130 Q 200 95 250 130\" stroke=\"#db2777\" stroke-width=\"8\" fill=\"none\" stroke-linecap=\"round\"/><rect x=\"160\" y=\"75\" width=\"80\" height=\"65\" rx=\"6\" fill=\"#b45309\" stroke=\"#78350f\" stroke-width=\"2\"/><rect x=\"165\" y=\"80\" width=\"70\" height=\"22\" rx=\"4\" fill=\"#f59e0b\"/><ellipse cx=\"200\" cy=\"72\" rx=\"20\" ry=\"10\" fill=\"#f8fafc\"/><text x=\"200\" y=\"210\" text-anchor=\"middle\" fill=\"#fbbf24\" font-size=\"11\">Brioche Caramelizada & Quenelle Mascarpone</text></svg>"
+  },
+  {
+    "id": "pancakes",
+    "nombre": "Fluffy Buttermilk Pancakes con Arándanos",
+    "nombreEs": "Tortitas Americanas con Sirope de Arce Orgánico",
+    "categoria": "dulces",
+    "categoriaLabel": "Dulces & Panadería",
+    "badgeClass": "badge-sweet",
+    "precio": "19 €",
+    "vajilla": "Plato llano 26cm caliente con campana térmica, jarrita de cobre para sirope",
+    "descripcion": "Torre de 3 tortitas americanas de suero de mantequilla esponjosas y aireadas de 1.5 cm de grosor, arándanos frescos integrados en la masa y en superficie, quenelle de mantequilla batida con miel de azahar y jarrita de sirope de arce canadiense grado A tibio.",
+    "tags": [
+      "Buttermilk Pancakes",
+      "Arándanos Frescos",
+      "Sirope de Arce Grado A"
+    ],
+    "touchpoint": "Las tortitas deben conservar su altura y textura suflé; jamás aplastar con la campana. El sirope de arce debe servirse tibio en jarrita individual.",
+    "alergenos": "Gluten (GL), Lactosa (LAC), Huevos (HUE)",
+    "tiempoPase": "12 min",
+    "tempServicio": "Pancakes calientes 65°C · Sirope tibio 45°C",
+    "pasosEmplatado": [
+      "Cocinar 3 tortitas en plancha a 170°C hasta que doblen su volumen con burbujas y dorar ambos lados.",
+      "Apilar las 3 tortitas en el centro del plato caliente alineadas con precisión.",
+      "Espolvorear azúcar glas tamizado con colador fino.",
+      "Colocar un puñado de arándanos frescos en la cima, una nuez de mantequilla batida con miel y colocar la campana con la jarrita de sirope aparte."
+    ],
+    "imagen": null,
+    "ficha": null,
+    "tieneFichaOficial": false,
+    "svg": "<svg viewBox=\"0 0 400 220\" xmlns=\"http://www.w3.org/2000/svg\"><rect width=\"400\" height=\"220\" fill=\"#151f32\"/><circle cx=\"200\" cy=\"110\" r=\"85\" fill=\"#f8fafc\" stroke=\"#94a3b8\" stroke-width=\"4\"/><ellipse cx=\"200\" cy=\"130\" rx=\"65\" ry=\"20\" fill=\"#d97706\"/><ellipse cx=\"200\" cy=\"115\" rx=\"62\" ry=\"19\" fill=\"#f59e0b\"/><ellipse cx=\"200\" cy=\"100\" rx=\"58\" ry=\"18\" fill=\"#fbbf24\"/><rect x=\"190\" y=\"86\" width=\"20\" height=\"14\" rx=\"3\" fill=\"#fef08a\"/><circle cx=\"170\" cy=\"98\" r=\"6\" fill=\"#1e1b4b\"/><circle cx=\"225\" cy=\"102\" r=\"6\" fill=\"#1e1b4b\"/><text x=\"200\" y=\"210\" text-anchor=\"middle\" fill=\"#94a3b8\" font-size=\"11\">Torre Suflé 3 Pisos & Sirope de Arce</text></svg>"
+  },
+  {
+    "id": "omelette",
+    "nombre": "Omelette Francesa al Gusto (Trufa / Bellota)",
+    "nombreEs": "Tortilla Francesa Artesana en Huso",
+    "categoria": "huevos",
+    "categoriaLabel": "Platos de Huevos",
+    "badgeClass": "badge-eggs",
+    "precio": "22 €",
+    "vajilla": "Plato ovalado 28cm precalentado a 55°C, campana térmica de acero inoxidable",
+    "descripcion": "Tortilla francesa de 3 huevos de corral ecológicos batidos a mano, técnica de alta escuela enrollada en huso cilíndrico perfecto sin coloración exterior, superficie lisa barnizada con mantequilla clarificada e interior baveuse. Rellenos selectos: trufa negra melanosporum, setas silvestres, queso de cabra o jamón ibérico.",
+    "tags": [
+      "3 Huevos Camperos",
+      "Forma en Huso",
+      "Interior Baveuse",
+      "Sin Dorado Exterior"
+    ],
+    "touchpoint": "CERO coloración marrón en la superficie (criterio estricto de alta gastronomía). Barnizar con mantequilla clarificada antes de poner la campana.",
+    "alergenos": "Huevos (HUE), Lactosa (LAC)",
+    "tiempoPase": "8 - 10 min",
+    "tempServicio": "Servicio inmediato a 65°C con campana",
+    "pasosEmplatado": [
+      "Batir los 3 huevos con un pellizco de sal hasta emulsionar sin exceso de espuma.",
+      "Verter en sartén antiadherente con mantequilla y remover vigorosamente con espátula a fuego medio-alto.",
+      "Cuando el huevo esté casi cuajado pero baveuse en el centro, incorporar el relleno y enrollar dándole golpes suaves a la sartén en forma de huso perfecto.",
+      "Volcar sobre el plato oval caliente con el pliegue hacia abajo, pintar con mantequilla clarificada y decorar con cebollino fresco picado."
+    ],
+    "imagen": null,
+    "ficha": null,
+    "tieneFichaOficial": false,
+    "svg": "<svg viewBox=\"0 0 400 220\" xmlns=\"http://www.w3.org/2000/svg\"><rect width=\"400\" height=\"220\" fill=\"#151f32\"/><ellipse cx=\"200\" cy=\"110\" rx=\"130\" ry=\"70\" fill=\"#f8fafc\" stroke=\"#94a3b8\" stroke-width=\"4\"/><ellipse cx=\"200\" cy=\"110\" rx=\"85\" ry=\"32\" fill=\"#facc15\" stroke=\"#eab308\" stroke-width=\"2\"/><line x1=\"140\" y1=\"110\" x2=\"260\" y2=\"110\" stroke=\"#ca8a04\" stroke-width=\"2\" stroke-dasharray=\"4 4\"/><circle cx=\"170\" cy=\"110\" r=\"4\" fill=\"#15803d\"/><circle cx=\"200\" cy=\"110\" r=\"4\" fill=\"#15803d\"/><circle cx=\"230\" cy=\"110\" r=\"4\" fill=\"#15803d\"/><text x=\"200\" y=\"208\" text-anchor=\"middle\" fill=\"#eab308\" font-size=\"11\">Huso Francés Liso · Interior Baveuse</text></svg>"
+  },
+  {
+    "id": "acai",
+    "nombre": "Açaí & Chia Superfood Bowl",
+    "nombreEs": "Bol Antioxidante de Açaí y Frutas",
+    "categoria": "saludable",
+    "categoriaLabel": "Saludable & Vegano",
+    "badgeClass": "badge-healthy",
+    "precio": "17 €",
+    "vajilla": "Bol artesanal de cerámica gres o cáscara de coco helada a -5°C, cuchara plateada",
+    "descripcion": "Base densa de açaí puro orgánico del Amazonas batido con plátano y leche de coco, coronado con líneas geométricas impecables de semillas de chía, granola crujiente casera de avena y nueces, láminas de plátano fresco, arándanos, bayas de goji y escamas de coco tostado.",
+    "tags": [
+      "Açaí Orgánico",
+      "Semillas de Chía",
+      "Granola Casera",
+      "Vegano"
+    ],
+    "touchpoint": "La textura de la base debe ser firme tipo sorbete denso (nunca sopa líquida). Las líneas de toppings deben estar rigurosamente rectas y separadas.",
+    "alergenos": "Frutos de Cáscara (FS), Sésamo (trazas)",
+    "tiempoPase": "8 min",
+    "tempServicio": "Servicio helado a -2°C",
+    "pasosEmplatado": [
+      "Verter la emulsión de açaí frío en el bol helado alisando la superficie con espátula.",
+      "Trazar una línea longitudinal de rodajas de plátano superpuestas.",
+      "Disponer en franjas paralelas contiguas: granola crujiente, semillas de chía, bayas de goji rojas y arándanos azules.",
+      "Terminar con escamas de coco tostado en el extremo y servir de inmediato."
+    ],
+    "imagen": null,
+    "ficha": null,
+    "tieneFichaOficial": false,
+    "svg": "<svg viewBox=\"0 0 400 220\" xmlns=\"http://www.w3.org/2000/svg\"><rect width=\"400\" height=\"220\" fill=\"#151f32\"/><circle cx=\"200\" cy=\"110\" r=\"85\" fill=\"#3b0764\" stroke=\"#a855f7\" stroke-width=\"4\"/><circle cx=\"200\" cy=\"110\" r=\"75\" fill=\"#581c87\"/><rect x=\"145\" y=\"65\" width=\"15\" height=\"90\" rx=\"7\" fill=\"#fde047\"/><rect x=\"165\" y=\"60\" width=\"15\" height=\"100\" rx=\"7\" fill=\"#d97706\"/><rect x=\"185\" y=\"55\" width=\"15\" height=\"110\" rx=\"7\" fill=\"#1e1b4b\"/><rect x=\"205\" y=\"55\" width=\"15\" height=\"110\" rx=\"7\" fill=\"#ef4444\"/><rect x=\"225\" y=\"60\" width=\"15\" height=\"100\" rx=\"7\" fill=\"#f8fafc\"/><text x=\"200\" y=\"210\" text-anchor=\"middle\" fill=\"#c084fc\" font-size=\"11\">Bol Helado -5°C & Líneas Geométricas de Toppings</text></svg>"
+  }
+];
+
+    // --- 2. CATÁLOGO TARDE / NOCHE (PM) - (Las 49 Fichas del PDF) ---
+    const catalogoPM = [
+  {
+    "id": "pm_gilda",
+    "nombre": "Gilda",
+    "nombreEs": "Gildas del Cantábrico con Piparras (4 uds)",
+    "categoria": "sabor_local",
+    "categoriaLabel": "Sabor Local",
+    "badgeClass": "badge-local",
+    "precio": "12 €",
+    "vajilla": "Plato pequeño de madera noble, papel periódico artesanal",
+    "descripcion": "Gildas artesanales de anchoas del Cantábrico seleccionadas, piparras de Ibarra encurtidas y aceituna verde gordal.",
+    "tags": [
+      "4 Unidades",
+      "Pintxo Vasco",
+      "Anchoa Cantábrico"
+    ],
+    "alergenos": "Pescado, Sulfitos",
+    "tiempoPase": "5 min",
+    "tempServicio": "Frío (6 - 8°C)",
+    "pasosEmplatado": [
+      "Disponer 4 unidades de gilda sobre plato pequeño de madera con papel periódico de base.",
+      "IMPORTANTE: Escurrir bien las piparras y anchoas eliminando exceso de aceite.",
+      "Cruzar ligeramente las brochetas para un montaje armónico y limpio."
+    ],
+    "imagen": "img/gildas.jpg.png",
+    "ficha": "img/gildas.jpg.png",
+    "tieneFichaOficial": true
+  },
+  {
+    "id": "pm_pan_tomate",
+    "nombre": "Pan con Tomate",
+    "nombreEs": "Pan de Cristal Tostado con Tomate de Colgar y AOVE",
+    "categoria": "sabor_local",
+    "categoriaLabel": "Sabor Local",
+    "badgeClass": "badge-local",
+    "precio": "8 €",
+    "vajilla": "Plato rectangular alargado de porcelana",
+    "descripcion": "Pan de cristal extra crujiente horneado, frotado con tomate de colgar de ramillete, AOVE virgen extra 0.4° y escamas de sal Maldon.",
+    "tags": [
+      "Pan de Cristal",
+      "Tomate Colgar",
+      "AOVE Arbequina"
+    ],
+    "alergenos": "Gluten (Trazas: Soja, Mostaza)",
+    "tiempoPase": "5 min",
+    "tempServicio": "Pan caliente crujiente recién tostado",
+    "pasosEmplatado": [
+      "Tostar 4 trozos de pan de cristal en horno a 200°C durante 5 minutos.",
+      "Cortar 2 tomates de colgar por la mitad.",
+      "Frotar el tomate con delicadeza sobre la miga alveolada sin romper la corteza.",
+      "Finalizar con hilo generoso de AOVE virgen extra y escamas de sal Maldon."
+    ],
+    "imagen": "img/pan-con-tomate.jpg.png",
+    "ficha": "img/pan-con-tomate.jpg.png",
+    "tieneFichaOficial": true
+  },
+  {
+    "id": "pm_jamon_iberico",
+    "nombre": "Jamón Ibérico 100% Bellota",
+    "nombreEs": "Jamón Ibérico 100% Bellota D.O. Cortado a Cuchillo (80g)",
+    "categoria": "sabor_local",
+    "categoriaLabel": "Sabor Local",
+    "badgeClass": "badge-local",
+    "precio": "38 €",
+    "vajilla": "Plato Trinchante Grande blanco atemperado a 24°C",
+    "descripcion": "80 gramos de jamón ibérico puro de bellota cortado a cuchillo en lonchas finas translúcidas con grasa brillante y atemperada.",
+    "tags": [
+      "100% Bellota",
+      "Corte a Cuchillo",
+      "Atemperado"
+    ],
+    "alergenos": "Libre de alérgenos comunes (Cerdo Ibérico)",
+    "tiempoPase": "15 min",
+    "tempServicio": "Atemperado a 22 - 24°C para sudar la grasa noble",
+    "pasosEmplatado": [
+      "Sacar el blíster o pieza con antelación para asegurar atemperado óptimo.",
+      "Disponer las lonchas en abanico circular concéntrico en plato trinchante grande.",
+      "Pintar sutilmente con una gota de grasa tibia del propio jamón para brillo perfecto."
+    ],
+    "imagen": "img/jamon-iberico.jpg.png",
+    "ficha": "img/jamon-iberico.jpg.png",
+    "tieneFichaOficial": true
+  },
+  {
+    "id": "pm_bravas",
+    "nombre": "Nuestras Bravas",
+    "nombreEs": "Vasitos de Patata Confitada, Salsa Brava y Alioli de Ajo Asado",
+    "categoria": "sabor_local",
+    "categoriaLabel": "Sabor Local",
+    "badgeClass": "badge-local",
+    "precio": "14 €",
+    "vajilla": "Plato rectangular alargado de porcelana",
+    "descripcion": "Vasitos cilíndricos de patata agria confitados y fritos crujientes, rellenos de salsa brava ahumada y coronados con alioli suave de ajo asado.",
+    "tags": [
+      "8 Vasitos",
+      "Alioli Ajo Asado",
+      "Salsa Brava Arts"
+    ],
+    "alergenos": "Gluten, Sulfitos, Huevos",
+    "tiempoPase": "15 min",
+    "tempServicio": "Muy caliente >65°C (mantener en Hot Box)",
+    "pasosEmplatado": [
+      "Freír 8 vasitos de patata a 180°C durante 3 minutos. Escurrir y salar al punto.",
+      "Rellenar el interior con salsa brava artesana dejando margen superior.",
+      "Coronar con puntos de alioli de ajo asado cubriendo la salsa brava.",
+      "Alinear en plato rectangular y finalizar con cebollino fino recién cortado."
+    ],
+    "imagen": "img/nuestras-bravas.jpg.png",
+    "ficha": "img/nuestras-bravas.jpg.png",
+    "tieneFichaOficial": true
+  },
+  {
+    "id": "pm_bomba_barcelona",
+    "nombre": "Bomba de la Barceloneta",
+    "nombreEs": "Bomba Tradicional de Ternera y Cerdo Especiada (6 uds)",
+    "categoria": "sabor_local",
+    "categoriaLabel": "Sabor Local",
+    "badgeClass": "badge-local",
+    "precio": "16 €",
+    "vajilla": "Plato rectangular alargado",
+    "descripcion": "Bombas clásicas de patata rellenas de carne mixta de ternera y cerdo con sofrito picante tradicional, alioli y brava.",
+    "tags": [
+      "6 Unidades",
+      "Receta Barceloneta",
+      "Doble Salsa"
+    ],
+    "alergenos": "Gluten, Cerdo, Lactosa, Huevos, Sulfitos",
+    "tiempoPase": "15 min",
+    "tempServicio": "Muy caliente >65°C",
+    "pasosEmplatado": [
+      "Freír 6 bombas a 180°C durante 3 min. Terminar en horno seco a 200°C 2 min.",
+      "Verificar temperatura interna del centro antes del pase.",
+      "Disponer 6 lágrimas de alioli en la base para fijar las bombas.",
+      "Coronar cada bomba con un punto de salsa brava y alioli, y micro-cebollino."
+    ],
+    "imagen": "img/bomba-de-barcelona.jpg.png",
+    "ficha": "img/bomba-de-barcelona.jpg.png",
+    "tieneFichaOficial": true
+  },
+  {
+    "id": "pm_croqueta_jamon",
+    "nombre": "Croquetas de Jamón Ibérico",
+    "nombreEs": "Croquetas Melosas de Jamón de Bellota (6 uds)",
+    "categoria": "sabor_local",
+    "categoriaLabel": "Sabor Local",
+    "badgeClass": "badge-local",
+    "precio": "15 €",
+    "vajilla": "Plato rectangular alargado",
+    "descripcion": "Croquetas de bechamel sedosa de jamón ibérico 100% bellota con rebozado crujiente de panko y lámina de ibérico sobre cada unidad.",
+    "tags": [
+      "6 Unidades",
+      "Bechamel Melosa",
+      "Panko Crujiente"
+    ],
+    "alergenos": "Gluten, Lactosa, Huevos",
+    "tiempoPase": "12 min",
+    "tempServicio": "Caliente >65°C",
+    "pasosEmplatado": [
+      "Freír 6 unidades a 180°C durante 3 min, escurrir en papel secante y dar golpe de horno 2 min.",
+      "Fijar con 6 puntos suaves de emulsión en la base del plato.",
+      "Coronar cada croqueta con una fina tira de jamón ibérico atemperado."
+    ],
+    "imagen": "img/croqueta-jamon-iberico.jpg.png",
+    "ficha": "img/croqueta-jamon-iberico.jpg.png",
+    "tieneFichaOficial": true
+  },
+  {
+    "id": "pm_croqueta_pollo",
+    "nombre": "Croquetas de Pollo Rustido",
+    "nombreEs": "Croquetas Cremosas de Pollo de Corral Rustido (6 uds)",
+    "categoria": "sabor_local",
+    "categoriaLabel": "Sabor Local",
+    "badgeClass": "badge-local",
+    "precio": "15 €",
+    "vajilla": "Plato rectangular alargado",
+    "descripcion": "Croquetas artesanales elaboradas a partir del tradicional asado de pollo de corral con cebolla pochada y reducción de sus jugos.",
+    "tags": [
+      "6 Unidades",
+      "Pollo de Corral",
+      "Rustido Tradicional"
+    ],
+    "alergenos": "Gluten, Lactosa, Huevos",
+    "tiempoPase": "12 min",
+    "tempServicio": "Caliente >65°C",
+    "pasosEmplatado": [
+      "Freír 6 croquetas de pollo a 180°C hasta dorado uniforme y crujiente.",
+      "Escurrir en papel absorbente y asentar en el plato sobre base de fijación.",
+      "Decorar con brotes tiernos o mayonesa trufada según ficha técnica."
+    ],
+    "imagen": "img/croqueta-pollo.png",
+    "ficha": "img/croqueta-pollo.png",
+    "tieneFichaOficial": true
+  },
+  {
+    "id": "pm_croqueta_setas",
+    "nombre": "Croquetas de Setas Silvestres",
+    "nombreEs": "Croquetas Cremosas de Boletus y Setas de Temporada (6 uds)",
+    "categoria": "sabor_local",
+    "categoriaLabel": "Sabor Local",
+    "badgeClass": "badge-local",
+    "precio": "15 €",
+    "vajilla": "Plato rectangular alargado",
+    "descripcion": "Croquetas melosas de boletus edulis y setas silvestres salteadas con chalotas y bechamel infusionada.",
+    "tags": [
+      "6 Unidades",
+      "Boletus Edulis",
+      "Vegetariano"
+    ],
+    "alergenos": "Gluten, Lactosa, Huevos",
+    "tiempoPase": "12 min",
+    "tempServicio": "Caliente >65°C",
+    "pasosEmplatado": [
+      "Freír las 6 croquetas a 180°C hasta que alcancen un rebozado dorado y crujiente.",
+      "Escurrir en rejilla y colocar alineadas en plato rectangular.",
+      "Acompañar con puntos de emulsión de trufa y polvo de setas deshidratadas."
+    ],
+    "imagen": "img/croquetas-setas.jpg.png",
+    "ficha": "img/croquetas-setas.jpg.png",
+    "tieneFichaOficial": true
+  },
+  {
+    "id": "pm_tortilla_trufada",
+    "nombre": "Tortilla Trufada de Patata y Cebolla",
+    "nombreEs": "Tortilla Española Jugosa con Cebolla Caramelizada y Trufa Negra",
+    "categoria": "sabor_local",
+    "categoriaLabel": "Sabor Local",
+    "badgeClass": "badge-local",
+    "precio": "18 €",
+    "vajilla": "Plato llano redondo 26cm caliente",
+    "descripcion": "Tortilla española individual jugosa al centro con patatas agrias confitadas, cebolla pochada a fuego lento y crema de trufa negra melanosporum.",
+    "tags": [
+      "Trufa Negra",
+      "Centro Jugoso",
+      "Cebolla Pochada"
+    ],
+    "alergenos": "Huevos, Lactosa (trazas de trufa)",
+    "tiempoPase": "12 - 15 min",
+    "tempServicio": "Caliente >60°C con campana",
+    "pasosEmplatado": [
+      "Cuajar la tortilla al momento en sartén individual manteniendo el corazón meloso.",
+      "Desmoldar cuidadosamente en plato llano caliente.",
+      "Pintar la superficie con aceite de trufa y decorar con lascas de trufa o brotes tiernos."
+    ],
+    "imagen": "img/TORTILLA-TRUFADA-PATATA-CEBOLLA.jpg.png",
+    "ficha": "img/TORTILLA-TRUFADA-PATATA-CEBOLLA.jpg.png",
+    "tieneFichaOficial": true
+  },
+  {
+    "id": "pm_caesar",
+    "nombre": "Ensalada Caesar",
+    "nombreEs": "Ensalada Caesar Tradicional Arts con Parmesano Reggiano",
+    "categoria": "ensaladas",
+    "categoriaLabel": "Ensaladas y Sopas",
+    "badgeClass": "badge-healthy",
+    "precio": "22 €",
+    "vajilla": "Plato hondo Sant Jordi o plato sombrero ancho",
+    "descripcion": "Corazones de lechuga romana crujiente, aderezo Caesar casero con anchoas, lascas de Parmigiano Reggiano 24 meses, tomates cherry confitados, bacon crujiente y picatostes dorados.",
+    "tags": [
+      "Emulsión Caesar",
+      "Parmesano 24 Meses",
+      "Picatostes"
+    ],
+    "alergenos": "Lactosa, Pescado, Huevos, Gluten",
+    "tiempoPase": "10 min",
+    "tempServicio": "Frío refrescante (4 - 6°C)",
+    "pasosEmplatado": [
+      "Lavar y escurrir los cogollos de lechuga romana dejándolos crujientes.",
+      "Emulsionar con la salsa Caesar artesana asegurando que cada hoja quede cubierta.",
+      "Montar en plato Sant Jordi dando volumen vertical.",
+      "Decorar con lascas de Parmigiano, tomates confitados, bacon crocante y picatostes."
+    ],
+    "imagen": "img/ensalada-cesar.jpg.png",
+    "ficha": "img/ensalada-cesar.jpg.png",
+    "tieneFichaOficial": true
+  },
+  {
+    "id": "pm_ensalada_radichio",
+    "nombre": "Ensalada de Radicchio y Jamón de Pato",
+    "nombreEs": "Ensalada de Radicchio Rosso, Jamón de Pato Curado y Vinagreta Balsámica",
+    "categoria": "ensaladas",
+    "categoriaLabel": "Ensaladas y Sopas",
+    "badgeClass": "badge-healthy",
+    "precio": "24 €",
+    "vajilla": "Plato hondo Sant Jordi",
+    "descripcion": "Hojas amargas y crujientes de radicchio rosso italiano combinadas con lonchas finas de jamón de pato curado, frutos secos garrapiñados y vinagreta balsámica de Módena.",
+    "tags": [
+      "Radicchio Rosso",
+      "Jamón de Pato",
+      "Vinagreta Módena"
+    ],
+    "alergenos": "Frutos de Cáscara, Sulfitos",
+    "tiempoPase": "10 min",
+    "tempServicio": "Fresco (6 - 8°C)",
+    "pasosEmplatado": [
+      "Mezclar las hojas seleccionadas de radicchio con el aliño balsámico suave.",
+      "Disponer en el centro del plato con volumen.",
+      "Colocar las láminas de jamón de pato intercaladas entre las hojas.",
+      "Coronar con nueces o avellanas garrapiñadas y reducción balsámica."
+    ],
+    "imagen": "img/ensalada-radichio-jamon-pato.jpg.png",
+    "ficha": "img/ensalada-radichio-jamon-pato.jpg.png",
+    "tieneFichaOficial": true
+  },
+  {
+    "id": "pm_ensalada_calabaza_miso",
+    "nombre": "Ensalada Tibia de Calabaza y Miso",
+    "nombreEs": "Ensalada Templada de Calabaza Asada, Glaseado Miso y Brotes Tiernos",
+    "categoria": "ensaladas",
+    "categoriaLabel": "Ensaladas y Sopas",
+    "badgeClass": "badge-healthy",
+    "precio": "20 €",
+    "vajilla": "Plato hondo de porcelana o plato sombrero",
+    "descripcion": "Dados de calabaza asada caramelizada con miso blanco dulce, semillas de calabaza tostadas, queso de cabra templado y selección de brotes tiernos.",
+    "tags": [
+      "Miso Blanco",
+      "Calabaza Asada",
+      "Templada"
+    ],
+    "alergenos": "Soja, Sésamo, Lactosa",
+    "tiempoPase": "12 min",
+    "tempServicio": "Tibia (35 - 40°C)",
+    "pasosEmplatado": [
+      "Regenerar los dados de calabaza asada con glaseado de miso en salamandra o sartén.",
+      "Disponer sobre la cama de brotes frescos aderezados con vinagreta de sésamo.",
+      "Añadir las perlas de queso de cabra templado.",
+      "Finalizar con semillas crujientes de calabaza y brotes frescos."
+    ],
+    "imagen": "img/ENSALADA-TIBIA-CALABAZA-MISO.jpg.png",
+    "ficha": "img/ENSALADA-TIBIA-CALABAZA-MISO.jpg.png",
+    "tieneFichaOficial": true
+  },
+  {
+    "id": "pm_sopa_pollo",
+    "nombre": "Sopa de Pollo de Corral",
+    "nombreEs": "Caldo Clarificado de Pollo de Corral con Verduras de Temporada y Galets",
+    "categoria": "ensaladas",
+    "categoriaLabel": "Ensaladas y Sopas",
+    "badgeClass": "badge-healthy",
+    "precio": "16 €",
+    "vajilla": "Plato sopero hondo blanco, jarrita térmica de caldo aparte",
+    "descripcion": "Consomé aromático y reconfortante de pollo de granja cocinado a fuego lento con puerros, zanahorias y mini galets o fideos finos.",
+    "tags": [
+      "Caldo Casero",
+      "Pase en Jarrita",
+      "Reconfortante"
+    ],
+    "alergenos": "Gluten, Apio, Huevos",
+    "tiempoPase": "10 min",
+    "tempServicio": "Muy caliente >75°C",
+    "pasosEmplatado": [
+      "Disponer en el fondo del plato hondo la guarnición caliente (verduras en brunoise, carne de pollo desmigada y pasta).",
+      "Llenar la jarrita térmica con el caldo hirviendo colado.",
+      "Servir en habitación vertiendo el caldo delante del huésped o cubierto con campana."
+    ],
+    "imagen": "img/sopa-pollo.jpg.png",
+    "ficha": "img/sopa-pollo.jpg.png",
+    "tieneFichaOficial": true
+  },
+  {
+    "id": "pm_sopa_bogavante",
+    "nombre": "Sopa de Bogavante del Cantábrico",
+    "nombreEs": "Bisque Cremosa de Bogavante con Medallones Salteados y Estragón",
+    "categoria": "ensaladas",
+    "categoriaLabel": "Ensaladas y Sopas",
+    "badgeClass": "badge-main",
+    "precio": "32 €",
+    "vajilla": "Plato sombrero noble precalentado, salsera o jarra térmica de plata",
+    "descripcion": "Bisque concentrada de bogavante tostado flambeado al coñac con crema fresca, carne tierna de bogavante salteada al punto y aceite de perifollo.",
+    "tags": [
+      "Bogavante Vivo",
+      "Bisque Noble",
+      "Pase en Jarrita"
+    ],
+    "alergenos": "Crustáceos, Lactosa, Apio, Sulfitos",
+    "tiempoPase": "15 min",
+    "tempServicio": "Muy caliente >75°C",
+    "pasosEmplatado": [
+      "Colocar en el centro de la hendidura del plato sombrero los trozos jugosos de bogavante con unas gotas de aceite verde de estragón.",
+      "Servir la bisque espesa humeante en jarrita térmica isotérmica.",
+      "Verter con elegancia en el momento del pase."
+    ],
+    "imagen": "img/SOPA-BOGAVANTE.jpg.png",
+    "ficha": "img/SOPA-BOGAVANTE.jpg.png",
+    "tieneFichaOficial": true
+  },
+  {
+    "id": "pm_tartare_vaca",
+    "nombre": "Steak Tartare de Vaca Madurada",
+    "nombreEs": "Tartar de Solomillo de Vaca Madurada Aliñado al Gusto con Tostadas",
+    "categoria": "compartir",
+    "categoriaLabel": "Para Compartir",
+    "badgeClass": "badge-local",
+    "precio": "28 €",
+    "vajilla": "Plato llano frío de cerámica noble",
+    "descripcion": "Solomillo de vaca picado finamente a cuchillo, emulsionado con yema de huevo de corral, alcaparras de Pantelleria, chalota, mostaza de Dijon y tostas de pan brioche.",
+    "tags": [
+      "Corte a Cuchillo",
+      "Yema de Corral",
+      "Brioche Tostado"
+    ],
+    "alergenos": "Mostaza, Huevos, Pescado (anchoa), Gluten",
+    "tiempoPase": "12 min",
+    "tempServicio": "Frío (8 - 10°C)",
+    "pasosEmplatado": [
+      "Picar y emulsionar el tartar en frío sobre bol con hielo.",
+      "Moldear en lingote o círculo perfecto en el centro del plato.",
+      "Decorar con yema curada o puntos de mostaza y brotes frescos.",
+      "Disponer las tostas de pan brioche crujientes al lateral."
+    ],
+    "imagen": "img/STEAK-TARTARE.jpg.png",
+    "ficha": "img/STEAK-TARTARE.jpg.png",
+    "tieneFichaOficial": true
+  },
+  {
+    "id": "pm_tartar_lubina",
+    "nombre": "Tartar de Lubina Salvaje",
+    "nombreEs": "Tartar de Lubina Mediterránea con Cítricos, Aguacate y Alga Nori",
+    "categoria": "compartir",
+    "categoriaLabel": "Para Compartir",
+    "badgeClass": "badge-healthy",
+    "precio": "26 €",
+    "vajilla": "Plato hondo frío refrigerado a 2°C",
+    "descripcion": "Lomo limpio de lubina salvaje cortado en dados milimétricos, aliñado con zumo de lima yuzu, cebollino fresco, dados de aguacate y crujientes de alga nori.",
+    "tags": [
+      "Lubina Salvaje",
+      "Cítricos Yuzu",
+      "Pase Frío"
+    ],
+    "alergenos": "Pescado, Soja, Sésamo",
+    "tiempoPase": "10 min",
+    "tempServicio": "Muy frío (2 - 4°C)",
+    "pasosEmplatado": [
+      "Mezclar la lubina con el marinado cítrico en el último instante para no sobrecocinar la carne.",
+      "Emplatar con aro circular sobre lecho cremoso de aguacate.",
+      "Coronar con flores comestibles, tobiko o alga nori crujiente."
+    ],
+    "imagen": "img/tartar-lubina.jpg.png",
+    "ficha": "img/tartar-lubina.jpg.png",
+    "tieneFichaOficial": true
+  },
+  {
+    "id": "pm_langostinos_crujientes",
+    "nombre": "Langostinos Crujientes",
+    "nombreEs": "Langostinos Envueltos en Pasta Kataifi con Mayonesa de Kimchi",
+    "categoria": "compartir",
+    "categoriaLabel": "Para Compartir",
+    "badgeClass": "badge-local",
+    "precio": "22 €",
+    "vajilla": "Plato rectangular alargado de piedra/porcelana",
+    "descripcion": "Colas de langostino tigre envueltas en crujiente fideo kataifi dorado, servidas con emulsión ligera de kimchi coreano y lima kaffir.",
+    "tags": [
+      "Pasta Kataifi",
+      "Kimchi Mayo",
+      "Fritura Crujiente"
+    ],
+    "alergenos": "Crustáceos, Gluten, Huevos, Soja",
+    "tiempoPase": "12 min",
+    "tempServicio": "Muy caliente y crujiente >65°C",
+    "pasosEmplatado": [
+      "Freír las piezas envueltas en kataifi a 175°C hasta dorado rubio impecable.",
+      "Escurrir en rejilla para garantizar máxima textura crujiente.",
+      "Disponer puntos generosos de mayonesa de kimchi en el plato.",
+      "Asentar los langostinos erguidos con gajo de lima al costado."
+    ],
+    "imagen": "img/LANGOSTINO-CRUJIENTE.jpg.png",
+    "ficha": "img/LANGOSTINO-CRUJIENTE.jpg.png",
+    "tieneFichaOficial": true
+  },
+  {
+    "id": "pm_alcachofa_trufa",
+    "nombre": "Alcachofas Fritas con Trufa",
+    "nombreEs": "Flores de Alcachofa Confitadas y Fritas con Yema y Salsa de Trufa Negra",
+    "categoria": "compartir",
+    "categoriaLabel": "Para Compartir",
+    "badgeClass": "badge-local",
+    "precio": "20 €",
+    "vajilla": "Plato hondo abierto o plato llano de cerámica",
+    "descripcion": "Corazones de alcachofas del Prat confitadas en aceite virgen extra, abiertas en flor y fritas crujientes con crema de trufa melanosporum.",
+    "tags": [
+      "Alcachofa Prat",
+      "Flor Crujiente",
+      "Trufa Negra"
+    ],
+    "alergenos": "Lactosa, Huevos (trazas de trufa)",
+    "tiempoPase": "12 min",
+    "tempServicio": "Caliente crujiente >65°C",
+    "pasosEmplatado": [
+      "Confitar previamente las alcachofas y abrir en flor con los dedos.",
+      "Freír a fuego vivo a 190°C hasta que los pétalos queden crujientes como chips.",
+      "Sazonar con flor de sal y asentar en el plato sobre espejo de salsa de trufa.",
+      "Finalizar con virutas de trufa negra fresca rallada al momento."
+    ],
+    "imagen": "img/alcachofa-trufa.jpg.png",
+    "ficha": "img/alcachofa-trufa.jpg.png",
+    "tieneFichaOficial": true
+  },
+  {
+    "id": "pm_arros_gamba",
+    "nombre": "Arròs a la Llauna de Gambas",
+    "nombreEs": "Arroz Bomba D.O. Delta en Llauna con Gamba Roja y Alioli Azafranado",
+    "categoria": "arroz_pastas",
+    "categoriaLabel": "Arroces y Pastas",
+    "badgeClass": "badge-main",
+    "precio": "34 €",
+    "vajilla": "Llauna tradicional de acero inoxidable sobre plato base de madera",
+    "descripcion": "Arroz bomba cocinado en capa milimétrica en llauna de hierro al horno con sofrito de gamba roja, fumet de roca concentrado y alioli suave.",
+    "tags": [
+      "Socarrat",
+      "Gamba Roja",
+      "Fumet de Roca"
+    ],
+    "alergenos": "Crustáceos, Pescado, Huevos, Sulfitos",
+    "tiempoPase": "25 - 30 min",
+    "tempServicio": "Recién salido del horno >70°C con campana especial",
+    "pasosEmplatado": [
+      "Terminar el arroz en horno fuerte a 240°C para lograr el característico socarrat crujiente en el fondo.",
+      "Marcar las colas de gamba roja al fuego vivo sin sobrecocinar.",
+      "Distribuir las gambas armónicamente sobre la llauna.",
+      "Colocar puntos de alioli de azafrán y servir inmediatamente."
+    ],
+    "imagen": "img/arroz-llauna-gamba.jpg.png",
+    "ficha": "img/arroz-llauna-gamba.jpg.png",
+    "tieneFichaOficial": true
+  },
+  {
+    "id": "pm_arros_pollo",
+    "nombre": "Arròs a la Llauna de Pollo de Corral",
+    "nombreEs": "Arroz en Llauna con Pollo de Corral Rustido, Setas y Romero",
+    "categoria": "arroz_pastas",
+    "categoriaLabel": "Arroces y Pastas",
+    "badgeClass": "badge-main",
+    "precio": "28 €",
+    "vajilla": "Llauna tradicional sobre salvamanteles de madera",
+    "descripcion": "Arroz en capa fina cocinado con fondo oscuro de pollo de corral, trozos jugosos de pechuga y contramuslo asado, boletus y alioli suave de romero.",
+    "tags": [
+      "Pollo de Corral",
+      "Setas de Temporada",
+      "Socarrat"
+    ],
+    "alergenos": "Huevos, Sulfitos",
+    "tiempoPase": "25 min",
+    "tempServicio": "Muy caliente >70°C",
+    "pasosEmplatado": [
+      "Asegurar capa fina de arroz con socarrat uniforme.",
+      "Distribuir los trozos de pollo deshuesado dorado y las setas salteadas.",
+      "Decorar con ramita de romero fresco quemada sutilmente con soplete para aroma de leña."
+    ],
+    "imagen": "img/arroz-llauna-pollo.jpg.png",
+    "ficha": "img/arroz-llauna-pollo.jpg.png",
+    "tieneFichaOficial": true
+  },
+  {
+    "id": "pm_arros_verduras",
+    "nombre": "Arròs a la Llauna de Verduras de Temporada",
+    "nombreEs": "Arroz Vegano en Llauna con Alcachofas, Espárragos y Tirabeques",
+    "categoria": "arroz_pastas",
+    "categoriaLabel": "Arroces y Pastas",
+    "badgeClass": "badge-healthy",
+    "precio": "24 €",
+    "vajilla": "Llauna tradicional con base térmica",
+    "descripcion": "Arroz vegetal elaborado con caldo profundo de verduras asadas al sarmiento, alcachofas tiernas, espárragos verdes trigueros y tomate seco confitado.",
+    "tags": [
+      "100% Vegano",
+      "Verduras del Parc Agrari",
+      "Socarrat"
+    ],
+    "alergenos": "Libre de alérgenos comunes (Sulfitos de verduras)",
+    "tiempoPase": "25 min",
+    "tempServicio": "Caliente >70°C",
+    "pasosEmplatado": [
+      "Cocinar el arroz en la llauna con el caldo vegetal reducido.",
+      "Disponer los vegetales salteados crujientes al dente sobre la superficie.",
+      "Servir caliente garantizando el socarrat en el fondo de la llauna."
+    ],
+    "imagen": "img/arroz-llauna-verduras-temporada.jpg.png",
+    "ficha": "img/arroz-llauna-verduras-temporada.jpg.png",
+    "tieneFichaOficial": true
+  },
+  {
+    "id": "pm_fetuccini_gamba",
+    "nombre": "Fetuccini con Gambas y Tomate Confitado",
+    "nombreEs": "Pasta Fresca al Huevo con Gambas Salteadas, Ajo, Guindilla y Bisque",
+    "categoria": "arroz_pastas",
+    "categoriaLabel": "Arroces y Pastas",
+    "badgeClass": "badge-main",
+    "precio": "26 €",
+    "vajilla": "Plato hondo Sant Jordi o plato sombrero caliente a 60°C",
+    "descripcion": "Fetuccini artesanales al huevo cocinados al dente, salteados con gambas rojas, emulsión de bisque de marisco, tomate San Marzano y albahaca genovesa.",
+    "tags": [
+      "Pasta Fresca",
+      "Gambas Rojas",
+      "Albahaca Fresca"
+    ],
+    "alergenos": "Gluten, Crustáceos, Huevos, Lactosa",
+    "tiempoPase": "15 min",
+    "tempServicio": "Muy caliente >65°C con campana",
+    "pasosEmplatado": [
+      "Enrollar los fetuccini con pinzas de cocina formando un nido alto en el centro del plato.",
+      "Distribuir las colas de gamba jugosas sobre el nido de pasta.",
+      "Napar con la reducción sedosa de bisque y decorar con hojas de albahaca fresca y aceite de guindilla suave."
+    ],
+    "imagen": "img/fetuccini-gamba.jpg.png",
+    "ficha": "img/fetuccini-gamba.jpg.png",
+    "tieneFichaOficial": true
+  },
+  {
+    "id": "pm_fetuccini_bolonesa",
+    "nombre": "Fetuccini a la Boloñesa Tradicional",
+    "nombreEs": "Fetuccini Frescos con Ragù Clásico a la Boloñesa de Ternera y Cerdo (4h)",
+    "categoria": "arroz_pastas",
+    "categoriaLabel": "Arroces y Pastas",
+    "badgeClass": "badge-main",
+    "precio": "24 €",
+    "vajilla": "Plato hondo de pasta precalentado",
+    "descripcion": "Pasta fresca al huevo con auténtico ragù a la boloñesa cocinado a fuego lento durante 4 horas con carne picada de ternera y cerdo, vino tinto y lascas de Parmigiano Reggiano.",
+    "tags": [
+      "Ragù Clásico 4h",
+      "Parmesano 24m",
+      "Pasta Fresca"
+    ],
+    "alergenos": "Gluten, Huevos, Lactosa, Apio, Sulfitos",
+    "tiempoPase": "12 min",
+    "tempServicio": "Caliente >65°C con campana",
+    "pasosEmplatado": [
+      "Mantecar la pasta en sartén con el ragù caliente y mantequilla para que ligue.",
+      "Montar en espiral vertical en el plato hondo.",
+      "Coronar con ragù abundante por encima y una lluvia de Parmigiano Reggiano rallado al microplane."
+    ],
+    "imagen": "img/fetuccini-bolanesa.jpg.png",
+    "ficha": "img/fetuccini-bolanesa.jpg.png",
+    "tieneFichaOficial": true
+  },
+  {
+    "id": "pm_fetuccini_tomate",
+    "nombre": "Fetuccini con Salsa de Tomate y Albahaca",
+    "nombreEs": "Fetuccini Frescos con Pomodoro San Marzano, Stracciatella y Albahaca",
+    "categoria": "arroz_pastas",
+    "categoriaLabel": "Arroces y Pastas",
+    "badgeClass": "badge-main",
+    "precio": "20 €",
+    "vajilla": "Plato hondo de pasta caliente",
+    "descripcion": "Fetuccini de pasta fresca con salsa de tomate San Marzano reducido lentamente con aceite de oliva virgen extra, ajo tierno, albahaca fresca y toque de stracciatella.",
+    "tags": [
+      "San Marzano",
+      "Albahaca Fresca",
+      "Vegetariano"
+    ],
+    "alergenos": "Gluten, Huevos, Lactosa",
+    "tiempoPase": "12 min",
+    "tempServicio": "Caliente >65°C con campana",
+    "pasosEmplatado": [
+      "Ligar la pasta con la salsa de tomate brillante en sartén.",
+      "Presentar en nido en el centro del plato.",
+      "Añadir quenelle de stracciatella fresca en el centro y hojas de albahaca fresca frita."
+    ],
+    "imagen": "img/fetuccini-salsa-tomate.jpg.png",
+    "ficha": "img/fetuccini-salsa-tomate.jpg.png",
+    "tieneFichaOficial": true
+  },
+  {
+    "id": "pm_rigatoni_bolonesa",
+    "nombre": "Rigatoni a la Boloñesa",
+    "nombreEs": "Rigatoni Trafilati al Bronzo con Ragù de Ternera Lenta y Parmesano",
+    "categoria": "arroz_pastas",
+    "categoriaLabel": "Arroces y Pastas",
+    "badgeClass": "badge-main",
+    "precio": "24 €",
+    "vajilla": "Plato hondo caliente",
+    "descripcion": "Rigatoni estriados trafilati al bronzo que atrapan el sofrito y carne de la boloñesa tradicional con queso parmesano madurado.",
+    "tags": [
+      "Trafilata al Bronzo",
+      "Ragù Boloñés",
+      "Parmesano"
+    ],
+    "alergenos": "Gluten, Lactosa, Apio, Sulfitos",
+    "tiempoPase": "12 min",
+    "tempServicio": "Caliente >65°C",
+    "pasosEmplatado": [
+      "Saltear los rigatoni con el ragù bien emulsionado.",
+      "Servir en plato hondo asegurando salsa dentro de cada tubo de rigatoni.",
+      "Terminar con lascas finas de Parmigiano Reggiano y hoja de laurel o albahaca."
+    ],
+    "imagen": "img/rigatoni-bolonesa.jpg.png",
+    "ficha": "img/rigatoni-bolonesa.jpg.png",
+    "tieneFichaOficial": true
+  },
+  {
+    "id": "pm_rigatoni_tomate",
+    "nombre": "Rigatoni con Salsa de Tomate",
+    "nombreEs": "Rigatoni al Bronzo con Salsa Casera de Tomate Asado y Orégano Fresco",
+    "categoria": "arroz_pastas",
+    "categoriaLabel": "Arroces y Pastas",
+    "badgeClass": "badge-main",
+    "precio": "20 €",
+    "vajilla": "Plato hondo caliente",
+    "descripcion": "Rigatoni bañados en rica salsa de tomates asados al carbón con hierbas mediterráneas, aceite de oliva arbequina y albahaca fresca.",
+    "tags": [
+      "Tomate Asado",
+      "Mediterráneo",
+      "Vegetariano"
+    ],
+    "alergenos": "Gluten, Lactosa",
+    "tiempoPase": "12 min",
+    "tempServicio": "Caliente >65°C",
+    "pasosEmplatado": [
+      "Mantecar rigatoni con la salsa pomodoro aromática.",
+      "Disponer centrados en el plato.",
+      "Decorar con orégano fresco y escamas de queso parmesano."
+    ],
+    "imagen": "img/rigatoni-salsa-tomate.jpg.png",
+    "ficha": "img/rigatoni-salsa-tomate.jpg.png",
+    "tieneFichaOficial": true
+  },
+  {
+    "id": "pm_bikini_trufado",
+    "nombre": "Bikini Trufado Arts",
+    "nombreEs": "Sandwich Mixto Gourmet con Jamón Ibérico, Queso Havarti y Pasta de Trufa",
+    "categoria": "clasicos",
+    "categoriaLabel": "Clásicos y Pizzas",
+    "badgeClass": "badge-main",
+    "precio": "18 €",
+    "vajilla": "Plato rectangular o pizarra con servilleta lino",
+    "descripcion": "Pan de molde artesano tostado a la mantequilla clarificada noisette, relleno de jamón ibérico 100% bellota, queso havarti fundente y crema de trufa negra.",
+    "tags": [
+      "Jamón Ibérico",
+      "Trufa Negra",
+      "Queso Fundido"
+    ],
+    "alergenos": "Gluten, Lactosa",
+    "tiempoPase": "10 min",
+    "tempServicio": "Caliente crujiente recién planchado",
+    "pasosEmplatado": [
+      "Planchar a fuego medio-alto con mantequilla clarificada hasta obtener costra dorada uniforme.",
+      "Cortar en diagonal en triángulos perfectos.",
+      "Superponer los triángulos mostrando el queso fundido y jamón en el corte.",
+      "Servir de inmediato sin campana para preservar textura crujiente."
+    ],
+    "imagen": "img/bikini-trufado.jpg.png",
+    "ficha": "img/bikini-trufado.jpg.png",
+    "tieneFichaOficial": true
+  },
+  {
+    "id": "pm_club_sandwich",
+    "nombre": "Arts Club Sandwich",
+    "nombreEs": "Triple Sandwich Club con Pollo a la Plancha, Bacon Crujiente y Huevo",
+    "categoria": "clasicos",
+    "categoriaLabel": "Clásicos y Pizzas",
+    "badgeClass": "badge-main",
+    "precio": "24 €",
+    "vajilla": "Plato rectangular amplio, cestillo para patatas fritas",
+    "descripcion": "Tres pisos de pan de molde tostado con pechuga de pollo asada al momento, bacon crujiente ahumado, huevo duro campero, lechuga romana, tomate y mayonesa suave, con patatas fritas.",
+    "tags": [
+      "Triple Piso",
+      "Pollo Asado",
+      "Patatas Fritas"
+    ],
+    "alergenos": "Gluten, Huevos, Mostaza, Lactosa",
+    "tiempoPase": "15 min",
+    "tempServicio": "Templado/Caliente",
+    "pasosEmplatado": [
+      "Montar los 3 pisos intercalando pollo, bacon, huevo, lechuga y tomate.",
+      "Fijar con 4 brochetas de madera de hotel.",
+      "Cortar en 4 triángulos simétricos perfectos.",
+      "Colocar en abanico acompañados de cestillo con patatas fritas doradas."
+    ],
+    "imagen": "img/arts-club-sandwiche.jpg.png",
+    "ficha": "img/arts-club-sandwiche.jpg.png",
+    "tieneFichaOficial": true
+  },
+  {
+    "id": "pm_cheese_burger",
+    "nombre": "Arts Cheese Burger",
+    "nombreEs": "Hamburguesa de Ternera Black Angus (200g), Cheddar Fundido y Pan Brioche",
+    "categoria": "clasicos",
+    "categoriaLabel": "Clásicos y Pizzas",
+    "badgeClass": "badge-main",
+    "precio": "26 €",
+    "vajilla": "Plato amplio o tabla de servicio noble, cestillo de patatas",
+    "descripcion": "200g de carne de ternera Black Angus a la brasa, queso cheddar inglés fundido, cebolla caramelizada, pepinillo agridulce, lechuga, tomate y salsa especial Arts en pan brioche artesano glaseado.",
+    "tags": [
+      "Black Angus 200g",
+      "Cheddar Inglés",
+      "Pan Brioche"
+    ],
+    "alergenos": "Gluten, Lactosa, Huevos, Sésamo, Mostaza",
+    "tiempoPase": "15 - 18 min",
+    "tempServicio": "Caliente jugosa >65°C",
+    "pasosEmplatado": [
+      "Marcar la hamburguesa al punto solicitado por el huésped y fundir el cheddar encima.",
+      "Tostar las dos caras del pan brioche con mantequilla.",
+      "Montar la base con salsa, lechuga, tomate, carne con queso y cebolla pochada.",
+      "Fijar con pincho de bambú y servir con patatas fritas en cestillo térmico."
+    ],
+    "imagen": "img/arts-cheese-burguer.jpg.png",
+    "ficha": "img/arts-cheese-burguer.jpg.png",
+    "tieneFichaOficial": true
+  },
+  {
+    "id": "pm_vegan_burger",
+    "nombre": "Arts Vegan Burger",
+    "nombreEs": "Hamburguesa 100% Plant-Based con Queso Vegano y Cebolla Caramelizada",
+    "categoria": "clasicos",
+    "categoriaLabel": "Clásicos y Pizzas",
+    "badgeClass": "badge-healthy",
+    "precio": "24 €",
+    "vajilla": "Plato amplio con cestillo de patatas",
+    "descripcion": "Patty vegetal plant-based a la parrilla con queso vegano fundente, aguacate laminado, lechuga, tomate y mayonesa vegana en pan de semillas sin lácteos.",
+    "tags": [
+      "100% Vegano",
+      "Plant-Based",
+      "Pan de Semillas"
+    ],
+    "alergenos": "Gluten, Soja, Sésamo",
+    "tiempoPase": "15 min",
+    "tempServicio": "Caliente >65°C",
+    "pasosEmplatado": [
+      "Marcar la hamburguesa vegana en plancha separada de carnes.",
+      "Fundir el queso vegetal con campana de vapor.",
+      "Montar en pan de semillas tostado con vegetales frescos.",
+      "Acompañar de patatas fritas artesanas con flor de sal."
+    ],
+    "imagen": "img/arts-vegan-burguer.jpg.png",
+    "ficha": "img/arts-vegan-burguer.jpg.png",
+    "tieneFichaOficial": true
+  },
+  {
+    "id": "pm_pizza_margherita",
+    "nombre": "Pizza Margherita Clásica",
+    "nombreEs": "Pizza Artesanal al Horno de Piedra con Tomate San Marzano y Mozzarella Fior di Latte",
+    "categoria": "clasicos",
+    "categoriaLabel": "Clásicos y Pizzas",
+    "badgeClass": "badge-main",
+    "precio": "20 €",
+    "vajilla": "Plato trinchante grande o tabla redonda con papel periódico",
+    "descripcion": "Masa fina de fermentación 48 horas horneada a la piedra, salsa de tomate San Marzano D.O.P., mozzarella fresca fior di latte fundida, AOVE y albahaca fresca (cortada en 8 porciones).",
+    "tags": [
+      "Masa 48h",
+      "San Marzano",
+      "8 Porciones"
+    ],
+    "alergenos": "Gluten, Lactosa",
+    "tiempoPase": "12 - 15 min",
+    "tempServicio": "Muy caliente recién salida del horno >70°C",
+    "pasosEmplatado": [
+      "Hornear la pizza a 320°C hasta que los bordes alveolados estén dorados y crujientes.",
+      "Cortar en 8 porciones iguales.",
+      "Servir sobre plato trinchante grande con papel periódico de base.",
+      "Finalizar con hojas de albahaca fresca y chorro de AOVE virgen extra."
+    ],
+    "imagen": "img/pizza-margherita.jpg.png",
+    "ficha": "img/pizza-margherita.jpg.png",
+    "tieneFichaOficial": true
+  },
+  {
+    "id": "pm_pizza_pepperoni",
+    "nombre": "Pizza Pepperoni Artesanal",
+    "nombreEs": "Pizza con Base Cristalina, Pepperoni Spianata, Mozzarella y Tomate (8 porciones)",
+    "categoria": "clasicos",
+    "categoriaLabel": "Clásicos y Pizzas",
+    "badgeClass": "badge-main",
+    "precio": "22 €",
+    "vajilla": "Plato Trinchante Grande con papel periódico artesanal",
+    "descripcion": "Base de pizza cristalina crujiente con salsa de pizza especiada en la base, mozzarella fundida y rodajas de pepperoni crujientes al horno (cortada en 8 porciones).",
+    "tags": [
+      "Pepperoni Spianata",
+      "Base Cristalina",
+      "8 Porciones"
+    ],
+    "alergenos": "Gluten, Lactosa, Cerdo",
+    "tiempoPase": "12 - 15 min",
+    "tempServicio": "Muy caliente recién horneada >70°C",
+    "pasosEmplatado": [
+      "Hornear hasta que el pepperoni libere sus aceites aromáticos y quede crujiente en los bordes.",
+      "Cortar limpiamente en 8 porciones.",
+      "Disponer en plato trinchante grande sobre papel periódico.",
+      "Pintar con un toque de aceite picante suave si el cliente lo desea."
+    ],
+    "imagen": "img/pizza-pepperoni.jpg.png",
+    "ficha": "img/pizza-pepperoni.jpg.png",
+    "tieneFichaOficial": true
+  },
+  {
+    "id": "pm_pizza_pesto_rucula",
+    "nombre": "Pizza Pesto, Rúcula y Stracciatella",
+    "nombreEs": "Pizza Bianca con Pesto Genovés, Hojas de Rúcula y Stracciatella Fresca",
+    "categoria": "clasicos",
+    "categoriaLabel": "Clásicos y Pizzas",
+    "badgeClass": "badge-healthy",
+    "precio": "23 €",
+    "vajilla": "Plato Trinchante Grande con papel periódico",
+    "descripcion": "Pizza blanca con base crujiente horneada con mozzarella, cubierta tras el horneado con pesto fresco de albahaca y piñones, rúcula silvestre, tomates cherry y cremosa stracciatella.",
+    "tags": [
+      "Stracciatella",
+      "Pesto Genovés",
+      "Rúcula Salvaje"
+    ],
+    "alergenos": "Gluten, Lactosa, Frutos de Cáscara (piñones)",
+    "tiempoPase": "15 min",
+    "tempServicio": "Base caliente con toppings frescos atemperados",
+    "pasosEmplatado": [
+      "Hornear la base blanca de mozzarella hasta dorar.",
+      "Cortar en 8 porciones.",
+      "Distribuir el pesto genovés en hilos sobre la superficie.",
+      "Colocar las hojas de rúcula aliñada y coronar con bocados de stracciatella fresca y cherrys."
+    ],
+    "imagen": "img/pizza-pesto-rucula-stracciatella.jpg.png",
+    "ficha": "img/pizza-pesto-rucula-stracciatella.jpg.png",
+    "tieneFichaOficial": true
+  },
+  {
+    "id": "pm_cube_roll",
+    "nombre": "Cube Roll Black Angus (300g)",
+    "nombreEs": "Ojo de Bife Black Angus a la Parrilla con Chalotas Glaseadas y Salsa Demi-Glace",
+    "categoria": "principales",
+    "categoriaLabel": "Carnes y Pescados",
+    "badgeClass": "badge-main",
+    "precio": "45 €",
+    "vajilla": "Plato Trinchante Grande precalentado a 60°C, jarrita demi-glace",
+    "descripcion": "Corte noble de 300g de lomo alto de ternera Black Angus con infiltración de grasa excepcional, marcado a la brasa con chalotas glaseadas y patatas confitadas.",
+    "tags": [
+      "Black Angus 300g",
+      "Corte Noble",
+      "Demi-Glace"
+    ],
+    "alergenos": "Sulfitos, Apio, Lactosa",
+    "tiempoPase": "20 - 25 min",
+    "tempServicio": "Muy caliente >65°C con campana térmica",
+    "pasosEmplatado": [
+      "Sellar la pieza en plancha a fuego vivo y terminar en horno al punto requerido por el huésped.",
+      "Dejar reposar 3 minutos para redistribuir los jugos internos de la carne.",
+      "Cortar en rebanadas gruesas o servir entero centrando el plato trinchante.",
+      "Guarnecer con chalotas caramelizadas y verter demi-glace desde la jarrita."
+    ],
+    "imagen": "img/cube-roll-300-gramos.jpg.png",
+    "ficha": "img/cube-roll-300-gramos.jpg.png",
+    "tieneFichaOficial": true
+  },
+  {
+    "id": "pm_solomillo",
+    "nombre": "Solomillo de Ternera (200g)",
+    "nombreEs": "Centro de Solomillo de Ternera a la Parrilla con Reducción de Oporto",
+    "categoria": "principales",
+    "categoriaLabel": "Carnes y Pescados",
+    "badgeClass": "badge-main",
+    "precio": "38 €",
+    "vajilla": "Plato Trinchante Grande caliente",
+    "descripcion": "Medallón tierno de 200g de solomillo de ternera nacional a la brasa, servido con parmentier trufado de patata y jugo reducido de vino de Oporto.",
+    "tags": [
+      "Solomillo 200g",
+      "Parmentier Trufado",
+      "Reducción Oporto"
+    ],
+    "alergenos": "Lactosa, Sulfitos, Apio",
+    "tiempoPase": "20 min",
+    "tempServicio": "Muy caliente >65°C con campana",
+    "pasosEmplatado": [
+      "Marcar el medallón a fuego vivo por ambas caras al punto solicitado.",
+      "Colocar una base circular de parmentier de patata sedoso en el centro.",
+      "Asentar el solomillo con flor de sal y salsear con el jugo de carne reducido."
+    ],
+    "imagen": "img/solomillo-200-gramos.jpg.png",
+    "ficha": "img/solomillo-200-gramos.jpg.png",
+    "tieneFichaOficial": true
+  },
+  {
+    "id": "pm_costilla_bt",
+    "nombre": "Costilla a Baja Temperatura",
+    "nombreEs": "Costilla de Ternera Melosa Cocinada 36h a Baja Temperatura y Glaseada",
+    "categoria": "principales",
+    "categoriaLabel": "Carnes y Pescados",
+    "badgeClass": "badge-main",
+    "precio": "42 €",
+    "vajilla": "Plato Trinchante Grande, jarrita para salsa",
+    "descripcion": "Tres trozos melosos de costilla de ternera cocinados al vacío durante 36 horas a 68°C, glaseados con su propio jugo reducido, patatitas confitadas y piquillos asados.",
+    "tags": [
+      "Cocción 36h",
+      "Glaseado Demi",
+      "Deshuesada"
+    ],
+    "alergenos": "Lactosa, Sulfitos, Mostaza, Soja",
+    "tiempoPase": "35 min",
+    "tempServicio": "Muy caliente >65°C con campana",
+    "pasosEmplatado": [
+      "Regenerar la costilla al vapor a 100°C (5 min) y horno seco a 200°C (12 min).",
+      "Napar con demi-glace y dar golpe de horno para laqueado brillante.",
+      "Disponer 3 trozos en el centro del plato dando volumen con patatas y pimientos del piquillo."
+    ],
+    "imagen": "img/costilla-baja-temperatura.jpg.png",
+    "ficha": "img/costilla-baja-temperatura.jpg.png",
+    "tieneFichaOficial": true
+  },
+  {
+    "id": "pm_lubina_celeri",
+    "nombre": "Lubina con Céleri y Vinagreta Mediterránea",
+    "nombreEs": "Lomo de Lubina Salvaje Asado con Puré de Apionabo y Vinagreta de Tomates y Alcaparras",
+    "categoria": "principales",
+    "categoriaLabel": "Carnes y Pescados",
+    "badgeClass": "badge-main",
+    "precio": "34 €",
+    "vajilla": "Plato llano trinchante precalentado a 55°C",
+    "descripcion": "Lomo de lubina asado con piel crujiente sobre cama suave de puré de apionabo (céleri), salteado de verduras tiernas y vinagreta mediterránea de hierbas y frutos secos.",
+    "tags": [
+      "Lubina Salvaje",
+      "Puré de Céleri",
+      "Mediterráneo"
+    ],
+    "alergenos": "Pescado, Apio, Lactosa, Frutos de Cáscara",
+    "tiempoPase": "20 min",
+    "tempServicio": "Caliente >65°C",
+    "pasosEmplatado": [
+      "Marcar la lubina por el lado de la piel hasta dejarla dorada y crujiente.",
+      "Trazar lágrima generosa de puré de céleri en la base del plato.",
+      "Montar el lomo de lubina con la piel hacia arriba.",
+      "Salsear con la vinagreta mediterránea templada alrededor."
+    ],
+    "imagen": "img/lubina-celeri-vinagreta-mediterranea.jpg.png",
+    "ficha": "img/lubina-celeri-vinagreta-mediterranea.jpg.png",
+    "tieneFichaOficial": true
+  },
+  {
+    "id": "pm_suquet_rodaballo",
+    "nombre": "Suquet Tradicional de Rodaballo",
+    "nombreEs": "Guiso Marinero Catalán de Rodaballo Salvaje con Patatas y Picada de Almendras",
+    "categoria": "principales",
+    "categoriaLabel": "Carnes y Pescados",
+    "badgeClass": "badge-main",
+    "precio": "36 €",
+    "vajilla": "Cazuela de cerámica noble o plato hondo amplio",
+    "descripcion": "Rodaballo salvaje guisado en tradicional suquet de pescadores con patatas monalisa fondant, fumet de pescado de roca, azafrán y picada catalana de almendras tostadas.",
+    "tags": [
+      "Suquet Catalán",
+      "Rodaballo Salvaje",
+      "Picada de Almendra"
+    ],
+    "alergenos": "Pescado, Crustáceos, Frutos de Cáscara, Sulfitos",
+    "tiempoPase": "25 min",
+    "tempServicio": "Muy caliente >70°C con campana",
+    "pasosEmplatado": [
+      "Guisar el rodaballo en el fondo de pescado infusionado con azafrán.",
+      "Disponer las patatas fondant en la base de la cazuela.",
+      "Asentar el lomo de rodaballo jugoso por encima.",
+      "Napar con el suquet trabado con la picada y decorar con perejil fresco."
+    ],
+    "imagen": "img/suquet-de-rodaballo.jpg.png",
+    "ficha": "img/suquet-de-rodaballo.jpg.png",
+    "tieneFichaOficial": true
+  },
+  {
+    "id": "pm_salmon_calabaza",
+    "nombre": "Salmón con Puré de Calabaza y Cítricos",
+    "nombreEs": "Lomo de Salmón a la Plancha con Puré de Calabaza Asada, Endivias y Kumquat",
+    "categoria": "principales",
+    "categoriaLabel": "Carnes y Pescados",
+    "badgeClass": "badge-main",
+    "precio": "32 €",
+    "vajilla": "Plato Trinchante Grande",
+    "descripcion": "Lomo de salmón noruego a la plancha (2 trozos jugosos), endivias confitadas a baja temperatura, tirabeques crocantes, gajos de kumquat y salsa emulsionada de naranja.",
+    "tags": [
+      "Salmón Plancha",
+      "Kumquat",
+      "Endivias BT"
+    ],
+    "alergenos": "Pescado, Sulfitos, Lactosa",
+    "tiempoPase": "25 min",
+    "tempServicio": "Caliente >65°C",
+    "pasosEmplatado": [
+      "Trazar base circular de puré de calabaza con lágrima estirada.",
+      "Posicionar 2 postas de salmón superpuestas para dar volumen y altura.",
+      "Colocar las endivias caramelizadas alrededor y salsear con reducción de naranja.",
+      "Terminar con gajos de kumquat confitado y tirabeques al dente."
+    ],
+    "imagen": "img/salmon-pure-de-calabaza-citricos.jpg.png",
+    "ficha": "img/salmon-pure-de-calabaza-citricos.jpg.png",
+    "tieneFichaOficial": true
+  },
+  {
+    "id": "pm_ensalada_mixta",
+    "nombre": "Ensalada Mixta de Temporada",
+    "nombreEs": "Mezclum de Hojas Verdes con Tomates Cherry, Rabanito y Aceitunas",
+    "categoria": "guarniciones",
+    "categoriaLabel": "Guarniciones",
+    "badgeClass": "badge-side",
+    "precio": "8 €",
+    "vajilla": "Bowl Cuadrado blanco de porcelana",
+    "descripcion": "Mezclum de brotes tiernos frescos, rabanito laminado, cebolla roja fina, tomates cherry multicolores, aceitunas negras y vinagreta suave de miel y mostaza.",
+    "tags": [
+      "Guarnición",
+      "Fresca",
+      "Vegetariana"
+    ],
+    "alergenos": "Mostaza, Sulfitos",
+    "tiempoPase": "10 min",
+    "tempServicio": "Frío refrescante (4 - 6°C)",
+    "pasosEmplatado": [
+      "Aliñar el mezclum y la mitad de los vegetales en un bol.",
+      "Transferir al bowl cuadrado de servicio con volumen aireado.",
+      "Coronar con el resto de toppings en la superficie para presentación limpia."
+    ],
+    "imagen": "img/ensalada-mixta.jpg.png",
+    "ficha": "img/ensalada-mixta.jpg.png",
+    "tieneFichaOficial": true
+  },
+  {
+    "id": "pm_verduras_plancha",
+    "nombre": "Verduras a la Plancha",
+    "nombreEs": "Selección de Verduras de Temporada a la Brasa con Aceite de Hierbas",
+    "categoria": "guarniciones",
+    "categoriaLabel": "Guarniciones",
+    "badgeClass": "badge-side",
+    "precio": "10 €",
+    "vajilla": "Plato rectangular o plato llano mediano caliente",
+    "descripcion": "Espárragos verdes, calabacín, berenjena, pimientos tricolor, champiñones y tomates asados a la brasa con escamas de sal y aceite de romero y tomillo.",
+    "tags": [
+      "Parrilla",
+      "100% Vegano",
+      "Saludable"
+    ],
+    "alergenos": "Libre de alérgenos comunes",
+    "tiempoPase": "12 min",
+    "tempServicio": "Caliente >65°C",
+    "pasosEmplatado": [
+      "Marcar las verduras en parrilla o plancha muy caliente para dejar marcas estéticas.",
+      "Disponer de forma escalonada en el plato.",
+      "Finalizar con hilo de AOVE aromatizado con hierbas de la Provenza y sal Maldon."
+    ],
+    "imagen": "img/verduras-plancha.jpg.png",
+    "ficha": "img/verduras-plancha.jpg.png",
+    "tieneFichaOficial": true
+  },
+  {
+    "id": "pm_arroz_basmati",
+    "nombre": "Arroz Basmati Aromático",
+    "nombreEs": "Arroz Basmati al Vapor Infusionado con Cardamomo y Laurel",
+    "categoria": "guarniciones",
+    "categoriaLabel": "Guarniciones",
+    "badgeClass": "badge-side",
+    "precio": "7 €",
+    "vajilla": "Bowl pequeño de porcelana o plato hondo",
+    "descripcion": "Arroz basmati de grano largo cocinado al vapor con especias aromáticas enteras (cardamomo verde, clavo y laurel), suelto y fragante.",
+    "tags": [
+      "Cardamomo",
+      "Grano Largo",
+      "Guarnición"
+    ],
+    "alergenos": "Libre de alérgenos comunes",
+    "tiempoPase": "8 min",
+    "tempServicio": "Caliente >65°C",
+    "pasosEmplatado": [
+      "Desgranar el arroz basmati con un tenedor para asegurar granos sueltos.",
+      "Servir en el bowl individual precalentado.",
+      "Decorar con unas briznas de azafrán o hierbas frescas."
+    ],
+    "imagen": "img/arroz-basmati.jpg.png",
+    "ficha": "img/arroz-basmati.jpg.png",
+    "tieneFichaOficial": true
+  },
+  {
+    "id": "pm_hummus_clasico",
+    "nombre": "Hummus Tradicional con Tostas",
+    "nombreEs": "Hummus de Garbanzos con Tahini, Garbanzos Fritos, Zumaque y Pan de Pita",
+    "categoria": "internacional",
+    "categoriaLabel": "Internacional & Vegano",
+    "badgeClass": "badge-healthy",
+    "precio": "18 €",
+    "vajilla": "Plato Sombrero hondo de cerámica, cesta de tostas aparte",
+    "descripcion": "Puré sedoso de garbanzos con pasta tahini de sésamo, zumo de limón y comino, emplatado en círculo con garbanzos fritos crujientes, zumaque y aceite virgen extra.",
+    "tags": [
+      "Zumaque",
+      "Garbanzo Frito",
+      "Vegano"
+    ],
+    "alergenos": "Gluten, Sésamo",
+    "tiempoPase": "10 min",
+    "tempServicio": "Frío refrescante (6 - 8°C)",
+    "pasosEmplatado": [
+      "Emplatar el hummus formando un surco circular con una cuchara.",
+      "Colocar en el centro los garbanzos fritos sazonados con pimentón.",
+      "Rellenar el surco con un generoso hilo de AOVE virgen extra.",
+      "Espolvorear zumaque rojo y brotes verdes. Servir las tostas de pan de pita en cesta aparte."
+    ],
+    "imagen": "img/hummus.jpg.png",
+    "ficha": "img/hummus.jpg.png",
+    "tieneFichaOficial": true
+  },
+  {
+    "id": "pm_butter_chicken",
+    "nombre": "Butter Chicken Hindú",
+    "nombreEs": "Pollo Tandoori en Salsa Cremosa de Mantequilla y Tomate Especiado con Pan Paratha",
+    "categoria": "internacional",
+    "categoriaLabel": "Internacional & Vegano",
+    "badgeClass": "badge-main",
+    "precio": "28 €",
+    "vajilla": "Tres bowls cuadrados de porcelana (Butter chicken, Arroz Basmati, Pan Paratha)",
+    "descripcion": "Pechuga de pollo marinada en yogur y especias garam masala, cocinada en salsa cremosa de tomate, mantequilla noisette, nata y fenogreco con arroz basmati y pan paratha.",
+    "tags": [
+      "Receta Hindú",
+      "Pan Paratha",
+      "Basmati Incluido"
+    ],
+    "alergenos": "Lactosa, Frutos de Cáscara (anacardos), Gluten",
+    "tiempoPase": "20 min",
+    "tempServicio": "Muy caliente >70°C",
+    "pasosEmplatado": [
+      "Calentar la salsa y el pollo tandoori asegurando textura sedosa y envolvente.",
+      "Emplatar el butter chicken en el bowl principal; finalizar con hilo de nata, nuez de mantequilla y jengibre en juliana fina.",
+      "Disponer el arroz basmati humeante en el segundo bowl.",
+      "Planchar el pan paratha, cortarlo en 4 triángulos y colocarlo en el tercer bowl (cilantro fresco servido aparte)."
+    ],
+    "imagen": "img/butter-chicken.jpg.png",
+    "ficha": "img/butter-chicken.jpg.png",
+    "tieneFichaOficial": true
+  },
+  {
+    "id": "pm_biryani_gambas",
+    "nombre": "Biryani de Gambas",
+    "nombreEs": "Arroz Especiado Hyderabadi con Gambas Salteadas, Azafrán y Cebolla Crujiente",
+    "categoria": "internacional",
+    "categoriaLabel": "Internacional & Vegano",
+    "badgeClass": "badge-main",
+    "precio": "30 €",
+    "vajilla": "Cazuela de servicio o bowl amplio de cerámica con tapa",
+    "descripcion": "Arroz basmati aromático cocinado en capas con gambas maceradas en cúrcuma y jengibre, azafrán, cebolla frita birista, menta fresca y salsa raita de yogur.",
+    "tags": [
+      "Biryani",
+      "Gambas Especiadas",
+      "Salsa Raita"
+    ],
+    "alergenos": "Crustáceos, Lactosa, Frutos de Cáscara",
+    "tiempoPase": "20 min",
+    "tempServicio": "Muy caliente >70°C",
+    "pasosEmplatado": [
+      "Montar el arroz biryani mostrando las capas contrastadas amarillas y blancas del azafrán.",
+      "Coronar con las gambas salteadas jugosas y abundante cebolla crujiente birista.",
+      "Acompañar con cuenco pequeño de salsa raita fría de pepino y menta."
+    ],
+    "imagen": "img/biryani-gambas.jpg.png",
+    "ficha": "img/biryani-gambas.jpg.png",
+    "tieneFichaOficial": true
+  },
+  {
+    "id": "pm_curry_verde",
+    "nombre": "Curry Verde de Verduras Thai",
+    "nombreEs": "Curry Verde Tailandés con Leche de Coco, Bambú, Berenjena Thai y Albahaca",
+    "categoria": "internacional",
+    "categoriaLabel": "Internacional & Vegano",
+    "badgeClass": "badge-healthy",
+    "precio": "22 €",
+    "vajilla": "Bowl hondo asiático, cuenco de arroz basmati aparte",
+    "descripcion": "Curry verde aromático de lima kaffir, galanga y lemon grass en leche de coco cremosa con brotes de bambú, tirabeques, berenjena y albahaca thai.",
+    "tags": [
+      "100% Vegano",
+      "Leche de Coco",
+      "Picante Suave"
+    ],
+    "alergenos": "Soja, Libre de Gluten y Lactosa",
+    "tiempoPase": "15 min",
+    "tempServicio": "Caliente >70°C",
+    "pasosEmplatado": [
+      "Llevar el curry verde a ebullición suave integrando las verduras al dente.",
+      "Servir en el bowl asiático decorando con hojas frescas de albahaca thai y tiras de chile rojo.",
+      "Acompañar con cuenco de arroz basmati o jazmín humeante."
+    ],
+    "imagen": "img/curry-verde-verduras.jpg.png",
+    "ficha": "img/curry-verde-verduras.jpg.png",
+    "tieneFichaOficial": true
+  },
+  {
+    "id": "pm_berenjena_miso",
+    "nombre": "Berenjena Asada con Salsa Miso",
+    "nombreEs": "Nasu Dengaku: Berenjena Japonesa Caramelizada con Glaseado de Miso Dulce y Sésamo",
+    "categoria": "internacional",
+    "categoriaLabel": "Internacional & Vegano",
+    "badgeClass": "badge-healthy",
+    "precio": "18 €",
+    "vajilla": "Plato rectangular de gres o cerámica oscura artesanal",
+    "descripcion": "Media berenjena asada con cortes en rombo profundos, glaseada bajo la salamandra con salsa dengaku de miso dulce, mirin y semillas de sésamo tostadas.",
+    "tags": [
+      "Nasu Dengaku",
+      "Miso Dulce",
+      "100% Vegano"
+    ],
+    "alergenos": "Soja, Sésamo",
+    "tiempoPase": "15 min",
+    "tempServicio": "Caliente >65°C",
+    "pasosEmplatado": [
+      "Hornear la berenjena hasta que la carne esté tierna y sedosa como una crema.",
+      "Pintar con abundante glaseado de miso dulce y gratinar en salamandra hasta burbujear.",
+      "Emplatar sobre cerámica oscura, espolvorear sésamo blanco y negro y tallos de cebollino fino."
+    ],
+    "imagen": "img/berenjena-salsa-miso.jpg.png",
+    "ficha": "img/berenjena-salsa-miso.jpg.png",
+    "tieneFichaOficial": true
+  },
+  {
+    "id": "pm_mousse_chocolate",
+    "nombre": "Mousse de Chocolate y Pistacho",
+    "nombreEs": "Lingote de Mousse de Chocolate Guanaja 70%, Crème Brûlée y Bizcocho de Pistacho",
+    "categoria": "postres",
+    "categoriaLabel": "Postres",
+    "badgeClass": "badge-sweet",
+    "precio": "14 €",
+    "vajilla": "Plato mediano de porcelana noble",
+    "descripcion": "Cúpula de mousse de chocolate negro Valrhona 70% rellena de crème brûlée de vainilla Bourbon, bizcocho esponjoso de pistacho siciliano, frambuesas frescas y teja crujiente de cacao.",
+    "tags": [
+      "Chocolate 70%",
+      "Pistacho Siciliano",
+      "Crème Brûlée"
+    ],
+    "alergenos": "Gluten, Lactosa, Huevos, Frutos de Cáscara",
+    "tiempoPase": "10 min",
+    "tempServicio": "Frío (4 - 6°C)",
+    "pasosEmplatado": [
+      "Trazar una elegante lágrima de caramelo o coulis de frutos rojos en media luna lateral.",
+      "Asentar la mousse en el centro del plato.",
+      "Decorar la lágrima con dados de bizcocho esponja de pistacho, frambuesas frescas y pistachos garrapiñados.",
+      "Coronar la mousse con una fina teja crujiente de chocolate negro templado."
+    ],
+    "imagen": "img/mousse-chocolate-pistacho.jpg.png",
+    "ficha": "img/mousse-chocolate-pistacho.jpg.png",
+    "tieneFichaOficial": true
+  },
+  {
+    "id": "pm_texturas_citricas",
+    "nombre": "Texturas Cítricas en Bote de Vidrio",
+    "nombreEs": "Cremoso de Mandarina, Mousse de Yuzu, Streusel Biscoff y Merengue Flambeado",
+    "categoria": "postres",
+    "categoriaLabel": "Postres",
+    "badgeClass": "badge-sweet",
+    "precio": "12 €",
+    "vajilla": "Bote hermético de vidrio noble de hotel sobre platillo con blonda",
+    "descripcion": "Postre refrescante servido en tarro de vidrio con capas de cremoso de mandarina mediterránea, mousse ligera de yuzu cítrico, crumble crujiente de galleta biscoff y merengue suizo sopleteado.",
+    "tags": [
+      "Yuzu Japonés",
+      "Tarro de Cristal",
+      "Merengue Quemado"
+    ],
+    "alergenos": "Gluten, Lactosa, Huevos",
+    "tiempoPase": "5 min",
+    "tempServicio": "Muy frío (2 - 4°C)",
+    "pasosEmplatado": [
+      "Verificar que el bote de cristal esté inmaculado, limpio y frío al tacto.",
+      "Comprobar el merengue dorado superior recién sopleteado.",
+      "Servir sobre platillo pequeño de apoyo con cucharilla larga de postre.",
+      "Presentar cerrado o semiabierto listo para degustar."
+    ],
+    "imagen": "img/texturas-citricas.jpg.png",
+    "ficha": "img/texturas-citricas.jpg.png",
+    "tieneFichaOficial": true
+  }
+];
+
+    // ESTADO DE LA APLICACIÓN
+    let turnoActual = 'AM';
+    let categoriaSeleccionada = 'todos';
+
+    // RENDERIZAR FILTROS SEGÚN TURNO
+    function renderizarFiltros() {
+      const container = document.getElementById('filtersContainer');
+      
+      if(turnoActual === 'AM') {
+        container.innerHTML = `
+          <button class="filter-btn active" data-categoria="todos" onclick="seleccionarCategoria('todos', this)"><span>Todos</span><span class="filter-count" id="count-todos">0</span></button>
+          <button class="filter-btn" data-categoria="menus" onclick="seleccionarCategoria('menus', this)"><span>Menús Completos</span><span class="filter-count" id="count-menus">0</span></button>
+          <button class="filter-btn" data-categoria="huevos" onclick="seleccionarCategoria('huevos', this)"><span>Platos de Huevos</span><span class="filter-count" id="count-huevos">0</span></button>
+          <button class="filter-btn" data-categoria="carta" onclick="seleccionarCategoria('carta', this)"><span>A la Carta & Caviar</span><span class="filter-count" id="count-carta">0</span></button>
+          <button class="filter-btn" data-categoria="saludable" onclick="seleccionarCategoria('saludable', this)"><span>Saludable & Vegano</span><span class="filter-count" id="count-saludable">0</span></button>
+          <button class="filter-btn" data-categoria="dulces" onclick="seleccionarCategoria('dulces', this)"><span>Dulces & Panadería</span><span class="filter-count" id="count-dulces">0</span></button>
+        `;
+      } else {
+        container.innerHTML = `
+          <button class="filter-btn active" data-categoria="todos" onclick="seleccionarCategoria('todos', this)"><span>Toda la Carta PM</span><span class="filter-count" id="count-todos">0</span></button>
+          <button class="filter-btn" data-categoria="sabor_local" onclick="seleccionarCategoria('sabor_local', this)">Sabor Local <span class="filter-count" id="count-sabor_local">0</span></button>
+          <button class="filter-btn" data-categoria="ensaladas" onclick="seleccionarCategoria('ensaladas', this)">Ensaladas & Sopas <span class="filter-count" id="count-ensaladas">0</span></button>
+          <button class="filter-btn" data-categoria="compartir" onclick="seleccionarCategoria('compartir', this)">Para Compartir <span class="filter-count" id="count-compartir">0</span></button>
+          <button class="filter-btn" data-categoria="arroz_pastas" onclick="seleccionarCategoria('arroz_pastas', this)">Arroz y Pastas <span class="filter-count" id="count-arroz_pastas">0</span></button>
+          <button class="filter-btn" data-categoria="clasicos" onclick="seleccionarCategoria('clasicos', this)">Clásicos <span class="filter-count" id="count-clasicos">0</span></button>
+          <button class="filter-btn" data-categoria="principales" onclick="seleccionarCategoria('principales', this)">Principales <span class="filter-count" id="count-principales">0</span></button>
+          <button class="filter-btn" data-categoria="guarniciones" onclick="seleccionarCategoria('guarniciones', this)">Guarniciones <span class="filter-count" id="count-guarniciones">0</span></button>
+          <button class="filter-btn" data-categoria="internacional" onclick="seleccionarCategoria('internacional', this)">Internacional <span class="filter-count" id="count-internacional">0</span></button>
+          <button class="filter-btn" data-categoria="postres" onclick="seleccionarCategoria('postres', this)">Postres <span class="filter-count" id="count-postres">0</span></button>
+        `;
+      }
+    }
+
+    function cambiarTurno(turno) {
+      turnoActual = turno;
+      categoriaSeleccionada = 'todos';
+      
+      document.getElementById('btnTurnoAM').className = `turn-btn ${turno === 'AM' ? 'active-am' : ''}`;
+      document.getElementById('btnTurnoPM').className = `turn-btn ${turno === 'PM' ? 'active-pm' : ''}`;
+      
+      document.getElementById('searchInput').value = '';
+      document.getElementById('clearSearchBtn').style.display = 'none';
+
+      renderizarFiltros();
+      actualizarContadores();
+      aplicarFiltros();
+    }
+
+    // ACTUALIZAR CONTADORES DE LOS BOTONES
+    function actualizarContadores() {
+      const db = turnoActual === 'AM' ? catalogoAM : catalogoPM;
+      
+      document.getElementById('count-todos').textContent = db.length;
+      
+      if(turnoActual === 'AM') {
+        document.getElementById('count-menus').textContent = db.filter(p => p.categoria === 'menus').length;
+        document.getElementById('count-huevos').textContent = db.filter(p => p.categoria === 'huevos').length;
+        document.getElementById('count-carta').textContent = db.filter(p => p.categoria === 'carta').length;
+        document.getElementById('count-saludable').textContent = db.filter(p => p.categoria === 'saludable').length;
+        document.getElementById('count-dulces').textContent = db.filter(p => p.categoria === 'dulces').length;
+      } else {
+        const cats = ['sabor_local', 'ensaladas', 'compartir', 'arroz_pastas', 'clasicos', 'principales', 'guarniciones', 'internacional', 'postres'];
+        cats.forEach(c => {
+          const countEl = document.getElementById(`count-${c}`);
+          if(countEl) countEl.textContent = db.filter(p => p.categoria === c).length;
+        });
+      }
+    }
+
+    // INICIALIZACIÓN
+    document.addEventListener('DOMContentLoaded', () => {
+      renderizarFiltros();
+      actualizarContadores();
+      aplicarFiltros();
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') { cerrarVisorFicha(); cerrarModal(); }
+      });
+    });
+
+    // RENDERIZAR LAS TARJETAS
+    function renderizarPlatos(platos) {
+      const grid = document.getElementById('platosGrid');
+      grid.innerHTML = '';
+
+      if (platos.length === 0) {
+        grid.innerHTML = `<div class="empty-state"><h3>No se encontraron platos</h3><p>Intenta con otro término.</p></div>`;
+        document.getElementById('resultsCount').textContent = '0 platos encontrados';
+        return;
+      }
+
+      document.getElementById('resultsCount').textContent = `Mostrando ${platos.length} platos en el turno ${turnoActual}`;
+
+      platos.forEach(plato => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.onclick = () => abrirModal(plato.id);
+
+        const visualContent = plato.imagen
+          ? `<img src="${plato.imagen}" alt="${plato.nombre}" class="card-img" loading="lazy" onerror="this.src='data:image/svg+xml;utf8,<svg viewBox=\\'0 0 400 220\\' xmlns=\\'http://www.w3.org/2000/svg\\'><rect width=\\'400\\' height=\\'220\\' fill=\\'%23151f32\\'/><text x=\\'200\\' y=\\'110\\' text-anchor=\\'middle\\' fill=\\'%2394a3b8\\'>Foto pendiente de subida</text></svg>'">`
+          : (plato.svg || `<div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; background:#151f32; color:#94a3b8;">Sin Imagen</div>`);
+
+        card.innerHTML = `
+          <div class="card-img-container">
+            <div class="card-badge-container">
+              <span class="card-badge ${plato.badgeClass}">${plato.categoriaLabel}</span>
+              ${plato.tieneFichaOficial ? `<span class="card-official-badge">✓ Ficha Oficial</span>` : ''}
+            </div>
+            ${plato.touchpoint ? `<div class="card-touchpoint-flag">★ Touchpoint LQA</div>` : ''}
+            ${visualContent}
+          </div>
+          <div class="card-body">
+            <div>
+              <div class="card-top"><div class="card-title">${plato.nombre}</div><div class="card-price">${plato.precio}</div></div>
+              <div class="card-desc">${plato.descripcion}</div>
+              <div class="tags-container">
+                <span class="tag tag-vajilla">🍽️ ${plato.vajilla.split(',')[0]}</span>
+                ${plato.tags.map(t => `<span class="tag">${t}</span>`).join('')}
+              </div>
+            </div>
+            <div>
+              <div class="allergens-box"><span class="allergens-icon">⚠️</span><span><strong>Alérgenos:</strong> ${plato.alergenos}</span></div>
+              <div class="card-footer">
+                <span style="font-size:0.75rem; color:#64748b;">⏱️ Pase: ${plato.tiempoPase}</span>
+                <button class="card-btn-view" type="button">Ver Ficha ➔</button>
+              </div>
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    // APLICAR FILTROS
+    function aplicarFiltros() {
+      const q = document.getElementById('searchInput').value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+      document.getElementById('clearSearchBtn').style.display = q.length > 0 ? 'block' : 'none';
+
+      const db = turnoActual === 'AM' ? catalogoAM : catalogoPM;
+
+      let filtrados = db.filter(plato => {
+        if (categoriaSeleccionada !== 'todos' && plato.categoria !== categoriaSeleccionada) return false;
+        if (!q) return true;
+        const texto = `${plato.nombre} ${plato.nombreEs} ${plato.descripcion} ${plato.vajilla} ${plato.tags.join(' ')} ${plato.alergenos}`.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        return texto.includes(q);
+      });
+
+      renderizarPlatos(filtrados);
+    }
+
+    function seleccionarCategoria(cat, btnElement) {
+      categoriaSeleccionada = cat;
+      document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+      btnElement.classList.add('active');
+      aplicarFiltros();
+    }
+
+    function limpiarBuscador() {
+      document.getElementById('searchInput').value = '';
+      categoriaSeleccionada = 'todos';
+      renderizarFiltros();
+      aplicarFiltros();
+    }
+
+    // MODAL
+    function abrirModal(platoId) {
+      const db = turnoActual === 'AM' ? catalogoAM : catalogoPM;
+      const plato = db.find(p => p.id === platoId);
+      if (!plato) return;
+
+      document.getElementById('modalBadge').textContent = plato.categoriaLabel;
+      document.getElementById('modalBadge').className = `brand-badge ${plato.badgeClass}`;
+      document.getElementById('modalTitle').textContent = `${plato.nombre} (${plato.precio})`;
+      document.getElementById('modalSubtitle').textContent = plato.nombreEs;
+
+      const heroContent = plato.imagen
+        ? `<img src="${plato.imagen}" class="modal-hero-photo" onerror="this.src='data:image/svg+xml;utf8,<svg viewBox=\\'0 0 400 220\\' xmlns=\\'http://www.w3.org/2000/svg\\'><rect width=\\'400\\' height=\\'220\\' fill=\\'%23151f32\\'/><text x=\\'200\\' y=\\'110\\' text-anchor=\\'middle\\' fill=\\'%2394a3b8\\'>Foto pendiente de extracción del PDF</text></svg>'">`
+        : `<div class="modal-hero-svg">${plato.svg}</div>`;
+
+      let fichaOficialHtml = plato.ficha ? `
+        <div class="official-ficha-banner">
+          <div class="official-ficha-text"><strong>Ficha Técnica Oficial Verificada (CRO)</strong><span>Correspondiente al manual del Hotel Arts.</span></div>
+          <button class="btn-action btn-ver-ficha" type="button" onclick="abrirVisorFicha('${plato.ficha}', '${plato.nombre}')">Ver Ficha Escaneada</button>
+        </div>` : '';
+
+      document.getElementById('modalBody').innerHTML = `
+        <div class="modal-hero-container">${heroContent}</div>
+        ${fichaOficialHtml}
+        <div class="modal-grid-specs">
+          <div class="spec-card"><div class="spec-label">Vajilla</div><div class="spec-value">${plato.vajilla}</div></div>
+          <div class="spec-card"><div class="spec-label">Tiempo Pase</div><div class="spec-value">${plato.tiempoPase}</div></div>
+          <div class="spec-card"><div class="spec-label">Servicio</div><div class="spec-value">${plato.tempServicio}</div></div>
+        </div>
+        ${plato.touchpoint ? `<div class="touchpoint-alert"><div class="touchpoint-title">★ Touchpoint LQA</div><div class="touchpoint-desc">${plato.touchpoint}</div></div>` : ''}
+        <div class="modal-section">
+          <div class="section-title">Procedimiento de Emplatado</div>
+          <ol class="steps-list">${plato.pasosEmplatado.map((p, i) => `<li><span class="step-number">${i+1}</span><span>${p}</span></li>`).join('')}</ol>
+        </div>
+        <div class="modal-section">
+          <div class="section-title" style="color:#f87171;">⚠️ Alérgenos</div>
+          <div style="font-size:0.95rem; color:#fca5a5;"><strong>Contiene:</strong> ${plato.alergenos}</div>
+        </div>
+      `;
+      document.getElementById('modalBackdrop').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function cerrarModal() { document.getElementById('modalBackdrop').classList.remove('open'); document.body.style.overflow = 'auto'; }
+    function cerrarModalFondo(e) { if (e.target.id === 'modalBackdrop') cerrarModal(); }
+
+    function abrirVisorFicha(rutaFicha, nombrePlato) {
+      document.getElementById('fichaViewerTitle').textContent = `Ficha Original: ${nombrePlato}`;
+      document.getElementById('fichaViewerImg').src = rutaFicha;
+      document.getElementById('fichaDownloadBtn').href = rutaFicha;
+      document.getElementById('modalFichaViewer').classList.add('open');
+    }
+    function cerrarVisorFicha() { document.getElementById('modalFichaViewer').classList.remove('open'); }
+    function cerrarVisorFichaFondo(e) { if (e.target.id === 'modalFichaViewer') cerrarVisorFicha(); }
+
+    function abrirEstandares() {
+      // Estándares simplificados
+      document.getElementById('modalBadge').textContent = "Calidad";
+      document.getElementById('modalTitle').textContent = "Estándares LQA / Forbes";
+      document.getElementById('modalSubtitle').textContent = "Pautas obligatorias In-Room Dining";
+      document.getElementById('modalBody').innerHTML = `<div class="touchpoint-alert"><div class="touchpoint-desc">Asegurar servicio a temperatura correcta, vajilla inmaculada y presentación idéntica a la ficha técnica oficial de la cocina del Hotel Arts.</div></div>`;
+      document.getElementById('modalBackdrop').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+  </script>
+</body>
+</html>
